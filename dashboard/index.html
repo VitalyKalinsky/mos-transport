@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Диспетчерская · Предиктор задержек</title>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-title">Предиктор задержек</div>
+    <div class="brand-sub">Диспетчерская наземного транспорта · прогноз на 10–15 мин</div>
+  </div>
+  <div class="clock" title="Время потока телеметрии (МСК)">
+    <span class="clock-time" id="clock">--:--:--</span>
+    <span class="clock-date" id="clock-date">ожидание данных</span>
+  </div>
+  <div class="mode" id="mode" role="status" aria-live="polite">
+    <span class="mode-dot"></span><span class="mode-text">Подключение…</span>
+  </div>
+  <div class="links">
+    <span class="chip" id="chip-link" title="Поток NDTP">NDTP</span>
+    <span class="chip" id="chip-ml" title="ML-сервис">ML</span>
+    <button class="icon-btn" id="theme-btn" title="Светлая / тёмная тема" aria-label="Переключить тему">◐</button>
+  </div>
+</header>
+
+<div class="degraded-banner hidden" id="banner" role="alert"></div>
+
+<section class="kpis" aria-label="Сводка">
+  <button class="kpi kpi-red" data-filter="red"><span class="kpi-label"><i class="lvl lvl-red"></i>Высокий риск</span><span class="kpi-val" id="k-red">–</span><span class="kpi-sub">прогноз ≥ 4 мин или P≥75%</span></button>
+  <button class="kpi kpi-yellow" data-filter="yellow"><span class="kpi-label"><i class="lvl lvl-yellow"></i>Внимание</span><span class="kpi-val" id="k-yellow">–</span><span class="kpi-sub">опоздание &gt; 2 мин / опережение</span></button>
+  <button class="kpi kpi-green" data-filter="green"><span class="kpi-label"><i class="lvl lvl-green"></i>В графике</span><span class="kpi-val" id="k-green">–</span><span class="kpi-sub">отклонение −1…+2 мин</span></button>
+  <button class="kpi" data-filter="stale"><span class="kpi-label"><i class="lvl lvl-gray"></i>Нет связи / вне наряда</span><span class="kpi-val" id="k-gray">–</span><span class="kpi-sub" id="k-gray-sub">&nbsp;</span></button>
+  <div class="kpi kpi-static"><span class="kpi-label">Точность онлайн (MAE)</span><span class="kpi-val" id="k-mae">–</span><span class="kpi-sub" id="k-mae-sub">по факту прибытия</span></div>
+  <div class="kpi kpi-static"><span class="kpi-label">Задержка обработки</span><span class="kpi-val" id="k-lat">–</span><span class="kpi-sub" id="k-lat-sub">пакет → прогноз, p95</span></div>
+</section>
+
+<main class="main">
+  <section class="map-wrap">
+    <div id="map" aria-label="Карта маршрутной сети"></div>
+    <div class="map-legend" aria-label="Легенда карты">
+      <div><i class="lvl lvl-red"></i>высокий риск</div>
+      <div><i class="lvl lvl-yellow"></i>внимание</div>
+      <div><i class="lvl lvl-green"></i>в графике</div>
+      <div><i class="lvl lvl-gray"></i>нет связи / без наряда</div>
+      <div class="lg-line"><span class="seg seg-red"></span>проблемный участок</div>
+    </div>
+    <div class="map-filter" id="map-filter"></div>
+  </section>
+
+  <aside class="side">
+    <div class="side-head">
+      <h2>Инциденты <span class="count" id="inc-count">0</span></h2>
+      <div class="tabs" role="tablist">
+        <button role="tab" class="tab active" data-tab="open">Открытые</button>
+        <button role="tab" class="tab" data-tab="vehicles">Все ТС</button>
+        <button role="tab" class="tab" data-tab="resolved">Закрытые</button>
+      </div>
+    </div>
+    <div class="side-body" id="side-body">
+      <div class="empty">Ожидание первого прогноза…</div>
+    </div>
+  </aside>
+</main>
+
+<footer class="bottom">
+  <div class="routes" id="routes" aria-label="Риск по маршрутам"></div>
+  <div class="events" id="events" aria-label="Журнал событий"></div>
+  <div class="perf" id="perf"></div>
+</footer>
+
+<div class="drawer hidden" id="drawer" role="dialog" aria-modal="false" aria-labelledby="drawer-title">
+  <div class="drawer-head">
+    <h3 id="drawer-title">ТС</h3>
+    <button class="icon-btn" id="drawer-close" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
+<details class="demo" id="demo">
+  <summary>Демо-управление потоком</summary>
+  <div class="demo-body">
+    <div class="demo-status" id="demo-status">—</div>
+    <div class="demo-row">
+      <button data-demo="pause">Пауза</button><button data-demo="resume">Пуск</button>
+      <button data-demo="speed/1">×1</button><button data-demo="speed/10">×10</button><button data-demo="speed/30">×30</button>
+    </div>
+    <div class="demo-row">
+      <button data-demo="outage/60" class="warn">Обрыв связи 60 с</button>
+      <button data-demo="chaos/garbage">Мусор в канал</button>
+    </div>
+    <div class="demo-row">
+      <button data-demo-seek="2026-01-06 04:30:00">07:30 МСК</button>
+      <button data-demo-seek="2026-01-06 09:00:00">12:00 МСК</button>
+      <button data-demo-seek="2026-01-06 14:30:00">17:30 МСК</button>
+    </div>
+  </div>
+</details>
+
+<div class="tooltip hidden" id="tooltip" role="tooltip"></div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

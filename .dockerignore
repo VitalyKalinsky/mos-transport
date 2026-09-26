@@ -1,0 +1,7 @@
+**/__pycache__
+**/*.pyc
+.git
+.vscode
+dataset/ndtp-telemetry-emulator.tar
+notebooks/*.ipynb
+**/.pytest_cache

@@ -1,0 +1,83 @@
+# Предиктор задержек городского транспорта — запуск одной командой:
+#   docker compose up -d --build
+# Дашборд: http://localhost:8080 · Swagger Backend: http://localhost:8000/docs · Swagger ML: http://localhost:8001/docs
+name: mos-transport
+
+x-restart: &restart
+  restart: unless-stopped
+
+services:
+  # --- ML-ядро: инференс/обучение (CatBoost, notebooks/data_functions.py) ------------------------
+  ml-service:
+    <<: *restart
+    build: { context: ., dockerfile: services/ml_service/Dockerfile }
+    image: mos-transport/ml-service:1.0
+    ports: ["8001:8001"]
+    environment:
+      LOG_LEVEL: INFO
+      ML_ENABLE_TRAIN: "false"
+
+  # --- Backend: приём NDTP (TCP 9201), сопоставление с расписанием, оркестрация, API/WS -----------
+  backend:
+    <<: *restart
+    build: { context: ., dockerfile: services/backend/Dockerfile }
+    image: mos-transport/backend:1.0
+    ports: ["8000:8000", "9201:9201"]
+    environment:
+      ML_URL: http://ml-service:8001
+      NDTP_PORT: "9201"
+      PREDICT_INTERVAL_S: "1.0"
+      LINK_TIMEOUT_S: "15"
+      DISPLAY_TZ_OFFSET_H: "3"
+    # Backend НЕ ждёт ML-сервис: без него работает в деградированном режиме (baseline-прогноз)
+    depends_on:
+      ml-service: { condition: service_started }
+
+  # --- Источник потока: реплей реальной телеметрии датасета по NDTP --------------------------------
+  feeder:
+    <<: *restart
+    build: { context: ., dockerfile: services/feeder/Dockerfile }
+    image: mos-transport/feeder:1.0
+    ports: ["8090:8090"]
+    environment:
+      TARGET_HOST: backend
+      TARGET_PORT: "9201"
+      REPLAY_START: "2026-01-06 04:30:00"   # UTC = 07:30 МСК (утренний пик)
+      REPLAY_SPEED: "10"
+      REPLAY_LOOP: "true"
+    depends_on:
+      backend: { condition: service_healthy }
+
+  # --- Диспетчерский BI-дашборд (nginx + статический SPA, прокси к API/WS) -------------------------
+  dashboard:
+    <<: *restart
+    build: { context: ., dockerfile: dashboard/Dockerfile }
+    image: mos-transport/dashboard:1.0
+    ports: ["8080:80"]
+    depends_on:
+      backend: { condition: service_started }
+
+  # --- Штатный эмулятор NDTP (опционально): docker compose --profile emulator up -d ----------------
+  # Требует предварительно: docker load -i dataset/ndtp-telemetry-emulator.tar
+  emulator:
+    profiles: ["emulator"]
+    <<: *restart
+    image: ndtp-telemetry-emulator:1.0
+    ports: ["18080:18080"]
+
+  emulator-config:
+    profiles: ["emulator"]
+    image: curlimages/curl:8.10.1
+    depends_on:
+      emulator: { condition: service_started }
+      backend: { condition: service_healthy }
+    volumes: ["./scripts/emulator-config.json:/config.json:ro"]
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        for i in $$(seq 1 60); do
+          curl -fs -X POST http://emulator:18080/api/config -H 'Content-Type: application/json' -d @/config.json && echo ' -> emulator configured' && exit 0
+          sleep 2
+        done
+        echo 'emulator not reachable'; exit 1
+    restart: "no"

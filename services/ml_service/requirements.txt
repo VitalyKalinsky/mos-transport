@@ -1,0 +1,10 @@
+# Окружение ML-ядра (версии совпадают с теми, на которых обучена модель)
+catboost==1.2.10
+pandas==3.0.3
+numpy==2.4.6
+scikit-learn==1.9.0
+matplotlib==3.11.2
+seaborn==0.13.2
+# HTTP-обёртка
+fastapi==0.137.2
+uvicorn[standard]==0.49.0
