@@ -32,6 +32,7 @@ SPEED = float(os.getenv("REPLAY_SPEED", "10"))
 LOOP = os.getenv("REPLAY_LOOP", "true").lower() == "true"
 UNITS = os.getenv("REPLAY_UNITS", "")                           # пусто = все
 AUTOSTART = os.getenv("REPLAY_AUTOSTART", "true").lower() == "true"
+SPEED_PRESETS = [1, 2, 5, 10, 30, 60]
 
 
 class Replay:
@@ -52,6 +53,10 @@ class Replay:
         self.dropped = 0
         self.loops = 0
         self._garbage: set[int] = set()
+        # внештатные ситуации в живом потоке: сдвиг времени ТС (опоздание) и остановка
+        self.shift: dict[int, float] = {}            # накопленное смещение данных ТС, с (данные идут позже)
+        self.incidents: dict[int, dict] = {}         # unit → {kind, start, until, factor}
+        self.last_pos: dict[int, tuple] = {}         # последняя отправленная точка (для «стоящего» ТС)
 
     # --------------------------------------------------------------- data
     def load(self) -> None:
@@ -108,14 +113,49 @@ class Replay:
                         q.put_nowait(r)
                 self.pos += 1
                 batch += 1
+            self.expire_incidents(now)
             if self.pos >= len(self.rows):
                 if LOOP:
+                    self.shift.clear()
+                    self.incidents.clear()
                     self.loops += 1
                     log.info("end of data — loop #%d from start", self.loops)
                     self.seek(pd.Timestamp(START).timestamp() if START else self.data_start)
                 else:
                     self.running = False
             await asyncio.sleep(0.05)
+
+    # ------------------------------------------------------------- incidents
+    def unit_shift(self, unit: int, now: float) -> float:
+        """Смещение времени ТС: поломка — +длительность сразу; замедление — растёт с темпом (factor−1)."""
+        base = self.shift.get(unit, 0.0)
+        inc = self.incidents.get(unit)
+        if inc and inc["kind"] == "slowdown":
+            base += (max(inc["start"], min(now, inc["until"])) - inc["start"]) * (inc["factor"] - 1.0)
+        return base
+
+    def frozen(self, unit: int, now: float) -> bool:
+        inc = self.incidents.get(unit)
+        return bool(inc and inc["kind"] == "breakdown" and inc["start"] <= now < inc["until"])
+
+    def expire_incidents(self, now: float) -> None:
+        for unit, inc in list(self.incidents.items()):
+            if now >= inc["until"]:
+                if inc["kind"] == "slowdown":
+                    self.shift[unit] = self.shift.get(unit, 0.0) + (inc["until"] - inc["start"]) * (inc["factor"] - 1.0)
+                del self.incidents[unit]
+                log.info("incident on unit %s finished", unit)
+
+    def add_incident(self, unit: int, kind: str, minutes: float, factor: float = 2.0) -> dict:
+        if unit not in self.queues:
+            raise KeyError(unit)
+        now = self.data_now()
+        self.expire_incidents(now)
+        inc = {"kind": kind, "start": now, "until": now + minutes * 60, "factor": factor}
+        if kind == "breakdown":
+            self.shift[unit] = self.shift.get(unit, 0.0) + minutes * 60
+        self.incidents[unit] = inc
+        return inc
 
     # ------------------------------------------------------------- units
     async def unit_worker(self, unit: int) -> None:
@@ -165,7 +205,34 @@ class Replay:
                     writer.write(os.urandom(37) + ndtp.build_handshake(unit, 0)[:-3] + b"\x00\x00\x00")
                 continue
             _, ts, valid, lon, lat, alt, speed, heading, is_hist = r
+            # внештатная ситуация: ТС стоит (поломка) или едет медленнее (ДТП/засор) —
+            # строки его трека выдаются позже, в простое шлём «стоячие» пакеты с последней точки
+            hb_next = 0.0
+            while True:
+                now = self.data_now()
+                if self.frozen(unit, now) and unit in self.last_pos and now >= hb_next and writer is not None:
+                    plon, plat, palt, phead = self.last_pos[unit]
+                    req += 1
+                    try:
+                        writer.write(ndtp.build_realtime(unit, req, ndtp.encode_nav(
+                            int(now), plon, plat, True, speed=0.0, heading=phead, alt=palt)))
+                        await writer.drain()
+                        self.sent += 1
+                    except Exception:  # noqa: BLE001
+                        writer = None
+                    hb_next = now + 10.0
+                if now >= ts + self.unit_shift(unit, now) and not self.frozen(unit, now):
+                    break
+                if time.time() < self.outage_until or writer is None:
+                    break
+                await asyncio.sleep(0.1)
+            if writer is None or time.time() < self.outage_until:
+                self.dropped += 1
+                continue
+            ts = ts + self.unit_shift(unit, self.data_now())
             has = valid and lon == lon and lat == lat
+            if has:
+                self.last_pos[unit] = (lon, lat, 0.0 if alt != alt else alt, 0.0 if heading != heading else heading)
             cell = ndtp.encode_nav(
                 int(ts), lon if has else None, lat if has else None, has,
                 speed=0.0 if speed != speed else speed, heading=0.0 if heading != heading else heading,
@@ -202,7 +269,12 @@ class Replay:
             "target": f"{TARGET_HOST}:{TARGET_PORT}", "units": len(self.units),
             "connected_units": sum(1 for c in self.conns.values() if c["connected"]),
             "packets_sent": self.sent, "packets_dropped": self.dropped, "loops": self.loops,
-            "outage_remaining_s": max(0.0, round(self.outage_until - time.time(), 1)),
+            "outage_remaining_s": max(0.0, round(min(self.outage_until - time.time(), 1e9), 1)),
+            "outage_indefinite": self.outage_until == float("inf"),
+            "incidents": {str(u): {"kind": i["kind"], "remaining_min": round(max(0.0, i["until"] - self.data_now()) / 60, 1),
+                                   "factor": i["factor"]} for u, i in self.incidents.items()},
+            "shift_s": {str(u): round(v) for u, v in self.shift.items() if v},
+            "speed_presets": SPEED_PRESETS,
         }
 
 
@@ -246,7 +318,7 @@ def resume():
     return replay.status()
 
 
-@app.post("/speed/{value}")
+@app.post("/speed/{value:float}")
 def speed(value: float):
     if not 0.1 <= value <= 200:
         raise HTTPException(400, "speed must be within 0.1..200")
@@ -261,7 +333,7 @@ def seek(t: str):
     return replay.status()
 
 
-@app.post("/outage/{seconds}")
+@app.post("/outage/{seconds:float}")
 def outage(seconds: float):
     """Имитация обрыва связи: все TCP-соединения закрываются на `seconds` секунд."""
     replay.outage_until = time.time() + max(0.0, min(seconds, 3600))
@@ -273,3 +345,49 @@ def garbage():
     """Отправить в каждое соединение мусорные байты (проверка пересинхронизации парсера)."""
     replay._garbage.update(replay.units)
     return {"ok": True}
+
+
+@app.post("/outage/start")
+def outage_start():
+    """Обрыв потока до ручного восстановления."""
+    replay.outage_until = float("inf")
+    return replay.status()
+
+
+@app.post("/outage/stop")
+def outage_stop():
+    """Восстановление потока (терминалы переподключаются и повторяют handshake)."""
+    replay.outage_until = 0.0
+    return replay.status()
+
+
+@app.post("/incident/breakdown/{unit}")
+def incident_breakdown(unit: int, minutes: float = 10):
+    """Поломка: ТС стоит `minutes` минут (время данных), затем продолжает движение с опозданием."""
+    try:
+        replay.add_incident(unit, "breakdown", minutes)
+    except KeyError as e:
+        raise HTTPException(404, "unit not in replay") from e
+    return replay.status()
+
+
+@app.post("/incident/slowdown/{unit}")
+def incident_slowdown(unit: int, minutes: float = 20, factor: float = 2.5):
+    """ДТП/засор на пути: ТС движется в `factor` раз медленнее в течение `minutes` минут."""
+    try:
+        replay.add_incident(unit, "slowdown", minutes, max(1.0, min(factor, 10.0)))
+    except KeyError as e:
+        raise HTTPException(404, "unit not in replay") from e
+    return replay.status()
+
+
+@app.post("/incident/clear")
+def incident_clear(reset_delay: bool = False):
+    """Снять внештатные ситуации (накопленное опоздание сохраняется, если reset_delay=false)."""
+    now = replay.data_now()
+    for u in list(replay.incidents):
+        replay.incidents[u]["until"] = now
+    replay.expire_incidents(now)
+    if reset_delay:
+        replay.shift.clear()
+    return replay.status()

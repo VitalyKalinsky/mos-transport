@@ -17,6 +17,10 @@ from .engine import Engine
 from .ml_client import MLClient
 from .ndtp_server import NDTPServer
 from .reference import load_reference
+from .regions import load_region
+from .routes_registry import RouteRegistry
+from .whatif import WhatIf
+from . import api_ext
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"),
                     format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -33,11 +37,15 @@ async def lifespan(_: FastAPI):
     ref = await asyncio.to_thread(load_reference, settings.schedule_path, settings.units_path)
     ml = MLClient(settings)
     engine = Engine(settings, ref, ml)
+    registry = RouteRegistry(settings.routes_dir, settings.builtin_routes_dir)
+    engine.route_names = registry.vehicle_links()
+    region = load_region(settings.regions_path, settings.region)
     server = NDTPServer(settings.ndtp_host, settings.ndtp_port, engine.on_frame,
                         settings.ndtp_verify_crc, settings.ndtp_idle_timeout_s)
     await server.start()
     task = asyncio.create_task(engine.run(), name="predict-loop")
-    state.update(ref=ref, ml=ml, engine=engine, server=server, task=task,
+    state.update(ref=ref, ml=ml, engine=engine, server=server, task=task, registry=registry,
+                 region=region, whatif=WhatIf(engine),
                  startup_s=round(time.perf_counter() - t0, 2))
     log.info("backend ready in %.2fs", state["startup_s"])
     yield
@@ -48,15 +56,18 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="Mos-Transport Dispatcher Backend",
-    version="1.0.0",
+    version="2.0.0",
     description=(
         "Приём потока телеметрии NDTP (TCP), сопоставление с эталонным расписанием, расчёт производных "
         "признаков, оркестрация прогнозов ML-сервиса (горизонт 10–15 мин), риск/инциденты для диспетчера.\n\n"
-        "WebSocket `/ws` — поток снимков состояния для дашборда (≈1 раз в секунду)."
+        "WebSocket `/ws` — поток снимков состояния для дашборда (≈1 раз в секунду).\n\n"
+        "Расширения: ETA на ближайшие остановки, what-if моделирование, таймлайн, реестр реальных маршрутов "
+        "(OSM/GTFS), экспорт GTFS-Realtime/GTFS/GeoJSON для картографических сервисов."
     ),
     lifespan=lifespan,
 )
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+api_ext.register(app, state)
 
 
 def _engine() -> Engine:
@@ -192,6 +203,8 @@ def network():
         "segments": [{"id": s["id"], "coords": s["coords"], "routes": sorted(s["routes"])}
                      for s in ref.segments.values()],
         "routes": [{"id": r["id"], "vehicles": r["vehicles"]} for r in ref.routes.values()],
+        "real_routes": [dict(state["registry"].summary(r), geometry=r.get("geometry", []))
+                        for r in state["registry"].routes.values()],
     }
 
 

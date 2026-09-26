@@ -1,0 +1,83 @@
+  122048: candidate м83 score 0.22
+  122048: candidate м86 score 0.98
+  122048: candidate с848 score 0.11
+  122048: candidate 844 score 0.20
+  122048: candidate е85 score 0.69
+  122048: candidate с823 score 0.17
+122048: -> м86 (98%)
+  122613: candidate 770 score 0.32
+  122613: candidate 838 score 0.37
+  122613: candidate 708 score 0.22
+  122613: candidate с827 score 0.93
+  122613: candidate с848 score 0.04
+  122613: candidate с797 score 0.19
+122613: -> с827 (93%)
+  122658: candidate 480 score 0.57
+  122658: candidate 127 score 0.13
+  122658: candidate 129 score 0.33
+  122658: candidate 310 score 0.57
+  122658: candidate 638 score 0.43
+  122658: candidate 743 score 0.23
+122658: no confident match ({'ref': None, 'score': 0.567})
+  129964: candidate с856 score 0.45
+  129964: candidate 811 score 0.26
+  129964 824: Overpass недоступен: overpass-api.de: HTTPError; overpass-api.de: HTTPError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: TimeoutError
+  129964: candidate м19 score 0.12
+  129964: candidate <= Мёд score 0.10
+129964: no confident match ({'ref': None, 'score': 0.452})
+  130072: candidate 497 score 0.08
+  130072: candidate 374 score 0.09
+  130072: candidate 319 score 0.08
+  130072: candidate 400к score 0.55
+  130072: candidate 16 score 0.12
+  130072: candidate 20 score 0.16
+130072: no confident match ({'ref': None, 'score': 0.554})
+  130238: candidate 330 score 0.02
+  130238: candidate 793 score 0.17
+  130238: candidate 752 score 0.02
+  130238: candidate м17 score 0.98
+  130238: candidate 150 score 0.47
+  130238: candidate 221 score 0.03
+130238: -> м17 (98%)
+  131672: candidate м74 score 0.21
+  131672: candidate 21 score 0.97
+  131672: candidate 635 score 0.67
+  131672: candidate 14 score 0.45
+  131672: candidate 792 score 0.06
+  131672: candidate 79 score 0.39
+131672: -> 21 (97%)
+  132430: candidate 878 score 0.61
+  132430: candidate 978 score 0.14
+  132430: candidate 577 score 0.98
+  132430: candidate с949 score 0.27
+  132430: candidate 917 score 0.27
+  132430: candidate 101 score 0.59
+132430: -> 577 (98%)
+  133300: candidate 127 score 0.67
+  133300: candidate 73 score 0.33
+  133300: candidate 236 score 0.24
+  133300: candidate 757 score 1.00
+  133300: candidate 660 score 0.38
+133300: -> 757 (100%)
+133957: overpass error Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: TimeoutError
+  134040: candidate 330 score 0.09
+  134040 752: Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: HTTPError
+  134040: candidate м16 score 0.31
+  134040: candidate 226 score 0.06
+  134040: candidate 261 score 0.07
+  134040: candidate 288 score 0.06
+134040: no confident match ({'ref': None, 'score': 0.307})
+  134494: candidate с482 score 0.19
+  134494: candidate т29 score 0.13
+  134494: candidate 427 score 0.07
+  134494 384: Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: HTTPError
+  134494: candidate с372 score 0.07
+  134494: candidate 466 score 0.06
+134494: no confident match ({'ref': None, 'score': 0.185})
+  135081: candidate 756 score 0.14
+  135081: candidate 625 score 0.12
+  135081: candidate с9 score 0.12
+  135081: candidate 765 score 0.14
+  135081: candidate 749 score 0.19
+  135081: candidate 764 score 0.99
+135081: -> 764 (99%)

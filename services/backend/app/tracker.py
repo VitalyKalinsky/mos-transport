@@ -67,6 +67,11 @@ class VehicleState:
     seg_dist_m: float = 0.0
     standing_since: float | None = None
 
+    # темп и наблюдения перегонов (для ETA-движка и индекса загруженности)
+    pace_samples: deque = field(default_factory=lambda: deque(maxlen=6))
+    seg_observations: list = field(default_factory=list)
+    eta: object | None = None
+
     # прогноз
     prediction: dict | None = None
     pred_trail: deque = field(default_factory=lambda: deque(maxlen=180))
@@ -84,6 +89,8 @@ class VehicleState:
         self.standing_since = None
         self.pending_eval.clear()
         self.pred_trail.clear()
+        self.pace_samples.clear()
+        self.seg_observations.clear()
         self.history.clear()
         self.prediction = None
 
@@ -182,6 +189,7 @@ class VehicleState:
         for k in range(self.next_idx, j):
             self._skip(k)
         arr = Arrival(j, hit_ts, hit_ts - stops[j].plan_ts, True)
+        self._observe_pace(j, hit_ts)
         self.arrivals[j] = arr
         self.last_arrival = arr
         self.arrivals_detected += 1
@@ -189,6 +197,24 @@ class VehicleState:
         self.seg_start_ts = ts
         self.seg_dist_m = 0.0
         return [arr]
+
+    def _observe_pace(self, j: int, fact_ts: float) -> None:
+        """Темп ТС: факт/план по последнему детектированному перегону (без межрейсовых отстоев)."""
+        prev = self.last_arrival
+        if prev is None or not prev.detected or not (0 < j - prev.idx <= 3):
+            return
+        stops = self.schedule.stops
+        plan_dt = stops[j].plan_ts - stops[prev.idx].plan_ts
+        fact_dt = fact_ts - prev.fact_ts
+        if 30 <= plan_dt < 360 and fact_dt > 0:
+            ratio = fact_dt / plan_dt
+            self.pace_samples.append(ratio)
+            if j - prev.idx == 1 and stops[prev.idx].stop_key != stops[j].stop_key:
+                self.seg_observations.append((f"{stops[prev.idx].stop_key}>{stops[j].stop_key}", ratio, fact_ts))
+
+    def pop_segment_observations(self) -> list:
+        obs, self.seg_observations = self.seg_observations, []
+        return obs
 
     def _passage_time(self, slon: float, slat: float, lon: float, lat: float, ts: float,
                       prev: tuple[float, float, float] | None) -> float | None:

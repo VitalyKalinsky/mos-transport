@@ -12,6 +12,7 @@ import ndtp
 
 from .clock import DataClock
 from .config import Settings
+from .eta import EtaEngine, EtaResult, Overrides
 from .metrics import LatencyWindow, RateCounter
 from .ml_client import MLClient
 from .ndtp_server import ConnInfo
@@ -62,6 +63,15 @@ class Engine:
         self.snapshot: dict[str, Any] = {}
         self.subscribers: set[asyncio.Queue] = set()
         self._new_data = asyncio.Event()
+
+        # ETA на ближайшие остановки, живые воздействия (what-if, применённые к прогнозу), таймлайн
+        self.eta = EtaEngine(ref)
+        self.live_overrides: Overrides | None = None
+        self.live_scenarios: list[dict] = []
+        self.live_ovs: list[tuple] = []             # (Overrides, until_T) — для истечения по времени
+        self.timeline: deque[dict] = deque(maxlen=cfg.timeline_frames)
+        self._last_frame_T = 0.0
+        self.route_names: dict[int, dict] = {}      # tr_id → реальный маршрут из реестра (номер, id)
 
     # ================================================================ ingest
     def on_frame(self, frame: ndtp.Frame, conn: ConnInfo, rx_wall: float) -> None:
@@ -183,6 +193,26 @@ class Engine:
             if dirty and rx_wall:
                 self.e2e_ms.add((publish_wall - rx_wall) * 1000)
         self.predictions_total += len(points)
+
+        # истечение применённых сценариев what-if
+        if self.live_ovs and any(u <= T for _, u in self.live_ovs):
+            from .whatif import merge
+            self.live_ovs = [(o, u) for o, u in self.live_ovs if u > T]
+            self.live_scenarios = [x for x in self.live_scenarios if x["until_T"] > T]
+            merged = None
+            for o, _ in self.live_ovs:
+                merged = merge(merged, o)
+            self.live_overrides = merged
+            self._event("info", "Срок действия сценария what-if истёк")
+        # ETA на ближайшие остановки (кинематика + график; при обрыве — счисление пути)
+        scheduled = [st for st in self.vehicles.values() if st.schedule is not None and st.last_ts]
+        self.eta.update_traffic(scheduled)
+        for st in scheduled:
+            try:
+                st.eta = self.eta.predict(st, T, self.cfg.eta_stops, self.live_overrides)
+            except Exception:  # noqa: BLE001
+                log.exception("eta failed for unit %s", st.unit_id)
+                st.eta = None
 
         self._update_status(wall)
         self._update_incidents(T)
@@ -357,9 +387,17 @@ class Engine:
         state = "stale" if stale else ("no_gps" if not st.location_valid else
                                        ("standing" if st.speed < self.cfg.standing_speed_kmh else "moving"))
         seg = p.get("segment") or {}
+        eta: EtaResult | None = st.eta
+        rn = self.route_names.get(st.tr_id) if st.tr_id is not None else None
+        ghost = eta is not None and eta.mode == "dead_reckoning" and eta.est_lat is not None
         return {
             "unit_id": st.unit_id, "tr_id": st.tr_id,
             "route_id": st.schedule.route_id if st.schedule else None,
+            "route_ref": rn["ref"] if rn else None,
+            "eta_mode": eta.mode if eta else None,
+            "est_lat": eta.est_lat if ghost else None, "est_lon": eta.est_lon if ghost else None,
+            "next_stops": [{"address": e.address, "eta": self._local(e.eta_ts), "delay_s": _r(e.delay_s)}
+                           for e in (eta.stops[:3] if eta else [])],
             "scheduled": st.schedule is not None,
             "lon": st.lon, "lat": st.lat, "heading": st.heading, "speed": _r(st.speed, 1),
             "state": state, "level": level, "stale": stale,
@@ -390,8 +428,50 @@ class Engine:
                          for a in sorted(st.arrivals.values(), key=lambda a: a.idx)[-12:] if a.detected]
             if st.schedule else [],
             "upcoming": self._upcoming_path(st, T),
+            "eta": self.eta_view(st),
             "stats": {"packets": st.packets, "arrivals_detected": st.arrivals_detected,
                       "arrivals_skipped": st.arrivals_skipped, "gps_fail_streak": st.gps_fail_streak},
+        }
+
+    def export_trips(self, tr: int) -> list[tuple[int, int]]:
+        """Рейсы ТС (для GTFS): кэш разбиения графика по межрейсовым отстоям."""
+        cache = self.__dict__.setdefault("_trips_cache", {})
+        if tr not in cache:
+            from .export import trips_of
+            cache[tr] = trips_of(self.ref.schedules[tr])
+        return cache[tr]
+
+    def future_frames(self, minutes: int = 30, step_s: int = 60) -> list[dict]:
+        """Прогнозные кадры таймлайна: положение ТС по ETA на T+step … T+minutes."""
+        T = self.clock.now()
+        frames = []
+        for k in range(1, minutes * 60 // step_s + 1):
+            t = T + k * step_s
+            v = []
+            for st in self.vehicles.values():
+                if st.eta is None or not st.eta.stops:
+                    continue
+                pos = self.eta.position_at(st, st.eta, t)
+                if pos is None:
+                    continue
+                nxt = next((e for e in st.eta.stops if e.eta_ts >= t), st.eta.stops[-1])
+                d = nxt.delay_s
+                lvl = "red" if d >= self.cfg.red_threshold_s else "yellow" if d >= self.cfg.late_threshold_s or d <= self.cfg.early_threshold_s else "green"
+                v.append([st.unit_id, pos[0], pos[1], lvl, round(d), 0])
+            frames.append({"T": t, "t": self._local(t), "v": v, "future": True})
+        return frames
+
+    def eta_view(self, st: VehicleState) -> dict | None:
+        e: EtaResult | None = st.eta
+        if e is None:
+            return None
+        return {
+            "mode": e.mode, "pace": round(e.pace, 2),
+            "est_lat": e.est_lat, "est_lon": e.est_lon,
+            "stops": [{"idx": s.idx, "stop_id": s.stop_id, "address": s.address,
+                       "plan": self._local(s.plan_ts), "eta": self._local(s.eta_ts),
+                       "eta_ts": s.eta_ts, "delay_s": round(s.delay_s), "sigma_s": round(s.sigma_s),
+                       "skipped": s.skipped} for s in e.stops],
         }
 
     def _upcoming_path(self, st: VehicleState, T: float) -> list[list[float]]:
@@ -401,7 +481,8 @@ class Engine:
         stops = st.schedule.stops
         end = min(len(stops) - 1, p.get("target_idx", st.next_idx + 8))
         path = [[st.lat, st.lon]] if st.lat is not None else []
-        path += [[stops[i].lat, stops[i].lon] for i in range(st.next_idx, end + 1)]
+        for i in range(max(1, st.next_idx), end + 1):
+            path += self.ref.polyline(stops[i - 1], stops[i]).coords
         return path
 
     def _segment_levels(self) -> dict[str, str]:
@@ -421,6 +502,21 @@ class Engine:
                 if sid in self.ref.segments and LEVEL_ORDER[p["level"]] > LEVEL_ORDER.get(levels.get(sid, "gray"), 0):
                     levels[sid] = p["level"]
         return levels
+
+    def _record_frame(self, T: float, vehicles: list[dict]) -> None:
+        """Кадр таймлайна: компактное состояние всех ТС раз в timeline_step_s секунд данных."""
+        if T - self._last_frame_T < self.cfg.timeline_step_s and T >= self._last_frame_T:
+            return
+        if T < self._last_frame_T - 3600:
+            self.timeline.clear()              # перезапуск источника — история другого времени
+        self._last_frame_T = T
+        self.timeline.append({
+            "T": T, "t": self._local(T),
+            "v": [[v["unit_id"], v["lat"], v["lon"], v["level"], v["predicted_delay_s"], 1 if v["stale"] else 0]
+                  for v in vehicles if v["lat"] is not None],
+            "inc": [i["tr_id"] for i in self.incidents.values()],
+            "mode": self.status()["mode"],
+        })
 
     def _build_snapshot(self, T: float, wall: float) -> None:
         vehicles = [self.vehicle_view(st, T) for st in self.vehicles.values()]
@@ -469,7 +565,9 @@ class Engine:
             "events": [{"time": datetime.fromtimestamp(e["wall"], tz=self.tz).strftime("%H:%M:%S"),
                         "level": e["level"], "text": e["text"]} for e in list(self.events)[:12]],
             "perf": self.perf_brief(),
+            "live_scenarios": self.live_scenarios,
         }
+        self._record_frame(T, vehicles)
 
     def perf_brief(self) -> dict:
         return {

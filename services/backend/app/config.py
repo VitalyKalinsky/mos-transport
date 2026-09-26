@@ -62,6 +62,18 @@ class Settings:
     unknown_unit_ttl_s: float = field(default_factory=lambda: _env("UNKNOWN_UNIT_TTL_S", 300.0, float))
     clock_freerun_max_s: float = field(default_factory=lambda: _env("CLOCK_FREERUN_MAX_S", 3 * 3600.0, float))
 
+    # --- ETA / таймлайн
+    eta_stops: int = field(default_factory=lambda: _env("ETA_STOPS", 8, int))
+    timeline_step_s: float = field(default_factory=lambda: _env("TIMELINE_STEP_S", 15.0, float))
+    timeline_frames: int = field(default_factory=lambda: _env("TIMELINE_FRAMES", 1440, int))   # 6 ч данных
+
+    # --- справочники
+    region: str = field(default_factory=lambda: _env("REGION", "moscow"))
+    regions_path: str = field(default_factory=lambda: _env("REGIONS_PATH", "/app/data/regions/regions.json"))
+    routes_dir: str = field(default_factory=lambda: _env("ROUTES_DIR", "/var/lib/mos-transport/routes"))
+    builtin_routes_dir: str = field(default_factory=lambda: _env("BUILTIN_ROUTES_DIR", "/app/data/routes"))
+    feeder_url: str = field(default_factory=lambda: _env("FEEDER_URL", "http://feeder:8090"))
+
     # --- отображение
     display_tz_offset_h: int = field(default_factory=lambda: _env("DISPLAY_TZ_OFFSET_H", 3, int))  # МСК
 

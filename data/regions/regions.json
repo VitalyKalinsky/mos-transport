@@ -1,0 +1,67 @@
+{
+  "default": "moscow",
+  "regions": {
+    "moscow": {
+      "name": "Москва и Московская область",
+      "center": [55.7558, 37.6176],
+      "zoom": 11,
+      "min_zoom": 8,
+      "max_zoom": 18,
+      "bounds": [[54.20, 35.10], [56.99, 40.25]],
+      "tz_offset_h": 3,
+      "providers": ["2gis", "yandex", "osm"],
+      "default_provider": "2gis",
+      "osm_area": "Москва"
+    },
+    "spb": {
+      "name": "Санкт-Петербург и Ленинградская область",
+      "center": [59.9386, 30.3141],
+      "zoom": 11,
+      "min_zoom": 7,
+      "max_zoom": 18,
+      "bounds": [[58.40, 27.80], [61.35, 35.75]],
+      "tz_offset_h": 3,
+      "providers": ["2gis", "yandex", "osm"],
+      "default_provider": "2gis",
+      "osm_area": "Санкт-Петербург"
+    },
+    "kazan": {
+      "name": "Казань",
+      "center": [55.7963, 49.1088],
+      "zoom": 11,
+      "min_zoom": 9,
+      "max_zoom": 18,
+      "bounds": [[55.55, 48.70], [56.05, 49.50]],
+      "tz_offset_h": 3,
+      "providers": ["2gis", "yandex", "osm"],
+      "default_provider": "2gis",
+      "osm_area": "Казань"
+    }
+  },
+  "providers": {
+    "2gis": {
+      "name": "2ГИС",
+      "url": "https://tile{s}.maps.2gis.com/tiles?x={x}&y={y}&z={z}&v=1",
+      "subdomains": "0123",
+      "crs": "EPSG3857",
+      "max_zoom": 18,
+      "attribution": "&copy; <a href=\"https://2gis.ru\" target=\"_blank\">2ГИС</a>"
+    },
+    "yandex": {
+      "name": "Яндекс Карты",
+      "url": "https://core-renderer-tiles.maps.yandex.net/tiles?l=map&x={x}&y={y}&z={z}&scale=1&lang=ru_RU",
+      "subdomains": "",
+      "crs": "EPSG3395",
+      "max_zoom": 19,
+      "attribution": "&copy; <a href=\"https://yandex.ru/maps\" target=\"_blank\">Яндекс</a>"
+    },
+    "osm": {
+      "name": "OpenStreetMap",
+      "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "subdomains": "",
+      "crs": "EPSG3857",
+      "max_zoom": 19,
+      "attribution": "&copy; участники <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a>"
+    }
+  }
+}

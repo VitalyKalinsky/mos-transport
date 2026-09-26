@@ -29,6 +29,11 @@ services:
       PREDICT_INTERVAL_S: "1.0"
       LINK_TIMEOUT_S: "15"
       DISPLAY_TZ_OFFSET_H: "3"
+      REGION: moscow                     # регион карты (data/regions/regions.json)
+      FEEDER_URL: http://feeder:8090     # инъекция внештатных ситуаций в поток (what-if «применить»)
+      ROUTER_URL: https://router.project-osrm.org   # дорожный роутер для объездов/новых маршрутов
+    volumes:
+      - routes-data:/var/lib/mos-transport/routes   # реестр импортированных маршрутов
     # Backend НЕ ждёт ML-сервис: без него работает в деградированном режиме (baseline-прогноз)
     depends_on:
       ml-service: { condition: service_started }
@@ -81,3 +86,6 @@ services:
         done
         echo 'emulator not reachable'; exit 1
     restart: "no"
+
+volumes:
+  routes-data:

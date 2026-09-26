@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Интеграция с картами</title>
+  <link rel="stylesheet" href="../vendor/leaflet/leaflet.css">
+  <style>
+    :root { --ink: #111418; --muted: #5f6570; --bg: #eef0f3; --card: #fff; --border: rgba(17,20,24,.14); --accent: #2a78d6; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink: #fff; --muted: #9a988f; --bg: #0d0d0d; --card: #1a1a19; --border: rgba(255,255,255,.12); } }
+    body { margin: 0; font: 15px/1.5 "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+    main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 60px; }
+    h1 { font-size: 26px; margin: 0 0 4px; } h2 { font-size: 19px; margin: 28px 0 8px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 10px 0; }
+    code, pre { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px; }
+    pre { background: rgba(127,127,127,.12); border-radius: 8px; padding: 10px 12px; overflow: auto; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    td, th { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; }
+    #map { height: 420px; border-radius: 12px; border: 1px solid var(--border); }
+    .muted { color: var(--muted); }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Интеграция с Яндекс Картами, 2ГИС и другими сервисами</h1>
+  <p class="muted">Сервис публикует положение ТС и прогноз прибытия, рассчитанные алгоритмами диспетчерской
+    (ETA-движок + ML-прогноз задержки), в открытых стандартах. Картографический сервис подключает фиды — и автобусы
+    на его картах двигаются и «опаздывают» так, как прогнозирует наша система.</p>
+
+  <h2>1. Фиды GTFS-Realtime (рекомендуемый путь)</h2>
+  <div class="card">
+    <p>GTFS / GTFS-Realtime — стандарт, в котором перевозчики передают расписания и онлайн-данные агрегаторам
+      (Яндекс Карты, 2ГИС, Google Maps, Moovit и др. принимают фиды через партнёрские программы для перевозчиков).</p>
+    <table>
+      <tr><th>Фид</th><th>URL</th><th>Содержимое</th></tr>
+      <tr><td>Статическое расписание</td><td><a href="/api/export/gtfs-static.zip">/api/export/gtfs-static.zip</a></td><td>stops, routes, trips, stop_times, shapes (геометрия по дорогам)</td></tr>
+      <tr><td>VehiclePositions</td><td><a href="/api/export/gtfs-rt/vehicle-positions?format=json">/api/export/gtfs-rt/vehicle-positions</a></td><td>координаты, курс, скорость; при потере связи — расчётное положение</td></tr>
+      <tr><td>TripUpdates</td><td><a href="/api/export/gtfs-rt/trip-updates?format=json">/api/export/gtfs-rt/trip-updates</a></td><td>прогноз прибытия на остановки с неопределённостью; на горизонте 10–15 мин — ML</td></tr>
+      <tr><td>Alerts</td><td><a href="/api/export/gtfs-rt/alerts?format=json">/api/export/gtfs-rt/alerts</a></td><td>инциденты: причина, эффект, маршрут</td></tr>
+    </table>
+    <p class="muted">По умолчанию — protobuf (<code>application/x-protobuf</code>), для отладки — <code>?format=json</code>.
+      Идентификаторы <code>stop_id / route_id / trip_id</code> в RT совпадают со статическим GTFS.</p>
+  </div>
+
+  <h2>2. GeoJSON для JS API карт</h2>
+  <div class="card">
+    <p><a href="/api/export/vehicles.geojson">/api/export/vehicles.geojson</a> — FeatureCollection ТС (уровень риска, прогноз, ближайшие остановки).
+      Ниже — живой пример на подложке 2ГИС (без ключа, опрос раз в 5 с):</p>
+    <div id="map"></div>
+  </div>
+
+  <h2>3. Яндекс Карты (JavaScript API 3.0)</h2>
+  <div class="card"><p class="muted">Требуется ключ JS API. Слой ТС строится из того же GeoJSON:</p>
+<pre>&lt;script src="https://api-maps.yandex.ru/v3/?apikey=ВАШ_КЛЮЧ&amp;lang=ru_RU"&gt;&lt;/script&gt;
+&lt;script&gt;
+(async () =&gt; {
+  await ymaps3.ready;
+  const {YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker} = ymaps3;
+  const map = new YMap(document.getElementById("map"), {location: {center: [37.62, 55.75], zoom: 11}});
+  map.addChild(new YMapDefaultSchemeLayer()); map.addChild(new YMapDefaultFeaturesLayer());
+  const markers = new Map();
+  async function tick() {
+    const fc = await (await fetch("https://ВАШ_ХОСТ/api/export/vehicles.geojson")).json();
+    for (const f of fc.features) {
+      const id = f.properties.unit_id, color = {red: "#d03b3b", yellow: "#fab219", green: "#0ca30c"}[f.properties.level] || "#898781";
+      let m = markers.get(id);
+      if (!m) { const el = document.createElement("div"); el.style.cssText = "width:14px;height:14px;border-radius:50%;border:2px solid #fff";
+                m = new YMapMarker({coordinates: f.geometry.coordinates}, el); map.addChild(m); markers.set(id, m); }
+      m.update({coordinates: f.geometry.coordinates}); m.element.style.background = color;
+    }
+  }
+  tick(); setInterval(tick, 5000);
+})();
+&lt;/script&gt;</pre></div>
+
+  <h2>4. 2ГИС (MapGL JS API)</h2>
+  <div class="card"><p class="muted">Требуется ключ MapGL:</p>
+<pre>&lt;script src="https://mapgl.2gis.com/api/js/v1"&gt;&lt;/script&gt;
+&lt;script&gt;
+const map = new mapgl.Map("map", {center: [37.62, 55.75], zoom: 11, key: "ВАШ_КЛЮЧ"});
+const markers = new Map();
+async function tick() {
+  const fc = await (await fetch("https://ВАШ_ХОСТ/api/export/vehicles.geojson")).json();
+  for (const f of fc.features) {
+    const id = f.properties.unit_id;
+    markers.get(id)?.destroy();
+    markers.set(id, new mapgl.CircleMarker(map, {coordinates: f.geometry.coordinates, radius: 8,
+      color: {red: "#d03b3b", yellow: "#fab219", green: "#0ca30c"}[f.properties.level] || "#898781",
+      strokeWidth: 2, strokeColor: "#fff"}));
+  }
+}
+tick(); setInterval(tick, 5000);
+&lt;/script&gt;</pre></div>
+  <p class="muted">CORS для /api/* открыт; в продакшене доступ к фидам ограничивается ключом партнёра на балансировщике.</p>
+</main>
+<script src="../vendor/leaflet/leaflet.js"></script>
+<script>
+  const map = L.map("map", { maxBounds: [[54.2, 35.1], [56.99, 40.25]], minZoom: 8 }).setView([55.75, 37.62], 10);
+  map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+  L.tileLayer("https://tile{s}.maps.2gis.com/tiles?x={x}&y={y}&z={z}&v=1", { subdomains: "0123", attribution: "&copy; 2ГИС" }).addTo(map);
+  const layer = L.geoJSON(null, {
+    pointToLayer: (f, ll) => L.circleMarker(ll, { radius: 7, weight: 2, color: "#fff",
+      fillColor: { red: "#d03b3b", yellow: "#fab219", green: "#0ca30c" }[f.properties.level] || "#898781", fillOpacity: 1 }),
+    onEachFeature: (f, l) => l.bindTooltip(`ТС ${f.properties.tr_id || f.properties.unit_id}${f.properties.route_ref ? " · " + f.properties.route_ref : ""}`),
+  }).addTo(map);
+  let fitted = false;
+  async function tick() {
+    try {
+      const fc = await (await fetch("/api/export/vehicles.geojson")).json();
+      layer.clearLayers(); layer.addData(fc);
+      if (!fitted && fc.features.length) { map.fitBounds(layer.getBounds(), { padding: [30, 30] }); fitted = true; }
+    } catch (e) { /* сервис недоступен */ }
+  }
+  tick(); setInterval(tick, 5000);
+</script>
+</body>
+</html>

@@ -1,7 +1,9 @@
 """Справочные данные: эталонное расписание, остановки, маршрутная сеть, привязка терминалов к ТС."""
 from __future__ import annotations
 
+import json
 import logging
+import os
 import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
@@ -9,6 +11,7 @@ from dataclasses import dataclass, field
 import pandas as pd
 
 from .geo import haversine_m
+from .geometry import Polyline, remove_spurs
 
 log = logging.getLogger("backend.reference")
 
@@ -54,10 +57,22 @@ class Reference:
     unit_to_tr: dict[int, int]
     stops: dict[str, dict]                     # stop_key -> {lon, lat, address, routes}
     routes: dict[str, dict]                    # route_id -> {vehicles, stops, segments}
-    segments: dict[str, dict]                  # seg_id -> {a, b, coords, routes}
+    segments: dict[str, dict]                  # seg_id -> {a, b, coords, routes, source}
+    shapes: dict[str, dict] = field(default_factory=dict)   # геометрия «по дорогам» (data/network/shapes.json)
+    _poly: dict[str, Polyline] = field(default_factory=dict)
 
     def tr_for_unit(self, unit_id: int) -> int | None:
         return self.unit_to_tr.get(unit_id)
+
+    def polyline(self, a: PlannedStop, b: PlannedStop) -> Polyline:
+        """Геометрия перегона a → b по дорогам (или прямая, если геометрии нет)."""
+        sid = seg_id(a.stop_key, b.stop_key)
+        pl = self._poly.get(sid)
+        if pl is None:
+            shp = self.shapes.get(sid)
+            coords = shp["coords"] if shp else [[a.lat, a.lon], [b.lat, b.lon]]
+            pl = self._poly[sid] = Polyline(coords)
+        return pl
 
 
 def _to_ts(s: pd.Series) -> pd.Series:
@@ -66,10 +81,25 @@ def _to_ts(s: pd.Series) -> pd.Series:
 
 
 def seg_id(a: str, b: str) -> str:
-    return f"{a}|{b}" if a <= b else f"{b}|{a}"
+    """Направленный сегмент «остановка a → остановка b» (одностороннее движение, разные полосы)."""
+    return f"{a}>{b}"
 
 
-def load_reference(schedule_path: str, units_path: str) -> Reference:
+def load_shapes(path: str | None = None) -> dict[str, dict]:
+    path = path or os.getenv("SHAPES_PATH", "/app/data/network/shapes.json")
+    try:
+        with open(path, encoding="utf-8") as f:
+            shapes = json.load(f)
+        for v in shapes.values():
+            v["coords"] = remove_spurs(v["coords"])
+        log.info("road-snapped shapes: %d segments from %s", len(shapes), path)
+        return shapes
+    except FileNotFoundError:
+        log.warning("shapes file %s not found — segments drawn as straight lines", path)
+        return {}
+
+
+def load_reference(schedule_path: str, units_path: str, shapes_path: str | None = None) -> Reference:
     sch = pd.read_csv(schedule_path)
     xy = sch["geom"].str.extract(_POINT).astype(float)
     sch["lon"], sch["lat"] = xy[0], xy[1]
@@ -98,14 +128,15 @@ def load_reference(schedule_path: str, units_path: str) -> Reference:
     units = pd.read_csv(units_path, usecols=["unit_id", "tr_id"]).drop_duplicates()
     unit_to_tr = {int(u): int(t) for u, t in zip(units["unit_id"], units["tr_id"])}
 
-    routes, segments = _build_network(schedules, stops)
+    shapes = load_shapes(shapes_path)
+    routes, segments = _build_network(schedules, stops, shapes)
     log.info("reference: %d scheduled vehicles, %d planned stops, %d physical stops, %d routes, "
              "%d segments, %d known units", len(schedules), len(sch), len(stops), len(routes),
              len(segments), len(unit_to_tr))
-    return Reference(schedules, unit_to_tr, stops, routes, segments)
+    return Reference(schedules, unit_to_tr, stops, routes, segments, shapes)
 
 
-def _build_network(schedules: dict[int, VehicleSchedule], stops: dict[str, dict]):
+def _build_network(schedules: dict[int, VehicleSchedule], stops: dict[str, dict], shapes: dict[str, dict]):
     """Маршрутная сеть: ТС с общими остановками объединяются в маршрут (union-find по
     доле общих остановок), сегменты = пары последовательных остановок по расписанию."""
     stop_sets = {tr: {s.stop_key for s in sch.stops} for tr, sch in schedules.items()}
@@ -146,9 +177,11 @@ def _build_network(schedules: dict[int, VehicleSchedule], stops: dict[str, dict]
                     # разрыв > 30 мин или > 3 км — это межрейсовый перегон/отстой, не сегмент маршрута
                     if s.plan_ts - prev.plan_ts <= 1800 and haversine_m(prev.lon, prev.lat, s.lon, s.lat) <= 3000:
                         sid = seg_id(prev.stop_key, s.stop_key)
+                        shp = shapes.get(sid)
                         seg = segments.setdefault(sid, {
                             "id": sid, "a": prev.stop_key, "b": s.stop_key,
-                            "coords": [[prev.lat, prev.lon], [s.lat, s.lon]], "routes": set(),
+                            "coords": shp["coords"] if shp else [[prev.lat, prev.lon], [s.lat, s.lon]],
+                            "source": shp["source"] if shp else "straight", "routes": set(),
                         })
                         seg["routes"].add(rid)
                         rsegs.add(sid)

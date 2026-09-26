@@ -8,10 +8,13 @@ RUN pip install -r /tmp/requirements.txt
 COPY dataset/validate/schedule_plan.csv /data/validate/schedule_plan.csv
 COPY dataset/validate/traffic.csv /data/validate/traffic.csv
 
+# Геометрия «по дорогам», регионы, встроенные маршруты (OSM-привязка ТС датасета)
+COPY data/ /app/data/
 COPY libs/ndtp /app/libs/ndtp
 COPY services/backend/app /app/app
 WORKDIR /app
 ENV PYTHONPATH=/app/libs:/app
+RUN mkdir -p /var/lib/mos-transport/routes
 EXPOSE 8000 9201
 HEALTHCHECK --interval=5s --timeout=3s --start-period=15s --retries=12 \
   CMD curl -fs http://localhost:8000/health | grep -q '"status":"ok"' || exit 1

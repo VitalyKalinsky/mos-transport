@@ -11,8 +11,24 @@
 <header class="topbar">
   <div class="brand">
     <div class="brand-title">Предиктор задержек</div>
-    <div class="brand-sub">Диспетчерская наземного транспорта · прогноз на 10–15 мин</div>
+    <div class="brand-sub" id="region-name">Диспетчерская наземного транспорта</div>
   </div>
+
+  <div class="search" role="search">
+    <input id="search" type="search" placeholder="Найти ТС или маршрут: 134040, м6, 824…" autocomplete="off"
+           aria-label="Поиск ТС по номеру или маршруту">
+    <div class="search-list hidden" id="search-list" role="listbox"></div>
+  </div>
+
+  <div class="stream" aria-label="Управление потоком">
+    <div class="seg" id="speed" role="group" aria-label="Скорость потока">
+      <button data-speed="0" title="Пауза">⏸</button>
+      <button data-speed="1">×1</button><button data-speed="2">×2</button><button data-speed="5">×5</button>
+      <button data-speed="10">×10</button><button data-speed="30">×30</button><button data-speed="60">×60</button>
+    </div>
+    <button class="btn stream-btn" id="outage-btn" title="Обрыв / восстановление потока телематики">Обрыв потока</button>
+  </div>
+
   <div class="clock" title="Время потока телеметрии (МСК)">
     <span class="clock-time" id="clock">--:--:--</span>
     <span class="clock-date" id="clock-date">ожидание данных</span>
@@ -23,11 +39,12 @@
   <div class="links">
     <span class="chip" id="chip-link" title="Поток NDTP">NDTP</span>
     <span class="chip" id="chip-ml" title="ML-сервис">ML</span>
+    <select id="provider" class="select" title="Картографическая основа" aria-label="Карта"></select>
     <button class="icon-btn" id="theme-btn" title="Светлая / тёмная тема" aria-label="Переключить тему">◐</button>
   </div>
 </header>
 
-<div class="degraded-banner hidden" id="banner" role="alert"></div>
+<div class="banner hidden" id="banner" role="alert"></div>
 
 <section class="kpis" aria-label="Сводка">
   <button class="kpi kpi-red" data-filter="red"><span class="kpi-label"><i class="lvl lvl-red"></i>Высокий риск</span><span class="kpi-val" id="k-red">–</span><span class="kpi-sub">прогноз ≥ 4 мин или P≥75%</span></button>
@@ -46,25 +63,42 @@
       <div><i class="lvl lvl-yellow"></i>внимание</div>
       <div><i class="lvl lvl-green"></i>в графике</div>
       <div><i class="lvl lvl-gray"></i>нет связи / без наряда</div>
-      <div class="lg-line"><span class="seg seg-red"></span>проблемный участок</div>
+      <div><i class="lvl lvl-ghost"></i>расчётное положение</div>
+      <div class="lg-line"><span class="seg-sample seg-red"></span>проблемный участок</div>
     </div>
-    <div class="map-filter" id="map-filter"></div>
+    <div class="map-tools">
+      <div id="map-filter"></div>
+      <label class="toggle"><input type="checkbox" id="lyr-real" checked> Реальные маршруты</label>
+      <label class="toggle"><input type="checkbox" id="lyr-net" checked> Сеть по расписанию</label>
+    </div>
+    <div class="track-pill hidden" id="track-pill"></div>
+    <div class="scrub-banner hidden" id="scrub-banner"></div>
   </section>
 
   <aside class="side">
     <div class="side-head">
-      <h2>Инциденты <span class="count" id="inc-count">0</span></h2>
       <div class="tabs" role="tablist">
-        <button role="tab" class="tab active" data-tab="open">Открытые</button>
+        <button role="tab" class="tab active" data-tab="open">Инциденты <span class="count" id="inc-count">0</span></button>
         <button role="tab" class="tab" data-tab="vehicles">Все ТС</button>
+        <button role="tab" class="tab" data-tab="whatif">What-if</button>
+        <button role="tab" class="tab" data-tab="routes">Маршруты</button>
         <button role="tab" class="tab" data-tab="resolved">Закрытые</button>
       </div>
     </div>
-    <div class="side-body" id="side-body">
-      <div class="empty">Ожидание первого прогноза…</div>
-    </div>
+    <div class="side-body" id="side-body"><div class="empty">Ожидание первого прогноза…</div></div>
+    <div class="side-body hidden" id="whatif-body"></div>
+    <div class="side-body hidden" id="routes-body"></div>
   </aside>
 </main>
+
+<section class="timeline" id="timeline" aria-label="Таймлайн: история и прогноз">
+  <button class="btn tl-live" id="tl-live" title="Вернуться к живой картине">● LIVE</button>
+  <div class="tl-track" id="tl-track">
+    <svg id="tl-svg" preserveAspectRatio="none"></svg>
+    <div class="tl-cursor" id="tl-cursor"></div>
+  </div>
+  <div class="tl-info" id="tl-info">История 2 ч · прогноз 30 мин</div>
+</section>
 
 <footer class="bottom">
   <div class="routes" id="routes" aria-label="Риск по маршрутам"></div>
@@ -75,34 +109,18 @@
 <div class="drawer hidden" id="drawer" role="dialog" aria-modal="false" aria-labelledby="drawer-title">
   <div class="drawer-head">
     <h3 id="drawer-title">ТС</h3>
+    <button class="btn" id="drawer-track">Отслеживать</button>
     <button class="icon-btn" id="drawer-close" aria-label="Закрыть">✕</button>
   </div>
   <div class="drawer-body" id="drawer-body"></div>
 </div>
 
-<details class="demo" id="demo">
-  <summary>Демо-управление потоком</summary>
-  <div class="demo-body">
-    <div class="demo-status" id="demo-status">—</div>
-    <div class="demo-row">
-      <button data-demo="pause">Пауза</button><button data-demo="resume">Пуск</button>
-      <button data-demo="speed/1">×1</button><button data-demo="speed/10">×10</button><button data-demo="speed/30">×30</button>
-    </div>
-    <div class="demo-row">
-      <button data-demo="outage/60" class="warn">Обрыв связи 60 с</button>
-      <button data-demo="chaos/garbage">Мусор в канал</button>
-    </div>
-    <div class="demo-row">
-      <button data-demo-seek="2026-01-06 04:30:00">07:30 МСК</button>
-      <button data-demo-seek="2026-01-06 09:00:00">12:00 МСК</button>
-      <button data-demo-seek="2026-01-06 14:30:00">17:30 МСК</button>
-    </div>
-  </div>
-</details>
-
 <div class="tooltip hidden" id="tooltip" role="tooltip"></div>
 
 <script src="vendor/leaflet/leaflet.js"></script>
 <script src="app.js"></script>
+<script src="timeline.js"></script>
+<script src="whatif.js"></script>
+<script src="routes.js"></script>
 </body>
 </html>

@@ -1,0 +1,48 @@
+segments: 922, with GPS tracks: 685, to build: 902
+20/902 {'osrm_match': 20, 'osrm_route_via_gps': 16, 'osrm_route': 4}
+40/902 {'osrm_match': 28, 'osrm_route_via_gps': 19, 'osrm_route': 13}
+60/902 {'osrm_match': 34, 'osrm_route_via_gps': 29, 'osrm_route': 15, 'straight': 1, 'gps': 1}
+80/902 {'osrm_match': 37, 'osrm_route_via_gps': 33, 'osrm_route': 28, 'straight': 1, 'gps': 1}
+100/902 {'osrm_route_via_gps': 45, 'osrm_match': 37, 'osrm_route': 35, 'gps': 2, 'straight': 1}
+120/902 {'osrm_route_via_gps': 64, 'osrm_match': 37, 'osrm_route': 36, 'gps': 2, 'straight': 1}
+140/902 {'osrm_route_via_gps': 74, 'osrm_route': 46, 'osrm_match': 37, 'gps': 2, 'straight': 1}
+160/902 {'osrm_route_via_gps': 81, 'osrm_route': 53, 'osrm_match': 43, 'gps': 2, 'straight': 1}
+180/902 {'osrm_route_via_gps': 94, 'osrm_route': 55, 'osrm_match': 45, 'straight': 3, 'gps': 3}
+200/902 {'osrm_route_via_gps': 105, 'osrm_route': 61, 'osrm_match': 48, 'straight': 3, 'gps': 3}
+220/902 {'osrm_route_via_gps': 120, 'osrm_route': 64, 'osrm_match': 50, 'straight': 3, 'gps': 3}
+240/902 {'osrm_route_via_gps': 140, 'osrm_route': 64, 'osrm_match': 50, 'straight': 3, 'gps': 3}
+260/902 {'osrm_route_via_gps': 151, 'osrm_route': 73, 'osrm_match': 50, 'straight': 3, 'gps': 3}
+280/902 {'osrm_route_via_gps': 164, 'osrm_route': 79, 'osrm_match': 51, 'straight': 3, 'gps': 3}
+300/902 {'osrm_route_via_gps': 173, 'osrm_route': 85, 'osrm_match': 56, 'straight': 3, 'gps': 3}
+320/902 {'osrm_route_via_gps': 183, 'osrm_route': 86, 'osrm_match': 65, 'straight': 3, 'gps': 3}
+340/902 {'osrm_route_via_gps': 192, 'osrm_route': 90, 'osrm_match': 72, 'straight': 3, 'gps': 3}
+360/902 {'osrm_route_via_gps': 199, 'osrm_route': 95, 'osrm_match': 78, 'straight': 4, 'gps': 4}
+380/902 {'osrm_route_via_gps': 213, 'osrm_route': 98, 'osrm_match': 80, 'straight': 5, 'gps': 4}
+400/902 {'osrm_route_via_gps': 220, 'osrm_route': 104, 'osrm_match': 87, 'straight': 5, 'gps': 4}
+420/902 {'osrm_route_via_gps': 238, 'osrm_route': 105, 'osrm_match': 87, 'straight': 5, 'gps': 5}
+440/902 {'osrm_route_via_gps': 253, 'osrm_route': 110, 'osrm_match': 87, 'straight': 5, 'gps': 5}
+460/902 {'osrm_route_via_gps': 266, 'osrm_route': 114, 'osrm_match': 88, 'straight': 7, 'gps': 5}
+480/902 {'osrm_route_via_gps': 283, 'osrm_route': 116, 'osrm_match': 89, 'straight': 7, 'gps': 5}
+500/902 {'osrm_route_via_gps': 299, 'osrm_route': 118, 'osrm_match': 90, 'straight': 8, 'gps': 5}
+520/902 {'osrm_route_via_gps': 315, 'osrm_route': 121, 'osrm_match': 91, 'straight': 8, 'gps': 5}
+540/902 {'osrm_route_via_gps': 327, 'osrm_route': 127, 'osrm_match': 92, 'straight': 9, 'gps': 5}
+560/902 {'osrm_route_via_gps': 344, 'osrm_route': 129, 'osrm_match': 92, 'straight': 9, 'gps': 6}
+580/902 {'osrm_route_via_gps': 357, 'osrm_route': 135, 'osrm_match': 93, 'straight': 9, 'gps': 6}
+600/902 {'osrm_route_via_gps': 368, 'osrm_route': 141, 'osrm_match': 95, 'straight': 9, 'gps': 7}
+620/902 {'osrm_route_via_gps': 377, 'osrm_route': 152, 'osrm_match': 95, 'straight': 9, 'gps': 7}
+640/902 {'osrm_route_via_gps': 389, 'osrm_route': 155, 'osrm_match': 97, 'straight': 11, 'gps': 8}
+660/902 {'osrm_route_via_gps': 404, 'osrm_route': 157, 'osrm_match': 100, 'straight': 11, 'gps': 8}
+680/902 {'osrm_route_via_gps': 404, 'osrm_route': 171, 'osrm_match': 100, 'straight': 17, 'gps': 8}
+700/902 {'osrm_route_via_gps': 404, 'osrm_route': 185, 'osrm_match': 100, 'straight': 23, 'gps': 8}
+720/902 {'osrm_route_via_gps': 404, 'osrm_route': 204, 'osrm_match': 100, 'straight': 24, 'gps': 8}
+740/902 {'osrm_route_via_gps': 411, 'osrm_route': 216, 'osrm_match': 100, 'straight': 25, 'gps': 8}
+760/902 {'osrm_route_via_gps': 423, 'osrm_route': 219, 'osrm_match': 105, 'straight': 25, 'gps': 8}
+780/902 {'osrm_route_via_gps': 425, 'osrm_route': 235, 'osrm_match': 105, 'straight': 27, 'gps': 8}
+800/902 {'osrm_route_via_gps': 425, 'osrm_route': 255, 'osrm_match': 105, 'straight': 27, 'gps': 8}
+820/902 {'osrm_route_via_gps': 425, 'osrm_route': 275, 'osrm_match': 105, 'straight': 27, 'gps': 8}
+840/902 {'osrm_route_via_gps': 432, 'osrm_route': 285, 'osrm_match': 108, 'straight': 27, 'gps': 8}
+860/902 {'osrm_route_via_gps': 445, 'osrm_route': 285, 'osrm_match': 115, 'straight': 27, 'gps': 8}
+880/902 {'osrm_route_via_gps': 456, 'osrm_route': 288, 'osrm_match': 120, 'straight': 27, 'gps': 9}
+900/902 {'osrm_route_via_gps': 469, 'osrm_route': 290, 'osrm_match': 125, 'straight': 27, 'gps': 9}
+902/902 {'osrm_route_via_gps': 470, 'osrm_route': 291, 'osrm_match': 125, 'straight': 27, 'gps': 9}
+saved 922 shapes -> C:\Users\roman\Desktop\khakaton-mos-transport\mos-transport\data\network\shapes.json
