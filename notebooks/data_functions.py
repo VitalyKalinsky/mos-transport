@@ -42,8 +42,12 @@ PATHS = {
     # Директории для моделей и кэша CatBoost
     "models_dir": MODELS_DIR,
     "catboost_info": MODELS_DIR / "catboost_info",
+    "finetune_info": MODELS_DIR / "fine-tuning",
     "model_save_path": MODELS_DIR / "catboost_model.cbm",
 }
+
+(PATHS["catboost_info"] / "base_600").mkdir(parents=True, exist_ok=True)
+PATHS["finetune_info"].mkdir(parents=True, exist_ok=True)
 
 # Кэш координат остановок: tt_action_item_id -> (lat, lon)
 STOP_COORDS_CACHE: dict[int, tuple[float, float]] = {}
@@ -489,6 +493,82 @@ def predict(model: CatBoostRegressor, test_df: pd.DataFrame) -> np.ndarray:
     predicted_delta = model.predict(test_df[FEATURE_COLS])
     return test_df["cur_dev_s"].values + predicted_delta
 
+from pathlib import Path
+import pandas as pd
+from catboost import CatBoostRegressor, Pool
+
+
+def fine_tune(
+    base_model: CatBoostRegressor | Path | str,
+    new_data_df: pd.DataFrame,
+    val_df: pd.DataFrame | None = None,
+    target_col: str = "target_delay_s",
+    additional_iterations: int = 150,
+    learning_rate: float = 0.025,
+    output_model_path: Path | str | None = None,
+) -> CatBoostRegressor:
+    """Дообучает модель CatBoost на новых данных через механизм init_model.
+    Существующие деревья сохраняются, поверх достраиваются новые под свежее распределение.
+    """
+    if output_model_path is None:
+        output_model_path = PATHS["model_save_path"]
+
+    # 1. Приводим base_model к объекту CatBoostRegressor для подсчета базовых деревьев
+    if isinstance(base_model, CatBoostRegressor):
+        base_obj = base_model
+    else:
+        base_obj = CatBoostRegressor()
+        base_obj.load_model(str(base_model))
+
+    base_trees = base_obj.tree_count_
+    total_iterations = base_trees + additional_iterations
+
+    # 2. Подготовка обучающей выборки
+    df = new_data_df.sort_values("T").reset_index(drop=True)
+    X_new = df[FEATURE_COLS]
+    y_new_delta = df[target_col] - df["cur_dev_s"]
+
+    train_pool = Pool(data=X_new, label=y_new_delta, cat_features=CAT_COLS)
+
+    # 3. Подготовка валидационной выборки
+    eval_pool = None
+    if val_df is not None:
+        X_val = val_df[FEATURE_COLS]
+        y_val_delta = val_df[target_col] - val_df["cur_dev_s"]
+        eval_pool = Pool(data=X_val, label=y_val_delta, cat_features=CAT_COLS)
+
+    finetune_dir = PATHS.get("finetune_info", MODELS_DIR / "fine-tuning")
+    finetune_dir.mkdir(parents=True, exist_ok=True)
+
+    # 4. Инициализация модели с суммарным числом итераций
+    updated_model = CatBoostRegressor(
+        iterations=total_iterations,
+        learning_rate=learning_rate,
+        depth=6,
+        loss_function="MAE",
+        eval_metric="MAE",
+        random_seed=42,
+        verbose=25,
+        train_dir=str(finetune_dir),
+    )
+
+    updated_model.fit(
+        train_pool,
+        eval_set=eval_pool,
+        init_model=base_obj,
+        early_stopping_rounds=30 if eval_pool is not None else None,
+        use_best_model=True if eval_pool is not None else False,
+    )
+
+    output_path = Path(output_model_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    updated_model.save_model(str(output_path))
+
+    added_trees = updated_model.tree_count_ - base_trees
+    print(f"\nМодель дообучена. Было деревьев: {base_trees}, добавлено: {added_trees}, всего: {updated_model.tree_count_}")
+    print(f"Сохранена в: {output_path}")
+
+    return updated_model
 
 ###########################
 # ЭКСПОРТ САБМИТА
