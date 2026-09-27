@@ -16,6 +16,11 @@ services:
     environment:
       LOG_LEVEL: INFO
       ML_ENABLE_TRAIN: "false"
+      ML_MODEL_PATH: /opt/ml/models/catboost_model_finetuned_fulltrees.cbm
+    # модели — с хоста: дообучение из консоли (python -m app.finetune) сохраняется между перезапусками
+    volumes:
+      - ./models:/opt/ml/models
+      - ./dataset:/opt/ml/dataset:ro
 
   # --- Backend: приём NDTP (TCP 9201), сопоставление с расписанием, оркестрация, API/WS -----------
   backend:

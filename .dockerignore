@@ -6,3 +6,5 @@ dataset/ndtp-telemetry-emulator.tar
 notebooks/*.ipynb
 **/.pytest_cache
 data/network/.shapes_cache.json
+models/finetuned
+models/backup

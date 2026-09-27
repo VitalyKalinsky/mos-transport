@@ -1,0 +1,8 @@
+# Сборка документации (ставится поверх образа ML-сервиса, см. docs/build_docs.sh)
+sphinx==8.2.3
+furo==2025.7.19
+# зависимости backend, которых нет в образе ML-сервиса (нужны autodoc для импорта модулей)
+httpx==0.28.1
+python-multipart==0.0.20
+gtfs-realtime-bindings==1.0.0
+protobuf==5.29.5

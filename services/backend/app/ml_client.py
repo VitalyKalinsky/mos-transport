@@ -1,4 +1,4 @@
-"""Клиент ML-сервиса с circuit breaker и деградацией на baseline-прогноз."""
+"""HTTP-клиент ML-сервиса с circuit breaker и деградацией на baseline-прогноз."""
 from __future__ import annotations
 
 import logging
@@ -13,27 +13,45 @@ log = logging.getLogger("backend.ml")
 
 
 class MLClient:
+    """Клиент ``/v1/predict`` и ``/v1/model`` ML-сервиса.
+
+    После ``ml_breaker_failures`` ошибок подряд breaker размыкается на ``ml_breaker_cooldown_s``:
+    цикл прогноза сразу идёт в fallback и не ждёт таймаут на каждой итерации.
+
+    Args:
+        cfg: Настройки сервиса.
+
+    Attributes:
+        available (bool): Последний вызов ML прошёл успешно.
+        error_scale_s (float): Масштаб ошибки прогноза (валидационная MAE модели), с; для P(late).
+        fallbacks (int): Сколько раз прогноз ушёл в baseline.
+    """
+
     def __init__(self, cfg: Settings) -> None:
         self.cfg = cfg
+        # один AsyncClient на процесс: keep-alive, без TCP-handshake на каждый батч
         self._client = httpx.AsyncClient(base_url=cfg.ml_url, timeout=cfg.ml_timeout_s)
         self.failures = 0
         self.open_until = 0.0
         self.available = False
         self.last_error: str | None = None
-        self.error_scale_s = cfg.default_error_scale_s   # MAE модели → масштаб ошибки
+        self.error_scale_s = cfg.default_error_scale_s
         self.model_info: dict | None = None
         self.latency = LatencyWindow()
         self.calls = 0
         self.fallbacks = 0
 
     async def close(self) -> None:
+        """Закрывает HTTP-соединения."""
         await self._client.aclose()
 
     @property
     def breaker_open(self) -> bool:
+        """bool: Breaker разомкнут — ML не вызывается до истечения паузы."""
         return time.time() < self.open_until
 
     async def refresh_info(self) -> None:
+        """Обновляет метаданные модели (``/v1/model``). Ошибки не пробрасываются: только ``last_error``."""
         try:
             r = await self._client.get("/v1/model")
             r.raise_for_status()
@@ -47,7 +65,18 @@ class MLClient:
             self.last_error = f"info: {e}"
 
     async def predict(self, points: list[dict], telemetry: list[dict]) -> list[dict] | None:
-        """None → ML недоступен (вызывающий переключается на fallback)."""
+        """Батч-прогноз задержки на целевых остановках.
+
+        Args:
+            points: Точки прогноза (``sample_id``, ``tr_id``, ``T``, ``target_stop_id``,
+                ``target_time_begin``, ``cur_dev_s``).
+            telemetry: Последние пакеты телеметрии по этим ТС (строки формата traffic.csv).
+
+        Returns:
+            list[dict] | None: Прогнозы в порядке ``points``; ``None`` — ML недоступен
+            (ошибка, таймаут или разомкнутый breaker), вызывающий переходит на baseline.
+            Исключения не пробрасываются.
+        """
         if not points:
             return []
         if self.breaker_open:
@@ -58,7 +87,7 @@ class MLClient:
             r = await self._client.post("/v1/predict", json={"points": points, "telemetry": telemetry})
             r.raise_for_status()
             data = r.json()
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001 — любой сбой ML = деградация, а не падение цикла
             self.failures += 1
             self.last_error = f"{type(e).__name__}: {e}"
             self.available = False
@@ -75,6 +104,6 @@ class MLClient:
         self.available = True
         self.last_error = None
         mae = data.get("model_validation_mae_s")
-        if mae:
+        if mae:  # модель могли дообучить и перезапустить — масштаб ошибки берём из каждого ответа
             self.error_scale_s = float(mae)
         return data["predictions"]

@@ -159,6 +159,15 @@ button.kpi:hover { background: var(--surface-2); }
 .cause b { display: block; margin-bottom: 2px; }
 .cause .detail { color: var(--ink-2); }
 .reco { font-size: 12.5px; color: var(--ink); }
+.shap-tags { font-size: 12px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.shap-tags .k { color: var(--muted); margin-right: 2px; }
+.tag.shap.up { color: var(--critical-ink); background: var(--red-wash); }
+.tag.shap.down { color: var(--good-ink); background: var(--green-wash); }
+.shap-row { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(60px, 1fr) auto; gap: 8px; align-items: center; font-size: 12.5px; padding: 2px 0; }
+.shap-bar { height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.shap-bar i { display: block; height: 100%; }
+.shap-bar i.up { background: var(--critical); }
+.shap-bar i.down { background: var(--good); }
 .reco::before { content: "→ "; color: var(--series-1); font-weight: 700; }
 .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 .btn { background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 5px 10px; font-size: 12px; font-weight: 650; }

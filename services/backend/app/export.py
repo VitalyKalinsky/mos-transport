@@ -1,12 +1,10 @@
 """Экспорт для внешних картографических сервисов (Яндекс Карты, 2ГИС, Google, Transit и др.).
 
-* GTFS-Realtime (стандарт, в котором перевозчики передают данные картографическим сервисам):
-    VehiclePositions — положения ТС; TripUpdates — прогноз прибытия на остановки (ETA-движок +
-    ML-прогноз задержки на целевой остановке); Alerts — инциденты диспетчерской.
-  Формат protobuf (application/x-protobuf) или JSON (?format=json).
-* Статический GTFS (zip) с теми же идентификаторами stop_id/route_id/trip_id — партнёр связывает
-  realtime-фид с расписанием.
-* GeoJSON FeatureCollection ТС — для быстрого встраивания в JS API карт.
+* GTFS-Realtime — стандарт, в котором перевозчики отдают данные картографическим сервисам:
+  VehiclePositions (положения ТС), TripUpdates (ETA-движок + ML-прогноз на целевой остановке),
+  Alerts (инциденты диспетчерской). Формат protobuf или JSON (``?format=json``).
+* Статический GTFS (zip) с теми же stop_id/route_id/trip_id: партнёр связывает realtime с расписанием.
+* GeoJSON FeatureCollection ТС для быстрого встраивания в JS API карт.
 """
 from __future__ import annotations
 
@@ -21,18 +19,33 @@ from .reference import VehicleSchedule
 
 try:
     from google.transit import gtfs_realtime_pb2  # gtfs-realtime-bindings
-except Exception:  # noqa: BLE001
+except Exception:  # noqa: BLE001 — без пакета работает JSON-вариант фидов
     gtfs_realtime_pb2 = None
 
-LAYOVER = 360
+LAYOVER = 360  # пауза ≥ 6 мин между остановками = отстой на конечной, граница рейса
 
 
 def stop_id(stop_key: str) -> str:
+    """Стабильный GTFS stop_id по физической остановке.
+
+    Args:
+        stop_key: Ключ остановки ``"lon,lat"``.
+
+    Returns:
+        str: ``"s" + 10 hex`` (md5 — только для компактного детерминированного ID, не для безопасности).
+    """
     return "s" + hashlib.md5(stop_key.encode()).hexdigest()[:10]
 
 
 def trips_of(sch: VehicleSchedule) -> list[tuple[int, int]]:
-    """Разбиение графика ТС на рейсы по межрейсовым отстоям: [(i_start, i_end), ...]."""
+    """Разбивает нитку графика ТС на рейсы по межрейсовым отстоям.
+
+    Args:
+        sch: Нитка графика.
+
+    Returns:
+        list[tuple[int, int]]: Индексы ``(i_start, i_end)`` включительно для каждого рейса.
+    """
     bounds, start = [], 0
     for i in range(1, len(sch.stops)):
         if sch.stops[i].plan_ts - sch.stops[i - 1].plan_ts >= LAYOVER:
@@ -43,10 +56,21 @@ def trips_of(sch: VehicleSchedule) -> list[tuple[int, int]]:
 
 
 def trip_id(tr: int, n: int) -> str:
+    """GTFS trip_id: ``<tr_id>_<номер рейса с 1>``."""
     return f"{tr}_{n + 1}"
 
 
 def route_ref(engine, tr: int) -> tuple[str, str]:
+    """Маршрут ТС для экспорта.
+
+    Args:
+        engine: Движок backend.
+        tr: tr_id.
+
+    Returns:
+        tuple[str, str]: ``(route_id, номер для пассажира)``; реальный номер OSM, если ТС привязано,
+        иначе внутренний ``M<n>``.
+    """
     rn = engine.route_names.get(tr)
     sch = engine.ref.schedules[tr]
     return (rn["id"], rn["ref"]) if rn else (sch.route_id, sch.route_id)
@@ -61,7 +85,15 @@ def _trip_for(engine, st, idx: int) -> tuple[str, int] | None:
 
 
 def feed(engine, kind: str) -> dict:
-    """Фид GTFS-RT как dict (структура совпадает с JSON-представлением protobuf)."""
+    """Собирает фид GTFS-Realtime.
+
+    Args:
+        engine: Движок backend (текущее состояние ТС и инцидентов).
+        kind: ``"vehicle_positions"``, ``"trip_updates"`` или ``"alerts"``.
+
+    Returns:
+        dict: FeedMessage в JSON-представлении protobuf (``header`` + ``entity``).
+    """
     T = engine.clock.now()
     ents = []
     for st in engine.vehicles.values():
@@ -70,9 +102,10 @@ def feed(engine, kind: str) -> dict:
         vid = str(st.tr_id or st.unit_id)
         eta = st.eta
         if kind == "vehicle_positions":
+            # без связи отдаём расчётное положение (счисление пути), а не устаревшую точку
             lat, lon = (eta.est_lat, eta.est_lon) if eta is not None and eta.mode == "dead_reckoning" and eta.est_lat else (st.lat, st.lon)
             v = {"vehicle": {"id": vid, "label": vid},
-                 "position": {"latitude": lat, "longitude": lon, "bearing": st.heading, "speed": st.speed / 3.6},
+                 "position": {"latitude": lat, "longitude": lon, "bearing": st.heading, "speed": st.speed / 3.6},  # GTFS: м/с
                  "timestamp": int(st.last_ts)}
             if st.schedule is not None and eta is not None and eta.stops:
                 t = _trip_for(engine, st, eta.stops[0].idx)
@@ -91,7 +124,7 @@ def feed(engine, kind: str) -> dict:
                 if not t:
                     continue
                 arrival = e.eta_ts
-                # на целевой остановке горизонта 10–15 мин используем ML-прогноз задержки
+                # на целевой остановке горизонта 10–15 мин ML точнее кинематического ETA
                 if ml and ml.get("target_idx") == e.idx:
                     arrival = e.plan_ts + ml["predicted_delay_s"]
                 by_trip.setdefault(t[0], []).append({
@@ -105,6 +138,7 @@ def feed(engine, kind: str) -> dict:
                     "trip": {"trip_id": tid, "route_id": rid}, "vehicle": {"id": vid},
                     "stop_time_update": upd, "timestamp": int(T)}})
     if kind == "alerts":
+        # коды причин → перечисление Alert.Cause стандарта GTFS-RT
         cause_map = {"STANDING_OFF_STOP": "ACCIDENT", "NO_SIGNAL": "TECHNICAL_PROBLEM", "GPS_FAILURE": "TECHNICAL_PROBLEM",
                      "SLOW_SEGMENT": "OTHER_CAUSE", "PEAK": "OTHER_CAUSE"}
         for inc in engine.snapshot.get("incidents", []):
@@ -123,6 +157,18 @@ def feed(engine, kind: str) -> dict:
 
 
 def to_protobuf(d: dict) -> bytes:
+    """Сериализует фид в бинарный protobuf GTFS-RT.
+
+    Args:
+        d: Фид из :func:`feed`.
+
+    Returns:
+        bytes: FeedMessage.
+
+    Raises:
+        RuntimeError: Не установлен ``gtfs-realtime-bindings``.
+        google.protobuf.json_format.ParseError: Структура фида не соответствует схеме.
+    """
     if gtfs_realtime_pb2 is None:
         raise RuntimeError("gtfs-realtime-bindings не установлен")
     from google.protobuf import json_format
@@ -133,6 +179,16 @@ def to_protobuf(d: dict) -> bytes:
 
 # ----------------------------------------------------------------------------- static GTFS
 def gtfs_static(engine, agency_name: str = "Мосгортранс (демо)", tz: str = "Europe/Moscow") -> bytes:
+    """Статический GTFS (zip) по эталонному расписанию и геометрии по дорогам.
+
+    Args:
+        engine: Движок backend.
+        agency_name: Название перевозчика в ``agency.txt``.
+        tz: Часовой пояс перевозчика.
+
+    Returns:
+        bytes: Zip-архив: agency, calendar, stops, routes, trips, stop_times, shapes.
+    """
     ref = engine.ref
     buf = io.BytesIO()
     z = zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED)
@@ -146,6 +202,7 @@ def gtfs_static(engine, agency_name: str = "Мосгортранс (демо)", 
 
     first_ts = min((sch.stops[0].plan_ts for sch in ref.schedules.values() if sch.stops), default=time.time())
     day = datetime.fromtimestamp(first_ts, tz=timezone.utc).strftime("%Y%m%d")
+    # в датасете один день — календарь на одну дату
     write("agency.txt", ["agency_id", "agency_name", "agency_url", "agency_timezone", "agency_lang"],
           [["mos", agency_name, "https://transport.mos.ru", tz, "ru"]])
     write("calendar.txt", ["service_id", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
@@ -155,7 +212,7 @@ def gtfs_static(engine, agency_name: str = "Мосгортранс (демо)", 
     routes, trips, times, shapes = {}, [], [], []
     for tr, sch in ref.schedules.items():
         rid, rref = route_ref(engine, tr)
-        routes[rid] = [rid, "mos", rref, "", 3]
+        routes[rid] = [rid, "mos", rref, "", 3]  # route_type 3 = автобус
         for n, (a, b) in enumerate(trips_of(sch)):
             tid = trip_id(tr, n)
             trips.append([rid, "day", tid, sch.stops[b].address, f"sh_{tid}"])
@@ -165,6 +222,7 @@ def gtfs_static(engine, agency_name: str = "Мосгортранс (демо)", 
                 hhmmss = _gtfs_time(s.plan_ts, first_ts)
                 times.append([tid, hhmmss, hhmmss, stop_id(s.stop_key), i - a + 1])
                 if i > a:
+                    # [1:] — первая точка перегона совпадает с последней предыдущего
                     for c in ref.polyline(sch.stops[i - 1], s).coords[1:]:
                         seq += 1
                         shapes.append([f"sh_{tid}", c[0], c[1], seq])
@@ -180,21 +238,33 @@ def gtfs_static(engine, agency_name: str = "Мосгортранс (демо)", 
 
 
 def _gtfs_time(ts: float, day_start_ts: float) -> str:
-    """Время GTFS (может быть > 24:00 для рейсов после полуночи) в часовом поясе МСК."""
+    """Время GTFS в МСК относительно полуночи сервисного дня.
+
+    Может быть > 24:00 для рейсов после полуночи: так требует спецификация GTFS.
+    """
     local0 = datetime.fromtimestamp(day_start_ts, tz=timezone.utc)
-    midnight = datetime(local0.year, local0.month, local0.day, tzinfo=timezone.utc).timestamp() - 3 * 3600
+    midnight = datetime(local0.year, local0.month, local0.day, tzinfo=timezone.utc).timestamp() - 3 * 3600  # полночь МСК (UTC+3, без перехода на летнее время)
     sec = int(ts - midnight)
     return f"{sec // 3600:02d}:{sec % 3600 // 60:02d}:{sec % 60:02d}"
 
 
 def geojson(engine) -> dict:
+    """GeoJSON-слой ТС для JS API карт.
+
+    Args:
+        engine: Движок backend.
+
+    Returns:
+        dict: FeatureCollection точек с уровнем риска, прогнозом и ближайшими остановками;
+        при потере связи — расчётное положение.
+    """
     feats = []
     for v in engine.snapshot.get("vehicles", []):
         lat = v.get("est_lat") or v.get("lat")
         lon = v.get("est_lon") or v.get("lon")
         if lat is None:
             continue
-        feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [lon, lat]},
+        feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [lon, lat]},  # GeoJSON: lon, lat
                       "properties": {k: v.get(k) for k in ("tr_id", "unit_id", "route_ref", "route_id", "level",
                                                            "predicted_delay_s", "p_late", "heading", "speed",
                                                            "stale", "eta_mode", "cause", "next_stops")}})

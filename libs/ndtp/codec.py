@@ -8,8 +8,10 @@
 * CRC-16/Modbus (poly 0xA001, init 0xFFFF) по NPH + телу, в NPL кладётся со свапнутыми байтами;
 * тело NPH_SND_REALTIME — последовательность ячеек [type u8][number u8][payload].
 
-Модуль без внешних зависимостей: используется и Backend-сервисом (приём/разбор потока),
-и replay-фидером (кодирование CSV-телеметрии в NDTP).
+Модуль без внешних зависимостей: им пользуются и Backend-сервис (приём и разбор потока),
+и replay-фидер (кодирование CSV-телеметрии в NDTP). Один кодек на обеих сторонах гарантирует,
+что формат совпадает; совместимость с протоколом проверена захватами живого эмулятора
+(``libs/ndtp/tests/fixtures``).
 """
 from __future__ import annotations
 
@@ -20,11 +22,11 @@ from typing import Any, Iterator
 # ---------------------------------------------------------------------------
 # Константы протокола
 # ---------------------------------------------------------------------------
-NPL_SIGNATURE = 0x7E7E
+NPL_SIGNATURE = 0x7E7E  # по ней декодер пересинхронизируется после мусора
 NPL_HEADER_SIZE = 15
 NPH_HEADER_SIZE = 10
 NPL_TYPE_NPH = 0x02
-MAX_DATA_SIZE = 65535
+MAX_DATA_SIZE = 65535  # dataSize — u16
 
 # NPH service / type
 NPH_SRV_GENERIC_CONTROLS = 0
@@ -35,7 +37,7 @@ NPH_SGC_CONN_REQUEST = 100
 NPH_SND_REALTIME = 101
 NPH_SND_HISTORY = 100  # в сервисе NAVDATA тип 100 — исторические данные (обрабатываем так же)
 
-NPH_FLAG_REQUEST = 0x0001
+NPH_FLAG_REQUEST = 0x0001  # отправитель ждёт NPH_RESULT, иначе повторит пакет
 
 _NPL = struct.Struct("<HHHHBIH")          # 15 байт
 _NPH = struct.Struct("<HHHI")             # 10 байт
@@ -44,7 +46,14 @@ _RESULT = struct.Struct("<I")
 
 
 def crc16_modbus(data: bytes) -> int:
-    """CRC-16/Modbus: poly 0xA001 (reflected 0x8005), init 0xFFFF."""
+    """CRC-16/Modbus, эталонная побитовая версия (для тестов).
+
+    Args:
+        data: NPH + тело кадра.
+
+    Returns:
+        int: CRC (poly 0xA001 = reflected 0x8005, init 0xFFFF).
+    """
     crc = 0xFFFF
     for b in data:
         crc ^= b
@@ -56,7 +65,7 @@ def crc16_modbus(data: bytes) -> int:
     return crc
 
 
-# Табличная версия — в ~10 раз быстрее, используется на горячем пути.
+# Табличная версия — байт за итерацию вместо бита; используется на горячем пути приёма.
 _CRC_TABLE = []
 for _i in range(256):
     _c = _i
@@ -66,6 +75,14 @@ for _i in range(256):
 
 
 def crc16_modbus_fast(data: bytes) -> int:
+    """CRC-16/Modbus табличным методом; результат совпадает с :func:`crc16_modbus`.
+
+    Args:
+        data: NPH + тело кадра.
+
+    Returns:
+        int: CRC.
+    """
     crc = 0xFFFF
     tbl = _CRC_TABLE
     for b in data:
@@ -74,6 +91,7 @@ def crc16_modbus_fast(data: bytes) -> int:
 
 
 def _swap16(v: int) -> int:
+    """Перестановка байт u16: по спецификации CRC в NPL лежит big-endian внутри little-endian заголовка."""
     return ((v & 0xFF) << 8) | (v >> 8)
 
 
@@ -82,6 +100,8 @@ def _swap16(v: int) -> int:
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
 class CellSpec:
+    """Бинарный формат ячейки телематики: тип, имя, struct (little-endian, packed), имена полей."""
+
     type_id: int
     name: str
     fmt: struct.Struct
@@ -89,6 +109,7 @@ class CellSpec:
 
     @property
     def size(self) -> int:
+        """int: Размер payload ячейки, байт (без 2 байт type/number)."""
         return self.fmt.size
 
 
@@ -154,13 +175,22 @@ class NavRecord:
 
     @classmethod
     def from_cell(cls, c: dict[str, Any]) -> "NavRecord":
+        """Nav00 → поля traffic.csv по таблице §8 README датасета.
+
+        Args:
+            c: Разобранная ячейка G6CellNav00.
+
+        Returns:
+            NavRecord: Координаты в градусах со знаком; ``lon/lat = None`` при нулевых координатах.
+        """
         bits = c["extraDop"]
+        # координаты передаются модулем, знак — битами 5 (N) и 6 (E); бит 7 — достоверность
         lat_north = bool(bits & (1 << 5))
         lon_east = bool(bits & (1 << 6))
         valid = bool(bits & (1 << 7))
         lon = c["longitude"] / 1e7 * (1 if lon_east else -1)
         lat = c["latitude"] / 1e7 * (1 if lat_north else -1)
-        if c["longitude"] == 0 and c["latitude"] == 0:
+        if c["longitude"] == 0 and c["latitude"] == 0:  # терминал без фикса шлёт нули — это не точка (0, 0)
             lon = lat = None
             valid = False
         return cls(
@@ -174,7 +204,7 @@ class NavRecord:
             alt=float(c["altitude"]),
             nsat=c["nsat"],
             pdop=c["pdop"],
-            bat_voltage_v=c["batVoltage"] * 0.02,
+            bat_voltage_v=c["batVoltage"] * 0.02,  # единица — 20 мВ
             track_m=c["track"],
             alarm=bool(bits & (1 << 1)),
             sos=bool(bits & (1 << 2)),
@@ -183,7 +213,9 @@ class NavRecord:
 
 @dataclass
 class Frame:
-    peer_address: int             # unitId из NPL
+    """Разобранный NDTP-кадр: заголовки NPL/NPH и содержимое (ячейки или handshake)."""
+
+    peer_address: int             # unitId из NPL — по нему терминал связывается с ТС
     npl_request_id: int
     service_id: int
     nph_type: int
@@ -196,21 +228,30 @@ class Frame:
 
     @property
     def is_handshake(self) -> bool:
+        """bool: Запрос соединения ``NPH_SGC_CONN_REQUEST`` (первый кадр сессии)."""
         return self.service_id == NPH_SRV_GENERIC_CONTROLS and self.nph_type == NPH_SGC_CONN_REQUEST
 
     @property
     def is_telemetry(self) -> bool:
+        """bool: Навигационные данные (realtime или история)."""
         return self.service_id == NPH_SRV_NAVDATA and self.nph_type in (NPH_SND_REALTIME, NPH_SND_HISTORY)
 
     @property
     def is_history(self) -> bool:
+        """bool: Данные из «чёрного ящика», досланные после восстановления связи."""
         return self.service_id == NPH_SRV_NAVDATA and self.nph_type == NPH_SND_HISTORY
 
     @property
     def needs_reply(self) -> bool:
+        """bool: Отправитель ждёт ``NPH_RESULT``."""
         return bool(self.nph_flags & NPH_FLAG_REQUEST)
 
     def nav(self) -> NavRecord | None:
+        """Первая навигационная ячейка кадра.
+
+        Returns:
+            NavRecord | None: ``None`` — в кадре нет Nav00.
+        """
         for c in self.cells:
             if c["type"] == 0:
                 return NavRecord.from_cell(c)
@@ -218,14 +259,22 @@ class Frame:
 
 
 class NDTPError(ValueError):
-    pass
+    """Кадр не соответствует протоколу (короткий, чужая сигнатура, тип NPL, обрезан, CRC)."""
 
 
 # ---------------------------------------------------------------------------
 # Разбор
 # ---------------------------------------------------------------------------
 def parse_cells(body: bytes) -> tuple[list[dict[str, Any]], int]:
-    """Разбирает тело realtime-пакета. Возвращает (ячейки, число неразобранных)."""
+    """Разбирает тело realtime-пакета.
+
+    Args:
+        body: Тело кадра после NPH.
+
+    Returns:
+        tuple[list[dict], int]: Ячейки и признак обрыва разбора (1 — встречен тип неизвестного размера
+        или обрезанная ячейка; ячейки до него сохраняются).
+    """
     cells: list[dict[str, Any]] = []
     pos = 0
     n = len(body)
@@ -267,7 +316,18 @@ OPAQUE_CELL_SIZES: dict[int, tuple[str, int]] = {
 
 
 def parse_frame(buf: bytes | bytearray | memoryview, verify_crc: bool = True) -> Frame:
-    """Разбирает ровно один полный кадр."""
+    """Разбирает ровно один полный кадр.
+
+    Args:
+        buf: Байты кадра, начиная с сигнатуры.
+        verify_crc: Проверять CRC.
+
+    Returns:
+        Frame: Кадр с разобранными ячейками или handshake.
+
+    Raises:
+        NDTPError: Кадр короче заголовков, неверная сигнатура или тип NPL, тело обрезано, CRC не совпал.
+    """
     if len(buf) < NPL_HEADER_SIZE + NPH_HEADER_SIZE:
         raise NDTPError("frame too short")
     sig, data_size, _flags, crc, npl_type, peer, npl_req = _NPL.unpack_from(buf, 0)
@@ -308,6 +368,11 @@ class StreamDecoder:
     SIG = b"\x7e\x7e"
 
     def __init__(self, verify_crc: bool = True, max_buffer: int = 1 << 20):
+        """
+        Args:
+            verify_crc: Проверять CRC кадров.
+            max_buffer: Предел буфера, байт; защита от памяти при бесконечном мусоре.
+        """
         self._buf = bytearray()
         self.verify_crc = verify_crc
         self.max_buffer = max_buffer
@@ -316,6 +381,14 @@ class StreamDecoder:
         self.last_error: str | None = None
 
     def feed(self, data: bytes) -> Iterator[Frame]:
+        """Добавляет очередной фрагмент TCP-потока и выдаёт все собранные целые кадры.
+
+        Args:
+            data: Произвольный фрагмент (TCP не сохраняет границы кадров).
+
+        Yields:
+            Frame: Корректные кадры. Ошибки не пробрасываются, а считаются в ``errors`` и ``last_error``.
+        """
         self._buf += data
         if len(self._buf) > self.max_buffer:  # защита от раздувания буфера
             self._buf = self._buf[-NPL_HEADER_SIZE:]
@@ -341,7 +414,7 @@ class StreamDecoder:
                 continue
             total = NPL_HEADER_SIZE + data_size
             if len(self._buf) < total:
-                return
+                return  # кадр ещё не пришёл целиком — ждём следующий фрагмент
             try:
                 frame = parse_frame(self._buf[:total], self.verify_crc)
             except NDTPError as e:
@@ -361,6 +434,20 @@ class StreamDecoder:
 # ---------------------------------------------------------------------------
 def build_frame(peer_address: int, service_id: int, nph_type: int, request_id: int,
                 body: bytes, nph_flags: int = NPH_FLAG_REQUEST, npl_request_id: int = 0) -> bytes:
+    """Собирает кадр NPL + NPH + тело с CRC.
+
+    Args:
+        peer_address: unitId терминала.
+        service_id: Сервис NPH.
+        nph_type: Тип пакета NPH.
+        request_id: ID запроса NPH (обрезается до u32).
+        body: Тело.
+        nph_flags: Флаги NPH (по умолчанию — ждать подтверждения).
+        npl_request_id: ID запроса NPL.
+
+    Returns:
+        bytes: Готовый кадр.
+    """
     payload = _NPH.pack(service_id, nph_type, nph_flags, request_id & 0xFFFFFFFF) + body
     crc = _swap16(crc16_modbus_fast(payload))
     npl = _NPL.pack(NPL_SIGNATURE, len(payload), 0, crc, NPL_TYPE_NPH,
@@ -369,17 +456,48 @@ def build_frame(peer_address: int, service_id: int, nph_type: int, request_id: i
 
 
 def build_handshake(unit_id: int, request_id: int) -> bytes:
-    body = _HANDSHAKE.pack(6, 2, 0, unit_id, 65535, 0)
+    """Запрос соединения терминала (``NPH_SGC_CONN_REQUEST``).
+
+    Args:
+        unit_id: unitId терминала.
+        request_id: ID запроса.
+
+    Returns:
+        bytes: Кадр handshake.
+    """
+    body = _HANDSHAKE.pack(6, 2, 0, unit_id, 65535, 0)  # версия протокола 6.2
     return build_frame(unit_id, NPH_SRV_GENERIC_CONTROLS, NPH_SGC_CONN_REQUEST, request_id, body)
 
 
 def build_result(to_frame: Frame, error: int = 0) -> bytes:
-    """Ответ сервера NPH_RESULT на запрос (flags.request=1)."""
+    """Ответ сервера ``NPH_RESULT`` на кадр с флагом request.
+
+    Args:
+        to_frame: Подтверждаемый кадр (берутся его peer, сервис и request_id).
+        error: Код результата, 0 — успех.
+
+    Returns:
+        bytes: Кадр ответа (без флага request: на ответ не отвечают).
+    """
     return build_frame(to_frame.peer_address, to_frame.service_id, NPH_RESULT,
                        to_frame.nph_request_id, _RESULT.pack(error), nph_flags=0)
 
 
 def encode_cell(type_id: int, number: int, values: dict[str, Any]) -> bytes:
+    """Кодирует ячейку телематики.
+
+    Args:
+        type_id: Тип ячейки из :data:`CELL_SPECS`.
+        number: Номер ячейки.
+        values: Значения полей; отсутствующие — 0.
+
+    Returns:
+        bytes: ``[type][number][payload]``.
+
+    Raises:
+        KeyError: Тип без описания формата.
+        struct.error: Значение не помещается в поле.
+    """
     spec = CELL_SPECS[type_id]
     return bytes((type_id, number)) + spec.fmt.pack(*(int(values.get(f, 0)) for f in spec.fields))
 
@@ -388,7 +506,24 @@ def encode_nav(timestamp: int, lon: float | None, lat: float | None, valid: bool
                speed: float = 0.0, heading: float = 0.0, alt: float = 0.0,
                nsat: int = 12, pdop: int = 10, bat_voltage_v: float = 4.1,
                track_m: int = 0) -> bytes:
-    """G6CellNav00 из полей traffic.csv (обратное преобразование к таблице §8 README)."""
+    """G6CellNav00 из полей traffic.csv (обратное преобразование к таблице §8 README датасета).
+
+    Args:
+        timestamp: Время, unix-с.
+        lon: Долгота или ``None`` (нет фикса → нули и сброшенный бит валидности).
+        lat: Широта или ``None``.
+        valid: Координаты достоверны.
+        speed: Скорость, км/ч.
+        heading: Курс, градусы.
+        alt: Высота, м.
+        nsat: Число спутников.
+        pdop: PDOP.
+        bat_voltage_v: Напряжение батареи, В.
+        track_m: Пробег, м.
+
+    Returns:
+        bytes: Ячейка Nav00.
+    """
     has_pos = lon is not None and lat is not None
     bits = 0
     if not has_pos or lat >= 0:
@@ -406,7 +541,7 @@ def encode_nav(timestamp: int, lon: float | None, lat: float | None, valid: bool
         "batVoltage": max(0, min(255, int(bat_voltage_v / 0.02))),
         "speedAvg": spd,
         "speedMax": spd,
-        "course": max(0, min(65535, int(round(heading or 0)))) % 361,
+        "course": max(0, min(65535, int(round(heading or 0)))) % 361,  # курс 0..360 включительно
         "track": int(track_m) % 65535,
         "altitude": max(0, min(65535, int(round(alt or 0)))),
         "nsat": nsat,
@@ -415,5 +550,16 @@ def encode_nav(timestamp: int, lon: float | None, lat: float | None, valid: bool
 
 
 def build_realtime(unit_id: int, request_id: int, cells: bytes, history: bool = False) -> bytes:
+    """Кадр с навигационными данными.
+
+    Args:
+        unit_id: unitId терминала.
+        request_id: ID запроса.
+        cells: Закодированные ячейки.
+        history: Исторические данные (досылка после обрыва).
+
+    Returns:
+        bytes: Кадр ``NPH_SND_REALTIME`` или ``NPH_SND_HISTORY``.
+    """
     return build_frame(unit_id, NPH_SRV_NAVDATA,
                        NPH_SND_HISTORY if history else NPH_SND_REALTIME, request_id, cells)

@@ -1,0 +1,1467 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Mos-Transport Dispatcher Backend",
+  "description": "Приём потока телеметрии NDTP (TCP), сопоставление с эталонным расписанием, расчёт производных признаков, оркестрация прогнозов ML-сервиса (горизонт 10–15 мин), риск/инциденты для диспетчера.\n\nWebSocket `/ws` — поток снимков состояния для дашборда (≈1 раз в секунду).\n\nРасширения: ETA на ближайшие остановки, what-if моделирование, таймлайн, реестр реальных маршрутов (OSM/GTFS), экспорт GTFS-Realtime/GTFS/GeoJSON для картографических сервисов.",
+  "version": "2.0.0"
+ },
+ "paths": {
+  "/api/region": {
+   "get": {
+    "tags": [
+     "map"
+    ],
+    "summary": "Регион обслуживания: границы карты, центр, провайдеры тайлов",
+    "description": "Регион карты: границы, центр, масштабы, часовой пояс, провайдеры тайлов (2ГИС, Яндекс, OSM).",
+    "operationId": "region_api_region_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/search": {
+   "get": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "Поиск ТС по номеру ТС / бортовому терминалу / номеру маршрута",
+    "description": "Поиск ТС и маршрутов.\n\nArgs:\n    q: tr_id, unit_id или номер маршрута. Короткие запросы (< 3 символов) — только точное\n        совпадение, чтобы «1» не находило всё подряд.\n\nReturns:\n    dict: ``vehicles`` (до 30) и ``routes`` (до 10).",
+    "operationId": "search_api_search_get",
+    "parameters": [
+     {
+      "name": "q",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "minLength": 1,
+       "examples": [
+        "м6"
+       ],
+       "title": "Q"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/vehicles/{vehicle_id}/eta": {
+   "get": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "ETA на ближайшие остановки",
+    "description": "ETA на ближайшие остановки (с учётом применённых what-if).\n\nArgs:\n    vehicle_id: unit_id или tr_id.\n    stops: Число остановок.\n\nRaises:\n    HTTPException: 404 — ТС не найдено или без расписания.",
+    "operationId": "vehicle_eta_api_vehicles__vehicle_id__eta_get",
+    "parameters": [
+     {
+      "name": "vehicle_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Vehicle Id"
+      }
+     },
+     {
+      "name": "stops",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 40,
+       "minimum": 1,
+       "default": 8,
+       "title": "Stops"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/whatif/types": {
+   "get": {
+    "tags": [
+     "what-if"
+    ],
+    "summary": "Типы сценариев и их параметры",
+    "description": "Справочник сценариев what-if: название и параметры (в скобках — значения по умолчанию).",
+    "operationId": "whatif_types_api_whatif_types_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/whatif/simulate": {
+   "post": {
+    "tags": [
+     "what-if"
+    ],
+    "summary": "Смоделировать сценарий(и): сравнение до/после",
+    "description": "Моделирует сценарии поверх текущего состояния сети без изменения живого прогноза.\n\nReturns:\n    dict: По каждому затронутому ТС — ETA «до/после» по остановкам, суммарное опоздание,\n    остановки с опозданием > 2 мин, опаздывающие следующие рейсы; общий эффект и рекомендация.",
+    "operationId": "whatif_simulate_api_whatif_simulate_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SimulateRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/whatif/apply": {
+   "post": {
+    "tags": [
+     "what-if"
+    ],
+    "summary": "Применить сценарий к живому прогнозу (и потоку)",
+    "description": "Применяет сценарий к живому прогнозу на ``duration_min`` минут времени данных.\n\nПоломка, ДТП и засор дополнительно передаются в фидер: ТС реально останавливается или\nзамедляется в потоке NDTP, и весь контур (детектор, ML, инциденты) реагирует на настоящее опоздание.\n\nReturns:\n    dict: ``until``, результат инъекции в поток, эффект и рекомендация.",
+    "operationId": "whatif_apply_api_whatif_apply_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ApplyRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/whatif/live": {
+   "delete": {
+    "tags": [
+     "what-if"
+    ],
+    "summary": "Снять все применённые сценарии",
+    "description": "Снимает все применённые сценарии и внештатные ситуации в потоке фидера.",
+    "operationId": "whatif_clear_api_whatif_live_delete",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/timeline": {
+   "get": {
+    "tags": [
+     "timeline"
+    ],
+    "summary": "История состояний (кадры) и прогноз положения ТС",
+    "description": "Кадры истории и прогноз положения ТС для интерактивного таймлайна.\n\nArgs:\n    past_min: Глубина истории, мин (хранится до 6 ч).\n    future_min: Горизонт прогноза положения, мин.\n    step_s: Шаг между кадрами, с (прореживание для размера ответа).\n\nReturns:\n    dict: ``now``, ``past`` (кадры), ``future`` (прогнозные кадры по ETA).",
+    "operationId": "timeline_api_timeline_get",
+    "parameters": [
+     {
+      "name": "past_min",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 720,
+       "minimum": 1,
+       "default": 120,
+       "title": "Past Min"
+      }
+     },
+     {
+      "name": "future_min",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 120,
+       "minimum": 0,
+       "default": 30,
+       "title": "Future Min"
+      }
+     },
+     {
+      "name": "step_s",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 600,
+       "minimum": 15,
+       "default": 60,
+       "title": "Step S"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/traffic": {
+   "get": {
+    "tags": [
+     "map"
+    ],
+    "summary": "Текущая загруженность перегонов (живая + внешняя)",
+    "description": "Загруженность перегонов: ``live`` (по проездам наших ТС), ``manual`` (внешний индекс), ``bus_lanes``.",
+    "operationId": "traffic_get_api_traffic_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   },
+   "put": {
+    "tags": [
+     "map"
+    ],
+    "summary": "Внешний индекс пробок / автобусные полосы для участков",
+    "description": "Задаёт внешний индекс пробок и/или долю автобусной полосы для перегонов (влияет на ETA и what-if).",
+    "operationId": "traffic_api_traffic_put",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TrafficUpdate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/routes": {
+   "get": {
+    "tags": [
+     "routes"
+    ],
+    "summary": "Реестр реальных маршрутов",
+    "description": "Все маршруты реестра (без геометрии).",
+    "operationId": "routes_list_api_routes_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "routes"
+    ],
+    "summary": "Создать маршрут по списку остановок (геометрия по дорогам)",
+    "description": "Создаёт маршрут вручную; геометрия строится роутером (если он недоступен — прямыми).",
+    "operationId": "route_create_api_routes_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ManualRoute"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/routes/{route_id}": {
+   "get": {
+    "tags": [
+     "routes"
+    ],
+    "summary": "Маршрут: остановки и геометрия",
+    "description": "Полная запись маршрута.\n\nRaises:\n    HTTPException: 404 — маршрут не найден.",
+    "operationId": "route_get_api_routes__route_id__get",
+    "parameters": [
+     {
+      "name": "route_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Route Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "tags": [
+     "routes"
+    ],
+    "summary": "Удалить маршрут",
+    "description": "Удаляет маршрут из реестра и с диска.\n\nRaises:\n    HTTPException: 404 — маршрут не найден.",
+    "operationId": "route_delete_api_routes__route_id__delete",
+    "parameters": [
+     {
+      "name": "route_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Route Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/routes/import/osm": {
+   "post": {
+    "tags": [
+     "routes"
+    ],
+    "summary": "Импорт маршрута из OpenStreetMap по номеру/relation",
+    "description": "Импортирует все направления маршрута из OSM и сохраняет в реестр.\n\nRaises:\n    HTTPException: 502 — Overpass недоступен или маршрут не найден.",
+    "operationId": "route_import_osm_api_routes_import_osm_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/OsmImport"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/routes/import/gtfs": {
+   "post": {
+    "tags": [
+     "routes"
+    ],
+    "summary": "Импорт маршрутов из GTFS (zip)",
+    "description": "Импортирует маршруты из GTFS-архива перевозчика.\n\nRaises:\n    HTTPException: 400 — архив некорректен или без рейсов.",
+    "operationId": "route_import_gtfs_api_routes_import_gtfs_post",
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_route_import_gtfs_api_routes_import_gtfs_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/routes/{route_id}/vehicles": {
+   "put": {
+    "tags": [
+     "routes"
+    ],
+    "summary": "Привязать ТС (tr_id) к маршруту",
+    "description": "Заменяет список привязанных ТС.\n\nRaises:\n    HTTPException: 404 — маршрут не найден.",
+    "operationId": "route_vehicles_api_routes__route_id__vehicles_put",
+    "parameters": [
+     {
+      "name": "route_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Route Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "array",
+        "items": {
+         "type": "integer"
+        },
+        "examples": [
+         [
+          131672
+         ]
+        ],
+        "title": "Vehicles"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/export/gtfs-rt/vehicle-positions": {
+   "get": {
+    "tags": [
+     "export"
+    ],
+    "summary": "GTFS-Realtime: положения ТС",
+    "description": "GTFS-RT VehiclePositions (protobuf или JSON).\n\nRaises:\n    HTTPException: 501 — protobuf недоступен (используйте ``format=json``).",
+    "operationId": "gtfs_rt_vp_api_export_gtfs_rt_vehicle_positions_get",
+    "parameters": [
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "pb",
+        "json"
+       ],
+       "type": "string",
+       "default": "pb",
+       "title": "Format"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/export/gtfs-rt/trip-updates": {
+   "get": {
+    "tags": [
+     "export"
+    ],
+    "summary": "GTFS-Realtime: прогноз прибытия (ETA + ML)",
+    "description": "GTFS-RT TripUpdates: ETA-движок, на целевой остановке — ML-прогноз.\n\nRaises:\n    HTTPException: 501 — protobuf недоступен (используйте ``format=json``).",
+    "operationId": "gtfs_rt_tu_api_export_gtfs_rt_trip_updates_get",
+    "parameters": [
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "pb",
+        "json"
+       ],
+       "type": "string",
+       "default": "pb",
+       "title": "Format"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/export/gtfs-rt/alerts": {
+   "get": {
+    "tags": [
+     "export"
+    ],
+    "summary": "GTFS-Realtime: инциденты",
+    "description": "GTFS-RT Alerts по открытым инцидентам.\n\nRaises:\n    HTTPException: 501 — protobuf недоступен (используйте ``format=json``).",
+    "operationId": "gtfs_rt_alerts_api_export_gtfs_rt_alerts_get",
+    "parameters": [
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "pb",
+        "json"
+       ],
+       "type": "string",
+       "default": "pb",
+       "title": "Format"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/export/gtfs-static.zip": {
+   "get": {
+    "tags": [
+     "export"
+    ],
+    "summary": "Статический GTFS (идентификаторы совпадают с RT)",
+    "description": "Статический GTFS (zip) по эталонному расписанию; ID совпадают с realtime-фидами.",
+    "operationId": "gtfs_static_api_export_gtfs_static_zip_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/export/vehicles.geojson": {
+   "get": {
+    "tags": [
+     "export"
+    ],
+    "summary": "GeoJSON ТС для JS API карт",
+    "description": "GeoJSON FeatureCollection ТС с уровнем риска и прогнозом.",
+    "operationId": "vehicles_geojson_api_export_vehicles_geojson_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/health": {
+   "get": {
+    "tags": [
+     "service"
+    ],
+    "summary": "Liveness/readiness",
+    "description": "Проверка живости для Docker healthcheck.\n\nВсегда 200: при недоступном ML сервис жив и работает в деградированном режиме.\n\nReturns:\n    dict: ``status`` (ok/starting), ``uptime_s``, ``startup_s``, ``mode`` (online/degraded).",
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/status": {
+   "get": {
+    "tags": [
+     "service"
+    ],
+    "summary": "Режим работы системы (online / degraded) и причины",
+    "description": "Режим работы: связь с телематикой, доступность ML, причины деградации.\n\nRaises:\n    HTTPException: 503 — сервис стартует.",
+    "operationId": "status_api_status_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/metrics": {
+   "get": {
+    "tags": [
+     "service"
+    ],
+    "summary": "Метрики производительности, надёжности и онлайн-точности",
+    "description": "Метрики приёма NDTP, цикла прогноза, задержек (p50/p95/p99) и онлайн-точности модели.\n\nReturns:\n    dict: Разделы ``ingest``, ``prediction``, ``accuracy_online``, ``status``, ``ndtp``.\n\nRaises:\n    HTTPException: 503 — сервис стартует.",
+    "operationId": "metrics_api_metrics_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/metrics": {
+   "get": {
+    "tags": [
+     "service"
+    ],
+    "summary": "Prometheus-метрики",
+    "description": "Те же метрики в текстовом формате Prometheus (без клиентской библиотеки).",
+    "operationId": "prometheus_metrics_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/plain": {
+        "schema": {
+         "type": "string"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/connections": {
+   "get": {
+    "tags": [
+     "ndtp"
+    ],
+    "summary": "Активные NDTP-соединения терминалов",
+    "description": "Активные TCP-соединения: терминал, байты, кадры, ошибки, версия протокола.\n\nReturns:\n    list[dict]: Поля :class:`app.ndtp_server.ConnInfo`.",
+    "operationId": "connections_api_connections_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/ndtp/parse": {
+   "post": {
+    "tags": [
+     "ndtp"
+    ],
+    "summary": "Разобрать NDTP-кадр(ы) из hex (отладка парсера)",
+    "description": "Разбирает NDTP-кадры тем же декодером, что и TCP-сервер. Пример — реальный кадр эмулятора.\n\nArgs:\n    hex_data: Кадры в hex; пробелы и переводы строк игнорируются.\n\nReturns:\n    dict: ``frames`` (заголовки, ячейки, навигация), ``errors``, ``last_error``.\n\nRaises:\n    HTTPException: 400 — строка не является hex.",
+    "operationId": "parse_ndtp_api_ndtp_parse_post",
+    "requestBody": {
+     "content": {
+      "text/plain": {
+       "schema": {
+        "type": "string",
+        "title": "Hex Data",
+        "description": "Один или несколько NDTP-кадров в hex (пробелы допускаются)",
+        "examples": [
+         "7e7e26000000c15c0200cc110000000100650001000200000000001ba1b76a0d2b5f1609473821e0842d0030003d01060df0000e02"
+        ]
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/state": {
+   "get": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "Полный снимок: KPI, ТС, инциденты, риск участков",
+    "description": "Полный снимок состояния; то же, что приходит по WebSocket ``/ws``.\n\nRaises:\n    HTTPException: 503 — первый цикл прогноза ещё не завершён.",
+    "operationId": "snapshot_api_state_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/vehicles": {
+   "get": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "Текущее положение и риск всех ТС",
+    "description": "ТС: положение, уровень риска, прогноз на T+10…15 мин, P(опоздание), причина, ближайшие остановки.\n\nReturns:\n    list[dict]: Пустой список до первого цикла прогноза.",
+    "operationId": "vehicles_api_vehicles_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/vehicles/{vehicle_id}": {
+   "get": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "Детали ТС (unit_id или tr_id): признаки модели, трейл прогнозов, факт прибытий",
+    "description": "Карточка ТС: прогноз, SHAP-объяснение, признаки модели, ETA, история прогнозов и прибытий.\n\nArgs:\n    vehicle_id: unit_id терминала или tr_id ТС.\n\nRaises:\n    HTTPException: 404 — ТС не найдено.",
+    "operationId": "vehicle_api_vehicles__vehicle_id__get",
+    "parameters": [
+     {
+      "name": "vehicle_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Vehicle Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/incidents": {
+   "get": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "Открытые инциденты (карточки) и недавно закрытые",
+    "description": "Карточки инцидентов: ТС, прогноз опоздания, P(late), причина, участок, целевая остановка, SHAP.\n\nReturns:\n    dict: ``open`` — активные, ``resolved`` — недавно закрытые.",
+    "operationId": "incidents_api_incidents_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/incidents/{incident_id}/ack": {
+   "post": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "Принять инцидент в работу",
+    "description": "Отмечает инцидент принятым диспетчером.\n\nArgs:\n    incident_id: ID инцидента из ``/api/incidents``.\n\nRaises:\n    HTTPException: 404 — инцидент не найден или уже закрыт.",
+    "operationId": "ack_api_incidents__incident_id__ack_post",
+    "parameters": [
+     {
+      "name": "incident_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Incident Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/network": {
+   "get": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "Маршрутная сеть: остановки, сегменты, маршруты",
+    "description": "Маршрутная сеть для карты: остановки, сегменты по дорогам, маршруты расписания и реальные маршруты.\n\nReturns:\n    dict: ``stops``, ``segments``, ``routes``, ``real_routes``.",
+    "operationId": "network_api_network_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/model": {
+   "get": {
+    "tags": [
+     "dispatcher"
+    ],
+    "summary": "Информация о модели (прокси ML-сервиса)",
+    "description": "Метаданные модели из ML-сервиса: деревья, признаки, важности, валидационная MAE.\n\nRaises:\n    HTTPException: 503 — ML-сервис недоступен.",
+    "operationId": "model_api_model_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "ApplyRequest": {
+    "properties": {
+     "scenarios": {
+      "items": {
+       "$ref": "#/components/schemas/Scenario"
+      },
+      "type": "array",
+      "title": "Scenarios"
+     },
+     "horizon_stops": {
+      "type": "integer",
+      "maximum": 40.0,
+      "minimum": 3.0,
+      "title": "Horizon Stops",
+      "default": 12
+     },
+     "include_all": {
+      "type": "boolean",
+      "title": "Include All",
+      "default": false
+     },
+     "duration_min": {
+      "type": "number",
+      "title": "Duration Min",
+      "description": "Сколько минут (время данных) воздействие действует в живом прогнозе",
+      "default": 30
+     },
+     "inject_into_stream": {
+      "type": "boolean",
+      "title": "Inject Into Stream",
+      "description": "Поломку/ДТП/засор также имитировать в потоке телеметрии (фидер)",
+      "default": true
+     }
+    },
+    "type": "object",
+    "required": [
+     "scenarios"
+    ],
+    "title": "ApplyRequest",
+    "description": "Запрос применения сценария к живому прогнозу."
+   },
+   "Body_route_import_gtfs_api_routes_import_gtfs_post": {
+    "properties": {
+     "file": {
+      "type": "string",
+      "contentMediaType": "application/octet-stream",
+      "title": "File"
+     }
+    },
+    "type": "object",
+    "required": [
+     "file"
+    ],
+    "title": "Body_route_import_gtfs_api_routes_import_gtfs_post"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "ManualRoute": {
+    "properties": {
+     "ref": {
+      "type": "string",
+      "title": "Ref",
+      "examples": [
+       "м6"
+      ]
+     },
+     "name": {
+      "type": "string",
+      "title": "Name",
+      "default": ""
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "bus",
+       "trolleybus",
+       "tram",
+       "share_taxi"
+      ],
+      "title": "Mode",
+      "default": "bus"
+     },
+     "stops": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "minItems": 2,
+      "title": "Stops",
+      "description": "[{name, lat, lon}] в порядке следования"
+     },
+     "vehicles": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "title": "Vehicles"
+     }
+    },
+    "type": "object",
+    "required": [
+     "ref",
+     "stops"
+    ],
+    "title": "ManualRoute",
+    "description": "Маршрут, заданный вручную списком остановок."
+   },
+   "OsmImport": {
+    "properties": {
+     "ref": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ref",
+      "description": "Номер маршрута как в OSM (например «м6», «т25», «297»)"
+     },
+     "relation_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Relation Id"
+     },
+     "vehicles": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "title": "Vehicles",
+      "description": "Привязать ТС (tr_id) к импортированному маршруту"
+     }
+    },
+    "type": "object",
+    "title": "OsmImport",
+    "description": "Импорт из OSM по номеру или ID relation."
+   },
+   "Scenario": {
+    "properties": {
+     "type": {
+      "type": "string",
+      "enum": [
+       "reserve_bus",
+       "detour",
+       "signal_priority",
+       "domino",
+       "skip_stops",
+       "breakdown",
+       "accident",
+       "blockage",
+       "traffic"
+      ],
+      "title": "Type"
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params",
+      "examples": [
+       {
+        "minutes": 10,
+        "unit_id": 985940
+       }
+      ]
+     }
+    },
+    "type": "object",
+    "required": [
+     "type"
+    ],
+    "title": "Scenario",
+    "description": "Один сценарий what-if: тип + параметры (см. ``GET /api/whatif/types``)."
+   },
+   "SimulateRequest": {
+    "properties": {
+     "scenarios": {
+      "items": {
+       "$ref": "#/components/schemas/Scenario"
+      },
+      "type": "array",
+      "title": "Scenarios"
+     },
+     "horizon_stops": {
+      "type": "integer",
+      "maximum": 40.0,
+      "minimum": 3.0,
+      "title": "Horizon Stops",
+      "default": 12
+     },
+     "include_all": {
+      "type": "boolean",
+      "title": "Include All",
+      "default": false
+     }
+    },
+    "type": "object",
+    "required": [
+     "scenarios"
+    ],
+    "title": "SimulateRequest",
+    "description": "Запрос моделирования: сценарии применяются вместе (комбинация)."
+   },
+   "TrafficUpdate": {
+    "properties": {
+     "segment_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Segment Ids"
+     },
+     "jam": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 10.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Jam",
+      "description": "Балл пробок 0–10 (как в картографических сервисах)"
+     },
+     "bus_lane": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 1.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Bus Lane",
+      "description": "Доля участка с выделенной полосой ОТ"
+     }
+    },
+    "type": "object",
+    "title": "TrafficUpdate",
+    "description": "Внешний индекс пробок и автобусные полосы для набора перегонов."
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}

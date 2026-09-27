@@ -1,10 +1,10 @@
-"""TCP-сервер приёма NDTP (роль «NDTP-сервера» для эмулятора / бортовых терминалов).
+"""TCP-сервер приёма NDTP: роль «NDTP-сервера» для эмулятора и бортовых терминалов.
 
-* Каждое соединение обслуживается отдельной корутиной; ошибка в одном соединении
-  не влияет на остальные и на сервис в целом.
-* Handshake (NPH_SGC_CONN_REQUEST) и пакеты с флагом request подтверждаются NPH_RESULT.
-* Битые кадры (CRC/сигнатура) пропускаются с пересинхронизацией, соединение не рвётся.
-* Простаивающее соединение закрывается по таймауту; терминал сам переподключается.
+* Каждое соединение обслуживает своя корутина: сбой одного терминала не задевает остальные.
+* Handshake (``NPH_SGC_CONN_REQUEST``) и пакеты с флагом request подтверждаются ``NPH_RESULT``,
+  иначе терминал по протоколу повторяет отправку.
+* Битые кадры (CRC, сигнатура) пропускаются с пересинхронизацией, соединение не рвётся.
+* Простаивающее соединение закрывается по таймауту, терминал сам переподключается.
 """
 from __future__ import annotations
 
@@ -21,10 +21,12 @@ log = logging.getLogger("backend.ndtp")
 
 @dataclass
 class ConnInfo:
+    """Состояние TCP-соединения терминала (для ``/api/connections`` и диагностики)."""
+
     conn_id: int
     peer: str
     connected_at: float = field(default_factory=time.time)
-    unit_id: int | None = None
+    unit_id: int | None = None   # peerAddress из NPH, известен после первого кадра
     frames: int = 0
     bytes: int = 0
     errors: int = 0
@@ -33,6 +35,16 @@ class ConnInfo:
 
 
 class NDTPServer:
+    """Асинхронный TCP-сервер NDTP.
+
+    Args:
+        host: Адрес прослушивания.
+        port: TCP-порт (по умолчанию 9201).
+        on_frame: Обработчик кадра ``(frame, conn_info, rx_wall_time)``; вызывается синхронно в event loop.
+        verify_crc: Проверять CRC-16 кадров.
+        idle_timeout_s: Закрыть соединение после стольких секунд без данных.
+    """
+
     def __init__(self, host: str, port: int, on_frame: Callable[[ndtp.Frame, ConnInfo, float], None],
                  verify_crc: bool = True, idle_timeout_s: float = 120.0) -> None:
         self.host, self.port = host, port
@@ -49,10 +61,17 @@ class NDTPServer:
         self._seq = 0
 
     async def start(self) -> None:
+        """Начинает принимать соединения.
+
+        Raises:
+            OSError: Порт занят или недоступен.
+        """
+        # limit 1 МБ (по умолчанию 64 КБ): запас под крупные пачки кадров, например историю после реконнекта
         self._server = await asyncio.start_server(self._handle, self.host, self.port, limit=1 << 20)
         log.info("NDTP server listening on %s:%d", self.host, self.port)
 
     async def stop(self) -> None:
+        """Прекращает приём и ждёт закрытия серверного сокета."""
         if self._server:
             self._server.close()
             await self._server.wait_closed()
@@ -63,15 +82,17 @@ class NDTPServer:
         info = ConnInfo(self._seq, f"{peer[0]}:{peer[1]}" if peer else "?")
         self.connections[info.conn_id] = info
         self.total_connections += 1
+        # свой декодер на соединение: TCP режет кадры произвольно, буфер хвоста у каждого свой
         decoder = ndtp.StreamDecoder(verify_crc=self.verify_crc)
         try:
             while True:
                 try:
                     data = await asyncio.wait_for(reader.read(65536), timeout=self.idle_timeout_s)
                 except asyncio.TimeoutError:
+                    # «полуоткрытое» соединение (терминал пропал без FIN) — освобождаем ресурсы
                     log.info("conn %d (unit %s) idle timeout", info.conn_id, info.unit_id)
                     break
-                if not data:
+                if not data:  # FIN от терминала
                     break
                 rx = time.time()
                 info.bytes += len(data)
@@ -90,6 +111,7 @@ class NDTPServer:
                         self.handler_errors += 1
                         log.exception("frame handler failed (unit %s)", frame.peer_address)
                     if frame.needs_reply:
+                        # подтверждаем даже при ошибке обработчика: кадр принят, повтор не нужен
                         replies.append(ndtp.build_result(frame, 0))
                 self.skipped_bytes += decoder.skipped_bytes - skipped_before
                 new_err = decoder.errors - errors_before
@@ -98,6 +120,7 @@ class NDTPServer:
                     self.parse_errors += new_err
                     log.warning("conn %d: %d bad frame(s): %s", info.conn_id, new_err, decoder.last_error)
                 if replies:
+                    # один write на пачку кадров, drain — backpressure, если терминал не читает
                     writer.write(b"".join(replies))
                     await writer.drain()
         except (ConnectionResetError, BrokenPipeError, OSError) as e:
@@ -108,5 +131,5 @@ class NDTPServer:
             try:
                 writer.close()
                 await writer.wait_closed()
-            except Exception:  # noqa: BLE001
+            except Exception:  # noqa: BLE001 — сокет уже мог быть закрыт пиром
                 pass

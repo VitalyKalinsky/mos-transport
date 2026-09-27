@@ -1,0 +1,955 @@
+<!doctype html>
+<html class="no-js" lang="ru" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Алфавитный указатель" href="genindex.html" /><link rel="search" title="Поиск" href="search.html" /><link rel="next" title="Replay-фидер (services/feeder)" href="feeder.html" /><link rel="prev" title="Backend (services/backend)" href="backend.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>NDTP-кодек (libs/ndtp) - mos-transport · документация по коду</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mos-transport · документация по коду</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">mos-transport · документация по коду</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Поиск" name="q" aria-label="Поиск">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Модули</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="backend.html">Backend (services/backend)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">NDTP-кодек (libs/ndtp)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feeder.html">Replay-фидер (services/feeder)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ml.html">ML-модуль</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/ndtp.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="ndtp-libs-ndtp">
+<h1>NDTP-кодек (libs/ndtp)<a class="headerlink" href="#ndtp-libs-ndtp" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Разбор и сборка кадров NDTP без внешних зависимостей; общий для backend и фидера.</p>
+<p id="module-ndtp.codec">NDTP (Navigation Data Transfer Protocol) codec.</p>
+<p>Реализация по dataset/docs/Emulator-and-Telematic-Packets-Specification.md:</p>
+<blockquote>
+<div><p>кадр = [ NPL 15 байт ][ NPH 10 байт ][ тело ]</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>все поля little-endian, структуры packed;</p></li>
+<li><p>CRC-16/Modbus (poly 0xA001, init 0xFFFF) по NPH + телу, в NPL кладётся со свапнутыми байтами;</p></li>
+<li><p>тело NPH_SND_REALTIME — последовательность ячеек [type u8][number u8][payload].</p></li>
+</ul>
+<p>Модуль без внешних зависимостей: им пользуются и Backend-сервис (приём и разбор потока),
+и replay-фидер (кодирование CSV-телеметрии в NDTP). Один кодек на обеих сторонах гарантирует,
+что формат совпадает; совместимость с протоколом проверена захватами живого эмулятора
+(<code class="docutils literal notranslate"><span class="pre">libs/ndtp/tests/fixtures</span></code>).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.crc16_modbus">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">crc16_modbus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#crc16_modbus"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.crc16_modbus" title="Ссылка на это определение">¶</a></dt>
+<dd><p>CRC-16/Modbus, эталонная побитовая версия (для тестов).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>bytes</em>) – NPH + тело кадра.</p>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>int</em> – CRC (poly 0xA001 = reflected 0x8005, init 0xFFFF).</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.crc16_modbus_fast">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">crc16_modbus_fast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#crc16_modbus_fast"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.crc16_modbus_fast" title="Ссылка на это определение">¶</a></dt>
+<dd><p>CRC-16/Modbus табличным методом; результат совпадает с <a class="reference internal" href="#ndtp.codec.crc16_modbus" title="ndtp.codec.crc16_modbus"><code class="xref py py-func docutils literal notranslate"><span class="pre">crc16_modbus()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>bytes</em>) – NPH + тело кадра.</p>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>int</em> – CRC.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ndtp.codec.CellSpec">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">CellSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#CellSpec"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.CellSpec" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Бинарный формат ячейки телематики: тип, имя, struct (little-endian, packed), имена полей.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>fmt</strong> (<em>Struct</em>)</p></li>
+<li><p><strong>fields</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.CellSpec.type_id">
+<span class="sig-name descname"><span class="pre">type_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.CellSpec.type_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.CellSpec.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ndtp.codec.CellSpec.name" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.CellSpec.fmt">
+<span class="sig-name descname"><span class="pre">fmt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Struct</span></em><a class="headerlink" href="#ndtp.codec.CellSpec.fmt" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.CellSpec.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ndtp.codec.CellSpec.fields" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ndtp.codec.CellSpec.size">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.CellSpec.size" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Размер payload ячейки, байт (без 2 байт type/number).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">NavRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location_valid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bat_voltage_v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alarm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#NavRecord"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.NavRecord" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Раскодированная G6CellNav00 в терминах traffic.csv.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamp</strong> (<em>int</em>)</p></li>
+<li><p><strong>lon</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>lat</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>location_valid</strong> (<em>bool</em>)</p></li>
+<li><p><strong>speed</strong> (<em>float</em>)</p></li>
+<li><p><strong>speed_max</strong> (<em>float</em>)</p></li>
+<li><p><strong>heading</strong> (<em>float</em>)</p></li>
+<li><p><strong>alt</strong> (<em>float</em>)</p></li>
+<li><p><strong>nsat</strong> (<em>int</em>)</p></li>
+<li><p><strong>pdop</strong> (<em>int</em>)</p></li>
+<li><p><strong>bat_voltage_v</strong> (<em>float</em>)</p></li>
+<li><p><strong>track_m</strong> (<em>int</em>)</p></li>
+<li><p><strong>alarm</strong> (<em>bool</em>)</p></li>
+<li><p><strong>sos</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.timestamp" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.lon">
+<span class="sig-name descname"><span class="pre">lon</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.lon" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.lat">
+<span class="sig-name descname"><span class="pre">lat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.lat" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.location_valid">
+<span class="sig-name descname"><span class="pre">location_valid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.location_valid" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.speed">
+<span class="sig-name descname"><span class="pre">speed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.speed" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.speed_max">
+<span class="sig-name descname"><span class="pre">speed_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.speed_max" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.heading">
+<span class="sig-name descname"><span class="pre">heading</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.heading" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.alt">
+<span class="sig-name descname"><span class="pre">alt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.alt" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.nsat">
+<span class="sig-name descname"><span class="pre">nsat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.nsat" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.pdop">
+<span class="sig-name descname"><span class="pre">pdop</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.pdop" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.bat_voltage_v">
+<span class="sig-name descname"><span class="pre">bat_voltage_v</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.bat_voltage_v" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.track_m">
+<span class="sig-name descname"><span class="pre">track_m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.track_m" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.alarm">
+<span class="sig-name descname"><span class="pre">alarm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.alarm" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.sos">
+<span class="sig-name descname"><span class="pre">sos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ndtp.codec.NavRecord.sos" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ndtp.codec.NavRecord.from_cell">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#NavRecord.from_cell"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.NavRecord.from_cell" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Nav00 → поля traffic.csv по таблице §8 README датасета.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>c</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Разобранная ячейка G6CellNav00.</p>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>NavRecord</em> – Координаты в градусах со знаком; <code class="docutils literal notranslate"><span class="pre">lon/lat</span> <span class="pre">=</span> <span class="pre">None</span></code> при нулевых координатах.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ndtp.codec.NavRecord" title="ndtp.codec.NavRecord"><em>NavRecord</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ndtp.codec.Frame">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">Frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peer_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npl_request_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nph_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nph_flags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nph_request_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handshake=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unparsed_cells=0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#Frame"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.Frame" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Разобранный NDTP-кадр: заголовки NPL/NPH и содержимое (ячейки или handshake).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peer_address</strong> (<em>int</em>)</p></li>
+<li><p><strong>npl_request_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>service_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>nph_type</strong> (<em>int</em>)</p></li>
+<li><p><strong>nph_flags</strong> (<em>int</em>)</p></li>
+<li><p><strong>nph_request_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>body</strong> (<em>bytes</em>)</p></li>
+<li><p><strong>cells</strong> (<em>list</em><em>[</em><em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em>)</p></li>
+<li><p><strong>handshake</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>unparsed_cells</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.peer_address">
+<span class="sig-name descname"><span class="pre">peer_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.Frame.peer_address" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.npl_request_id">
+<span class="sig-name descname"><span class="pre">npl_request_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.Frame.npl_request_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.service_id">
+<span class="sig-name descname"><span class="pre">service_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.Frame.service_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.nph_type">
+<span class="sig-name descname"><span class="pre">nph_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.Frame.nph_type" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.nph_flags">
+<span class="sig-name descname"><span class="pre">nph_flags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.Frame.nph_flags" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.nph_request_id">
+<span class="sig-name descname"><span class="pre">nph_request_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ndtp.codec.Frame.nph_request_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.body">
+<span class="sig-name descname"><span class="pre">body</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bytes</span></em><a class="headerlink" href="#ndtp.codec.Frame.body" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.cells">
+<span class="sig-name descname"><span class="pre">cells</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ndtp.codec.Frame.cells" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.handshake">
+<span class="sig-name descname"><span class="pre">handshake</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ndtp.codec.Frame.handshake" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.unparsed_cells">
+<span class="sig-name descname"><span class="pre">unparsed_cells</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ndtp.codec.Frame.unparsed_cells" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.is_handshake">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_handshake</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ndtp.codec.Frame.is_handshake" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Запрос соединения <code class="docutils literal notranslate"><span class="pre">NPH_SGC_CONN_REQUEST</span></code> (первый кадр сессии).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.is_telemetry">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_telemetry</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ndtp.codec.Frame.is_telemetry" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Навигационные данные (realtime или история).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.is_history">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_history</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ndtp.codec.Frame.is_history" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Данные из «чёрного ящика», досланные после восстановления связи.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.needs_reply">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">needs_reply</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ndtp.codec.Frame.needs_reply" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Отправитель ждёт <code class="docutils literal notranslate"><span class="pre">NPH_RESULT</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ndtp.codec.Frame.nav">
+<span class="sig-name descname"><span class="pre">nav</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#Frame.nav"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.Frame.nav" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Первая навигационная ячейка кадра.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>NavRecord | None</em> – <code class="docutils literal notranslate"><span class="pre">None</span></code> — в кадре нет Nav00.</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ndtp.codec.NavRecord" title="ndtp.codec.NavRecord"><em>NavRecord</em></a> | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ndtp.codec.NDTPError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">NDTPError</span></span><a class="reference internal" href="_modules/ndtp/codec.html#NDTPError"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.NDTPError" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>Кадр не соответствует протоколу (короткий, чужая сигнатура, тип NPL, обрезан, CRC).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.parse_cells">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">parse_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#parse_cells"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.parse_cells" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Разбирает тело realtime-пакета.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>body</strong> (<em>bytes</em>) – Тело кадра после NPH.</p>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>tuple[list[dict], int]</em> – Ячейки и признак обрыва разбора (1 — встречен тип неизвестного размера
+или обрезанная ячейка; ячейки до него сохраняются).</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[list[dict[str, <em>Any</em>]], int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.parse_frame">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">parse_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_crc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#parse_frame"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.parse_frame" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Разбирает ровно один полный кадр.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>buf</strong> (<em>bytes</em><em> | </em><em>bytearray</em><em> | </em><em>memoryview</em>) – Байты кадра, начиная с сигнатуры.</p></li>
+<li><p><strong>verify_crc</strong> (<em>bool</em>) – Проверять CRC.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Frame</em> – Кадр с разобранными ячейками или handshake.</p>
+</dd>
+<dt class="field-odd">Исключение<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ndtp.codec.NDTPError" title="ndtp.codec.NDTPError"><strong>NDTPError</strong></a> – Кадр короче заголовков, неверная сигнатура или тип NPL, тело обрезано, CRC не совпал.</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ndtp.codec.Frame" title="ndtp.codec.Frame"><em>Frame</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ndtp.codec.StreamDecoder">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">StreamDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verify_crc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1048576</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#StreamDecoder"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.StreamDecoder" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Инкрементальный декодер TCP-потока: накапливает байты, отдаёт целые кадры.</p>
+<p>Устойчив к мусору и битым кадрам: при ошибке сигнатуры/CRC пересинхронизируется
+по следующей сигнатуре 0x7E7E, не теряя соединение.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>verify_crc</strong> (<em>bool</em>)</p></li>
+<li><p><strong>max_buffer</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ndtp.codec.StreamDecoder.SIG">
+<span class="sig-name descname"><span class="pre">SIG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">b'~~'</span></em><a class="headerlink" href="#ndtp.codec.StreamDecoder.SIG" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ndtp.codec.StreamDecoder.feed">
+<span class="sig-name descname"><span class="pre">feed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#StreamDecoder.feed"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.StreamDecoder.feed" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Добавляет очередной фрагмент TCP-потока и выдаёт все собранные целые кадры.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>bytes</em>) – Произвольный фрагмент (TCP не сохраняет границы кадров).</p>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Frame</em> – Корректные кадры. Ошибки не пробрасываются, а считаются в <code class="docutils literal notranslate"><span class="pre">errors</span></code> и <code class="docutils literal notranslate"><span class="pre">last_error</span></code>.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Iterator</em>[<a class="reference internal" href="#ndtp.codec.Frame" title="ndtp.codec.Frame"><em>Frame</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.build_frame">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">build_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peer_address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nph_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nph_flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npl_request_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#build_frame"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.build_frame" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Собирает кадр NPL + NPH + тело с CRC.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peer_address</strong> (<em>int</em>) – unitId терминала.</p></li>
+<li><p><strong>service_id</strong> (<em>int</em>) – Сервис NPH.</p></li>
+<li><p><strong>nph_type</strong> (<em>int</em>) – Тип пакета NPH.</p></li>
+<li><p><strong>request_id</strong> (<em>int</em>) – ID запроса NPH (обрезается до u32).</p></li>
+<li><p><strong>body</strong> (<em>bytes</em>) – Тело.</p></li>
+<li><p><strong>nph_flags</strong> (<em>int</em>) – Флаги NPH (по умолчанию — ждать подтверждения).</p></li>
+<li><p><strong>npl_request_id</strong> (<em>int</em>) – ID запроса NPL.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bytes</em> – Готовый кадр.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.build_handshake">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">build_handshake</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#build_handshake"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.build_handshake" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Запрос соединения терминала (<code class="docutils literal notranslate"><span class="pre">NPH_SGC_CONN_REQUEST</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unit_id</strong> (<em>int</em>) – unitId терминала.</p></li>
+<li><p><strong>request_id</strong> (<em>int</em>) – ID запроса.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bytes</em> – Кадр handshake.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.build_result">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">build_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#build_result"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.build_result" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Ответ сервера <code class="docutils literal notranslate"><span class="pre">NPH_RESULT</span></code> на кадр с флагом request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>to_frame</strong> (<a class="reference internal" href="#ndtp.codec.Frame" title="ndtp.codec.Frame"><em>Frame</em></a>) – Подтверждаемый кадр (берутся его peer, сервис и request_id).</p></li>
+<li><p><strong>error</strong> (<em>int</em>) – Код результата, 0 — успех.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bytes</em> – Кадр ответа (без флага request: на ответ не отвечают).</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.encode_cell">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">encode_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#encode_cell"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.encode_cell" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Кодирует ячейку телематики.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type_id</strong> (<em>int</em>) – Тип ячейки из <code class="xref py py-data docutils literal notranslate"><span class="pre">CELL_SPECS</span></code>.</p></li>
+<li><p><strong>number</strong> (<em>int</em>) – Номер ячейки.</p></li>
+<li><p><strong>values</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Значения полей; отсутствующие — 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bytes</em> – <code class="docutils literal notranslate"><span class="pre">[type][number][payload]</span></code>.</p>
+</dd>
+<dt class="field-odd">Исключение<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>KeyError</strong> – Тип без описания формата.</p></li>
+<li><p><strong>struct.error</strong> – Значение не помещается в поле.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.encode_nav">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">encode_nav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bat_voltage_v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#encode_nav"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.encode_nav" title="Ссылка на это определение">¶</a></dt>
+<dd><p>G6CellNav00 из полей traffic.csv (обратное преобразование к таблице §8 README датасета).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamp</strong> (<em>int</em>) – Время, unix-с.</p></li>
+<li><p><strong>lon</strong> (<em>float</em><em> | </em><em>None</em>) – Долгота или <code class="docutils literal notranslate"><span class="pre">None</span></code> (нет фикса → нули и сброшенный бит валидности).</p></li>
+<li><p><strong>lat</strong> (<em>float</em><em> | </em><em>None</em>) – Широта или <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>valid</strong> (<em>bool</em>) – Координаты достоверны.</p></li>
+<li><p><strong>speed</strong> (<em>float</em>) – Скорость, км/ч.</p></li>
+<li><p><strong>heading</strong> (<em>float</em>) – Курс, градусы.</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Высота, м.</p></li>
+<li><p><strong>nsat</strong> (<em>int</em>) – Число спутников.</p></li>
+<li><p><strong>pdop</strong> (<em>int</em>) – PDOP.</p></li>
+<li><p><strong>bat_voltage_v</strong> (<em>float</em>) – Напряжение батареи, В.</p></li>
+<li><p><strong>track_m</strong> (<em>int</em>) – Пробег, м.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bytes</em> – Ячейка Nav00.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ndtp.codec.build_realtime">
+<span class="sig-prename descclassname"><span class="pre">ndtp.codec.</span></span><span class="sig-name descname"><span class="pre">build_realtime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ndtp/codec.html#build_realtime"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ndtp.codec.build_realtime" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Кадр с навигационными данными.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unit_id</strong> (<em>int</em>) – unitId терминала.</p></li>
+<li><p><strong>request_id</strong> (<em>int</em>) – ID запроса.</p></li>
+<li><p><strong>cells</strong> (<em>bytes</em>) – Закодированные ячейки.</p></li>
+<li><p><strong>history</strong> (<em>bool</em>) – Исторические данные (досылка после обрыва).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bytes</em> – Кадр <code class="docutils literal notranslate"><span class="pre">NPH_SND_REALTIME</span></code> или <code class="docutils literal notranslate"><span class="pre">NPH_SND_HISTORY</span></code>.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="feeder.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Replay-фидер (services/feeder)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="backend.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Backend (services/backend)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">NDTP-кодек (libs/ndtp)</a><ul>
+<li><a class="reference internal" href="#ndtp.codec.crc16_modbus"><code class="docutils literal notranslate"><span class="pre">crc16_modbus()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.crc16_modbus_fast"><code class="docutils literal notranslate"><span class="pre">crc16_modbus_fast()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.CellSpec"><code class="docutils literal notranslate"><span class="pre">CellSpec</span></code></a><ul>
+<li><a class="reference internal" href="#ndtp.codec.CellSpec.type_id"><code class="docutils literal notranslate"><span class="pre">CellSpec.type_id</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.CellSpec.name"><code class="docutils literal notranslate"><span class="pre">CellSpec.name</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.CellSpec.fmt"><code class="docutils literal notranslate"><span class="pre">CellSpec.fmt</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.CellSpec.fields"><code class="docutils literal notranslate"><span class="pre">CellSpec.fields</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.CellSpec.size"><code class="docutils literal notranslate"><span class="pre">CellSpec.size</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord"><code class="docutils literal notranslate"><span class="pre">NavRecord</span></code></a><ul>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.timestamp"><code class="docutils literal notranslate"><span class="pre">NavRecord.timestamp</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.lon"><code class="docutils literal notranslate"><span class="pre">NavRecord.lon</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.lat"><code class="docutils literal notranslate"><span class="pre">NavRecord.lat</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.location_valid"><code class="docutils literal notranslate"><span class="pre">NavRecord.location_valid</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.speed"><code class="docutils literal notranslate"><span class="pre">NavRecord.speed</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.speed_max"><code class="docutils literal notranslate"><span class="pre">NavRecord.speed_max</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.heading"><code class="docutils literal notranslate"><span class="pre">NavRecord.heading</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.alt"><code class="docutils literal notranslate"><span class="pre">NavRecord.alt</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.nsat"><code class="docutils literal notranslate"><span class="pre">NavRecord.nsat</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.pdop"><code class="docutils literal notranslate"><span class="pre">NavRecord.pdop</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.bat_voltage_v"><code class="docutils literal notranslate"><span class="pre">NavRecord.bat_voltage_v</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.track_m"><code class="docutils literal notranslate"><span class="pre">NavRecord.track_m</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.alarm"><code class="docutils literal notranslate"><span class="pre">NavRecord.alarm</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.sos"><code class="docutils literal notranslate"><span class="pre">NavRecord.sos</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.NavRecord.from_cell"><code class="docutils literal notranslate"><span class="pre">NavRecord.from_cell()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ndtp.codec.Frame"><code class="docutils literal notranslate"><span class="pre">Frame</span></code></a><ul>
+<li><a class="reference internal" href="#ndtp.codec.Frame.peer_address"><code class="docutils literal notranslate"><span class="pre">Frame.peer_address</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.npl_request_id"><code class="docutils literal notranslate"><span class="pre">Frame.npl_request_id</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.service_id"><code class="docutils literal notranslate"><span class="pre">Frame.service_id</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.nph_type"><code class="docutils literal notranslate"><span class="pre">Frame.nph_type</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.nph_flags"><code class="docutils literal notranslate"><span class="pre">Frame.nph_flags</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.nph_request_id"><code class="docutils literal notranslate"><span class="pre">Frame.nph_request_id</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.body"><code class="docutils literal notranslate"><span class="pre">Frame.body</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.cells"><code class="docutils literal notranslate"><span class="pre">Frame.cells</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.handshake"><code class="docutils literal notranslate"><span class="pre">Frame.handshake</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.unparsed_cells"><code class="docutils literal notranslate"><span class="pre">Frame.unparsed_cells</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.is_handshake"><code class="docutils literal notranslate"><span class="pre">Frame.is_handshake</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.is_telemetry"><code class="docutils literal notranslate"><span class="pre">Frame.is_telemetry</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.is_history"><code class="docutils literal notranslate"><span class="pre">Frame.is_history</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.needs_reply"><code class="docutils literal notranslate"><span class="pre">Frame.needs_reply</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.Frame.nav"><code class="docutils literal notranslate"><span class="pre">Frame.nav()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ndtp.codec.NDTPError"><code class="docutils literal notranslate"><span class="pre">NDTPError</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.parse_cells"><code class="docutils literal notranslate"><span class="pre">parse_cells()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.parse_frame"><code class="docutils literal notranslate"><span class="pre">parse_frame()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.StreamDecoder"><code class="docutils literal notranslate"><span class="pre">StreamDecoder</span></code></a><ul>
+<li><a class="reference internal" href="#ndtp.codec.StreamDecoder.SIG"><code class="docutils literal notranslate"><span class="pre">StreamDecoder.SIG</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.StreamDecoder.feed"><code class="docutils literal notranslate"><span class="pre">StreamDecoder.feed()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ndtp.codec.build_frame"><code class="docutils literal notranslate"><span class="pre">build_frame()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.build_handshake"><code class="docutils literal notranslate"><span class="pre">build_handshake()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.build_result"><code class="docutils literal notranslate"><span class="pre">build_result()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.encode_cell"><code class="docutils literal notranslate"><span class="pre">encode_cell()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.encode_nav"><code class="docutils literal notranslate"><span class="pre">encode_nav()</span></code></a></li>
+<li><a class="reference internal" href="#ndtp.codec.build_realtime"><code class="docutils literal notranslate"><span class="pre">build_realtime()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=9ca2116e"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=cd1d70c9"></script>
+    </body>
+</html>

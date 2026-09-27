@@ -6,7 +6,8 @@ NPH_SND_REALTIME с ячейкой G6CellNav00; при обрыве — reconnec
 Отличие от штатного эмулятора: координаты/скорость/время берутся из реальной телеметрии,
 поэтому поток сопоставим с эталонным расписанием (штатный эмулятор шлёт случайные данные).
 
-Управление (HTTP :8090): пауза, скорость, перемотка, имитация обрыва связи, мусор в канале.
+Управление (HTTP :8090, Swagger ``/docs``): пауза, скорость, перемотка, обрыв связи, мусор в канале,
+внештатные ситуации (поломка, ДТП/засор) для демонстрации деградации и what-if.
 """
 from __future__ import annotations
 
@@ -36,6 +37,12 @@ SPEED_PRESETS = [1, 2, 5, 10, 30, 60]
 
 
 class Replay:
+    """Состояние реплея: данные, часы реплея, очереди по терминалам, сценарии отказов.
+
+    Часы реплея — якорь (время данных, wall-clock) × скорость: смена скорости и пауза
+    не дают скачка времени данных.
+    """
+
     def __init__(self) -> None:
         self.rows: list[tuple] = []
         self.units: list[int] = []
@@ -60,6 +67,11 @@ class Replay:
 
     # --------------------------------------------------------------- data
     def load(self) -> None:
+        """Загружает traffic.csv и упорядочивает строки как поток.
+
+        Raises:
+            FileNotFoundError: Нет файла ``REPLAY_TRAFFIC``.
+        """
         t = pd.read_csv(TRAFFIC, low_memory=False)
         if UNITS:
             t = t[t.unit_id.isin([int(u) for u in UNITS.split(",")])]
@@ -67,7 +79,7 @@ class Replay:
         rx = pd.to_datetime(t.receive_time, format="ISO8601")
         epoch = pd.Timestamp("1970-01-01")
         t = t.assign(ts=(ev - epoch).dt.total_seconds(), rx=(rx - epoch).dt.total_seconds())
-        # порядок потока = порядок поступления на сервер
+        # порядок потока = порядок поступления на сервер: важно для паритета признака speed_diff с обучением
         t = t.sort_values(["ts", "rx"])
         self.rows = list(zip(
             t.unit_id.astype(int), t.ts, t.location_valid.astype(bool),
@@ -80,23 +92,35 @@ class Replay:
                  pd.Timestamp(self.data_start, unit="s"), pd.Timestamp(self.data_end, unit="s"))
 
     def data_now(self) -> float:
+        """Текущее время реплея (время данных), unix-с; на паузе стоит."""
         if not self.running:
             return self.anchor_data
         return self.anchor_data + (time.time() - self.anchor_wall) * self.speed
 
     def seek(self, data_ts: float) -> None:
+        """Перемотка на время данных (обрезается до границ датасета).
+
+        Args:
+            data_ts: Время данных, unix-с.
+        """
         import bisect
         self.anchor_data = max(self.data_start, min(self.data_end, data_ts))
         self.anchor_wall = time.time()
         self.pos = bisect.bisect_left(self.rows, self.anchor_data, key=lambda r: r[1])
 
     def set_speed(self, speed: float) -> None:
+        """Меняет ускорение без скачка времени: якорь переносится в «сейчас».
+
+        Args:
+            speed: Секунд данных за секунду реального времени.
+        """
         now = self.data_now()
         self.speed = speed
         self.anchor_data, self.anchor_wall = now, time.time()
 
     # ------------------------------------------------------------- pacing
     async def scheduler(self) -> None:
+        """Раздаёт строки, чьё время наступило, по очередям терминалов (тик 50 мс)."""
         while True:
             if not self.running:
                 await asyncio.sleep(0.2)
@@ -108,6 +132,7 @@ class Replay:
                 q = self.queues.get(r[0])
                 if q is not None:
                     if q.full():
+                        # терминал не успевает (нет связи) — теряем, как реальный канал, без роста памяти
                         self.dropped += 1
                     else:
                         q.put_nowait(r)
@@ -116,6 +141,7 @@ class Replay:
             self.expire_incidents(now)
             if self.pos >= len(self.rows):
                 if LOOP:
+                    # новый круг: время данных прыгает назад → backend сам пересинхронизирует часы и нитки
                     self.shift.clear()
                     self.incidents.clear()
                     self.loops += 1
@@ -135,10 +161,12 @@ class Replay:
         return base
 
     def frozen(self, unit: int, now: float) -> bool:
+        """ТС сейчас стоит из-за имитации поломки."""
         inc = self.incidents.get(unit)
         return bool(inc and inc["kind"] == "breakdown" and inc["start"] <= now < inc["until"])
 
     def expire_incidents(self, now: float) -> None:
+        """Завершает истёкшие ситуации; накопленное замедлением опоздание переносится в постоянный сдвиг."""
         for unit, inc in list(self.incidents.items()):
             if now >= inc["until"]:
                 if inc["kind"] == "slowdown":
@@ -147,6 +175,20 @@ class Replay:
                 log.info("incident on unit %s finished", unit)
 
     def add_incident(self, unit: int, kind: str, minutes: float, factor: float = 2.0) -> dict:
+        """Запускает внештатную ситуацию в потоке.
+
+        Args:
+            unit: unitId терминала.
+            kind: ``breakdown`` (ТС стоит) или ``slowdown`` (ТС едет в ``factor`` раз медленнее).
+            minutes: Длительность, минуты времени данных.
+            factor: Множитель замедления для ``slowdown``.
+
+        Returns:
+            dict: Параметры ситуации.
+
+        Raises:
+            KeyError: Терминала нет в реплее.
+        """
         if unit not in self.queues:
             raise KeyError(unit)
         now = self.data_now()
@@ -159,6 +201,11 @@ class Replay:
 
     # ------------------------------------------------------------- units
     async def unit_worker(self, unit: int) -> None:
+        """Отдельный «терминал»: своё TCP-соединение, handshake, отправка пакетов, reconnect с backoff.
+
+        Args:
+            unit: unitId терминала.
+        """
         q: asyncio.Queue = asyncio.Queue(maxsize=1000)
         self.queues[unit] = q
         info = self.conns.setdefault(unit, {"connected": False, "reconnects": 0, "sent": 0, "last_error": None})
@@ -183,7 +230,7 @@ class Replay:
                     req += 1
                     writer.write(ndtp.build_handshake(unit, req))
                     await writer.drain()
-                    await asyncio.sleep(0.2)
+                    await asyncio.sleep(0.2)  # пауза после handshake — как у штатного эмулятора (§4)
                     info.update(connected=True, last_error=None)
                     info["reconnects"] += 1
                     backoff = 1.0
@@ -195,12 +242,13 @@ class Replay:
                         q.get_nowait()
                         self.dropped += 1
                     await asyncio.sleep(backoff)
-                    backoff = min(10.0, backoff * 2)
+                    backoff = min(10.0, backoff * 2)  # экспоненциальный backoff: backend мог перезапускаться
                     continue
             try:
                 r = await asyncio.wait_for(q.get(), timeout=0.5)
             except asyncio.TimeoutError:
                 if unit in self._garbage:
+                    # мусор + кадр с ложной сигнатурой и битым CRC: проверка пересинхронизации парсера
                     self._garbage.discard(unit)
                     writer.write(os.urandom(37) + ndtp.build_handshake(unit, 0)[:-3] + b"\x00\x00\x00")
                 continue
@@ -220,7 +268,7 @@ class Replay:
                         self.sent += 1
                     except Exception:  # noqa: BLE001
                         writer = None
-                    hb_next = now + 10.0
+                    hb_next = now + 10.0  # «стоячий» пакет раз в 10 с данных — порядок интервала пакетов в датасете
                 if now >= ts + self.unit_shift(unit, now) and not self.frozen(unit, now):
                     break
                 if time.time() < self.outage_until or writer is None:
@@ -230,7 +278,7 @@ class Replay:
                 self.dropped += 1
                 continue
             ts = ts + self.unit_shift(unit, self.data_now())
-            has = valid and lon == lon and lat == lat
+            has = valid and lon == lon and lat == lat  # x == x — быстрая проверка на NaN
             if has:
                 self.last_pos[unit] = (lon, lat, 0.0 if alt != alt else alt, 0.0 if heading != heading else heading)
             cell = ndtp.encode_nav(
@@ -262,6 +310,7 @@ class Replay:
             pass
 
     def status(self) -> dict:
+        """Состояние реплея: время данных, прогресс, соединения, отправлено/потеряно, отказы, ситуации."""
         return {
             "running": self.running, "speed": self.speed,
             "data_time_utc": str(pd.Timestamp(self.data_now(), unit="s")),
@@ -283,6 +332,7 @@ replay = Replay()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    """Загрузка данных и запуск планировщика + по воркеру на терминал."""
     await asyncio.to_thread(replay.load)
     replay.seek(pd.Timestamp(START).timestamp() if START else replay.data_start)
     tasks = [asyncio.create_task(replay.scheduler())]
@@ -301,11 +351,13 @@ app = FastAPI(title="NDTP Replay Feeder", version="1.0.0",
 
 @app.get("/status")
 def status():
+    """Состояние реплея и соединений."""
     return replay.status()
 
 
 @app.post("/pause")
 def pause():
+    """Пауза: время данных замирает, соединения остаются открытыми."""
     replay.anchor_data = replay.data_now()
     replay.running = False
     return replay.status()
@@ -313,6 +365,7 @@ def pause():
 
 @app.post("/resume")
 def resume():
+    """Продолжить с места паузы."""
     replay.anchor_wall = time.time()
     replay.running = True
     return replay.status()
@@ -320,6 +373,11 @@ def resume():
 
 @app.post("/speed/{value:float}")
 def speed(value: float):
+    """Ускорение реплея.
+
+    Raises:
+        HTTPException: 400 — значение вне 0.1..200.
+    """
     if not 0.1 <= value <= 200:
         raise HTTPException(400, "speed must be within 0.1..200")
     replay.set_speed(value)
@@ -335,7 +393,10 @@ def seek(t: str):
 
 @app.post("/outage/{seconds:float}")
 def outage(seconds: float):
-    """Имитация обрыва связи: все TCP-соединения закрываются на `seconds` секунд."""
+    """Имитация обрыва связи: все TCP-соединения закрываются на `seconds` секунд (не более часа).
+
+    Данные за время обрыва теряются, как у реального терминала без «чёрного ящика».
+    """
     replay.outage_until = time.time() + max(0.0, min(seconds, 3600))
     return replay.status()
 
@@ -363,7 +424,11 @@ def outage_stop():
 
 @app.post("/incident/breakdown/{unit}")
 def incident_breakdown(unit: int, minutes: float = 10):
-    """Поломка: ТС стоит `minutes` минут (время данных), затем продолжает движение с опозданием."""
+    """Поломка: ТС стоит `minutes` минут (время данных), затем продолжает движение с опозданием.
+
+    Raises:
+        HTTPException: 404 — терминала нет в реплее.
+    """
     try:
         replay.add_incident(unit, "breakdown", minutes)
     except KeyError as e:
@@ -373,7 +438,11 @@ def incident_breakdown(unit: int, minutes: float = 10):
 
 @app.post("/incident/slowdown/{unit}")
 def incident_slowdown(unit: int, minutes: float = 20, factor: float = 2.5):
-    """ДТП/засор на пути: ТС движется в `factor` раз медленнее в течение `minutes` минут."""
+    """ДТП/засор на пути: ТС движется в `factor` раз медленнее (1..10) в течение `minutes` минут.
+
+    Raises:
+        HTTPException: 404 — терминала нет в реплее.
+    """
     try:
         replay.add_incident(unit, "slowdown", minutes, max(1.0, min(factor, 10.0)))
     except KeyError as e:

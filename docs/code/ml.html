@@ -1,0 +1,1199 @@
+<!doctype html>
+<html class="no-js" lang="ru" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Алфавитный указатель" href="genindex.html" /><link rel="search" title="Поиск" href="search.html" /><link rel="prev" title="Replay-фидер (services/feeder)" href="feeder.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>ML-модуль - mos-transport · документация по коду</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mos-transport · документация по коду</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">mos-transport · документация по коду</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Поиск" name="q" aria-label="Поиск">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Модули</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="backend.html">Backend (services/backend)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndtp.html">NDTP-кодек (libs/ndtp)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feeder.html">Replay-фидер (services/feeder)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">ML-модуль</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/ml.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="ml">
+<h1>ML-модуль<a class="headerlink" href="#ml" title="Ссылка на этот заголовок">¶</a></h1>
+<p>HTTP-сервис ML (<code class="docutils literal notranslate"><span class="pre">services/ml_service/app</span></code>, в документации — пакет <code class="docutils literal notranslate"><span class="pre">ml_service_app</span></code>) и ML-ядро
+(<code class="docutils literal notranslate"><span class="pre">notebooks/data_functions.py</span></code>). ML-ядро используется как есть; сервис только вызывает его функции.
+Описание модели, признаков и метрик — <code class="docutils literal notranslate"><span class="pre">docs/ML.md</span></code>.</p>
+<section id="module-ml_service_app.main">
+<span id="http"></span><h2>HTTP-сервис и адаптер<a class="headerlink" href="#module-ml_service_app.main" title="Ссылка на этот заголовок">¶</a></h2>
+<p>ML-сервис: HTTP-обёртка над ML-ядром (инференс + переобучение).</p>
+<p>Не содержит логики признаков/модели — всё делегируется в notebooks/data_functions.py.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.main.lifespan">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">lifespan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#lifespan"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.lifespan" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>_</strong> (<em>FastAPI</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictionPoint">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">PredictionPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_stop_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_time_begin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cur_dev_s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#PredictionPoint"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.PredictionPoint" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>tr_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>T</strong> (<em>str</em>)</p></li>
+<li><p><strong>target_stop_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>target_time_begin</strong> (<em>str</em>)</p></li>
+<li><p><strong>cur_dev_s</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictionPoint.sample_id">
+<span class="sig-name descname"><span class="pre">sample_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ml_service_app.main.PredictionPoint.sample_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictionPoint.tr_id">
+<span class="sig-name descname"><span class="pre">tr_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ml_service_app.main.PredictionPoint.tr_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictionPoint.T">
+<span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ml_service_app.main.PredictionPoint.T" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictionPoint.target_stop_id">
+<span class="sig-name descname"><span class="pre">target_stop_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ml_service_app.main.PredictionPoint.target_stop_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictionPoint.target_time_begin">
+<span class="sig-name descname"><span class="pre">target_time_begin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ml_service_app.main.PredictionPoint.target_time_begin" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictionPoint.cur_dev_s">
+<span class="sig-name descname"><span class="pre">cur_dev_s</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ml_service_app.main.PredictionPoint.cur_dev_s" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictionPoint.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ml_service_app.main.PredictionPoint.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">TelemetryRow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location_valid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_hist_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#TelemetryRow"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.TelemetryRow" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tr_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>unit_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>event_time</strong> (<em>str</em>)</p></li>
+<li><p><strong>location_valid</strong> (<em>bool</em>)</p></li>
+<li><p><strong>lon</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>lat</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>alt</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>speed</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>heading</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>is_hist_data</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.tr_id">
+<span class="sig-name descname"><span class="pre">tr_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.tr_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.unit_id">
+<span class="sig-name descname"><span class="pre">unit_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.unit_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.event_time">
+<span class="sig-name descname"><span class="pre">event_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.event_time" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.location_valid">
+<span class="sig-name descname"><span class="pre">location_valid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.location_valid" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.lon">
+<span class="sig-name descname"><span class="pre">lon</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.lon" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.lat">
+<span class="sig-name descname"><span class="pre">lat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.lat" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.alt">
+<span class="sig-name descname"><span class="pre">alt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.alt" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.speed">
+<span class="sig-name descname"><span class="pre">speed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.speed" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.heading">
+<span class="sig-name descname"><span class="pre">heading</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.heading" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.is_hist_data">
+<span class="sig-name descname"><span class="pre">is_hist_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.is_hist_data" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.TelemetryRow.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ml_service_app.main.TelemetryRow.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictRequest">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">PredictRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">telemetry=&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#PredictRequest"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.PredictRequest" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<em>list</em><em>[</em><a class="reference internal" href="#ml_service_app.main.PredictionPoint" title="ml_service_app.main.PredictionPoint"><em>PredictionPoint</em></a><em>]</em>)</p></li>
+<li><p><strong>telemetry</strong> (<em>list</em><em>[</em><a class="reference internal" href="#ml_service_app.main.TelemetryRow" title="ml_service_app.main.TelemetryRow"><em>TelemetryRow</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictRequest.points">
+<span class="sig-name descname"><span class="pre">points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ml_service_app.main.PredictionPoint" title="ml_service_app.main.PredictionPoint"><span class="pre">PredictionPoint</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ml_service_app.main.PredictRequest.points" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictRequest.telemetry">
+<span class="sig-name descname"><span class="pre">telemetry</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ml_service_app.main.TelemetryRow" title="ml_service_app.main.TelemetryRow"><span class="pre">TelemetryRow</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ml_service_app.main.PredictRequest.telemetry" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ml_service_app.main.PredictRequest.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ml_service_app.main.Prediction">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">Prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted_delay_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted_delta_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explanation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#Prediction"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.Prediction" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>tr_id</strong> (<em>int</em>)</p></li>
+<li><p><strong>predicted_delay_s</strong> (<em>float</em>)</p></li>
+<li><p><strong>predicted_delta_s</strong> (<em>float</em>)</p></li>
+<li><p><strong>features</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>explanation</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.Prediction.sample_id">
+<span class="sig-name descname"><span class="pre">sample_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#ml_service_app.main.Prediction.sample_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.Prediction.tr_id">
+<span class="sig-name descname"><span class="pre">tr_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ml_service_app.main.Prediction.tr_id" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.Prediction.predicted_delay_s">
+<span class="sig-name descname"><span class="pre">predicted_delay_s</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ml_service_app.main.Prediction.predicted_delay_s" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.Prediction.predicted_delta_s">
+<span class="sig-name descname"><span class="pre">predicted_delta_s</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ml_service_app.main.Prediction.predicted_delta_s" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.Prediction.features">
+<span class="sig-name descname"><span class="pre">features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ml_service_app.main.Prediction.features" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.Prediction.explanation">
+<span class="sig-name descname"><span class="pre">explanation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ml_service_app.main.Prediction.explanation" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.Prediction.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ml_service_app.main.Prediction.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictResponse">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">PredictResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timings_ms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_validation_mae_s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#PredictResponse"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.PredictResponse" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predictions</strong> (<em>list</em><em>[</em><a class="reference internal" href="#ml_service_app.main.Prediction" title="ml_service_app.main.Prediction"><em>Prediction</em></a><em>]</em>)</p></li>
+<li><p><strong>timings_ms</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>float</em><em>]</em>)</p></li>
+<li><p><strong>model_validation_mae_s</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictResponse.predictions">
+<span class="sig-name descname"><span class="pre">predictions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ml_service_app.main.Prediction" title="ml_service_app.main.Prediction"><span class="pre">Prediction</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ml_service_app.main.PredictResponse.predictions" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictResponse.timings_ms">
+<span class="sig-name descname"><span class="pre">timings_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ml_service_app.main.PredictResponse.timings_ms" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictResponse.model_validation_mae_s">
+<span class="sig-name descname"><span class="pre">model_validation_mae_s</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ml_service_app.main.PredictResponse.model_validation_mae_s" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ml_service_app.main.PredictResponse.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#ml_service_app.main.PredictResponse.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.main.health">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">health</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#health"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.health" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.main.model_info">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">model_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#model_info"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.model_info" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.main.predict">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#predict"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.predict" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>req</strong> (<a class="reference internal" href="#ml_service_app.main.PredictRequest" title="ml_service_app.main.PredictRequest"><em>PredictRequest</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.main.train">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">background</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#train"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.train" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Переобучение по пайплайну ноутбука (функции ML-ядра). Выключено по умолчанию.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>background</strong> (<em>BackgroundTasks</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.main.stats">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#stats"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.stats" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.main.metrics">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.main.</span></span><span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/main.html#metrics"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.main.metrics" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<p id="module-ml_service_app.adapter">Тонкий адаптер вокруг ML-ядра (notebooks/data_functions.py + models/catboost_model.cbm).</p>
+<p>ML-код НЕ дублируется и НЕ модифицируется: онлайн-запрос сериализуется в тот же
+табличный вид, что и CSV датасета, и прогоняется через те же функции
+load_and_preprocess_labels / load_and_preprocess_traffic / build_dataset / predict,
+что использовались при обучении. Это гарантирует идентичность признаков
+train ↔ serve (нет training/serving skew).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ml_service_app.adapter.ModelRuntime">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ml_service_app.adapter.</span></span><span class="sig-name descname"><span class="pre">ModelRuntime</span></span><a class="reference internal" href="_modules/ml_service_app/adapter.html#ModelRuntime"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.adapter.ModelRuntime" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Держит загруженную модель и исторические признаки расписания; потокобезопасная замена модели.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ml_service_app.adapter.ModelRuntime.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/adapter.html#ModelRuntime.load"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.adapter.ModelRuntime.load" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ml_service_app.adapter.ModelRuntime.ready">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ready</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#ml_service_app.adapter.ModelRuntime.ready" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ml_service_app.adapter.ModelRuntime.predict_batch">
+<span class="sig-name descname"><span class="pre">predict_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">telemetry</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/adapter.html#ModelRuntime.predict_batch"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.adapter.ModelRuntime.predict_batch" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>)</p></li>
+<li><p><strong>telemetry</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[list[dict], dict[str, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ml_service_app.adapter.ModelRuntime.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/adapter.html#ModelRuntime.info"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.adapter.ModelRuntime.info" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, <em>Any</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ml_service_app.adapter.ModelRuntime.retrain">
+<span class="sig-name descname"><span class="pre">retrain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/adapter.html#ModelRuntime.retrain"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.adapter.ModelRuntime.retrain" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Переобучение ровно по пайплайну ноутбука data_work.ipynb (функции ML-ядра без изменений).</p>
+<p>Модель сохраняется внутри контейнера (путь из data_functions.PATHS) и подменяется «на горячую».</p>
+<dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ml_service_app.explain">
+<span id="shap"></span><h2>Объяснение прогнозов (SHAP)<a class="headerlink" href="#module-ml_service_app.explain" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Объяснение прогнозов через SHAP (встроенный в CatBoost TreeSHAP), без изменений ML-ядра.</p>
+<p>Модель предсказывает дельту: прогноз = cur_dev_s + base + Σ SHAP(признак).
+Вклады признаков (в секундах) группируются в паттерны поведения ТС, понятные диспетчеру.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.explain.shap_values">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.explain.</span></span><span class="sig-name descname"><span class="pre">shap_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/explain.html#shap_values"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.explain.shap_values" title="Ссылка на это определение">¶</a></dt>
+<dd><p>SHAP-вклады (n × признаки, секунды дельты) и базовое значение (n,).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>CatBoostRegressor</em>)</p></li>
+<li><p><strong>dataset</strong> (<em>DataFrame</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[<em>ndarray</em>, <em>ndarray</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.explain.explain">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.explain.</span></span><span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/explain.html#explain"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.explain.explain" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Объяснение каждого прогноза: cur_dev_s + base_s + Σ patterns[].seconds = predicted_delay_s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>CatBoostRegressor</em>)</p></li>
+<li><p><strong>dataset</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>top_features</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[dict[str, <em>Any</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.explain.global_importance">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.explain.</span></span><span class="sig-name descname"><span class="pre">global_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/explain.html#global_importance"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.explain.global_importance" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Средний |вклад| паттернов по выборке (сек) — какие паттерны сильнее всего двигают прогноз.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>CatBoostRegressor</em>)</p></li>
+<li><p><strong>dataset</strong> (<em>DataFrame</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[dict[str, <em>Any</em>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-ml_service_app.evaluate">
+<span id="id1"></span><h2>Оценка модели (метрики)<a class="headerlink" href="#module-ml_service_app.evaluate" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Оценка прогнозов модели по трём метрикам (ML-ядро не меняется, только вызывается).</p>
+<ol class="arabic">
+<li><dl class="simple">
+<dt>score заказчика (dataset/README.md §5):</dt><dd><p>mae_zero = mean(|факт|)
+score    = clip((mae_zero − MAE) / (mae_zero − MAE_TARGET), 0, 1)</p>
+</dd>
+</dl>
+<p>MAE_TARGET организаторы не публикуют. Если он не задан (–mae-target), он калибруется по
+опорной точке из README: baseline «прогноз = cur_dev_s» даёт score ≈ 0.40.</p>
+</li>
+<li><p>MAE, секунды.</p></li>
+<li><p>F1 по классу «опоздание» (факт &gt; 120 с, порог target_class=late): насколько точно по
+прогнозу поднимаются алерты диспетчеру (плюс precision / recall).</p></li>
+</ol>
+<p>Запуск (в контейнере ML-сервиса, ./models и ./dataset смонтированы):</p>
+<blockquote>
+<div><p>docker compose run –rm –no-deps ml-service python -m app.evaluate
+docker compose run –rm –no-deps ml-service python -m app.evaluate –split train –shap
+docker compose run –rm –no-deps ml-service python -m app.evaluate –model models/finetuned/&lt;время&gt;.cbm</p>
+</div></blockquote>
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.evaluate.calibrate_mae_target">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.evaluate.</span></span><span class="sig-name descname"><span class="pre">calibrate_mae_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cur_dev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/evaluate.html#calibrate_mae_target"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.evaluate.calibrate_mae_target" title="Ссылка на это определение">¶</a></dt>
+<dd><p>MAE_TARGET, при котором baseline «прогноз = cur_dev_s» получает baseline_score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>baseline_score</strong> (<em>float</em>)</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.evaluate.customer_score">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.evaluate.</span></span><span class="sig-name descname"><span class="pre">customer_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mae_target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/evaluate.html#customer_score"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.evaluate.customer_score" title="Ссылка на это определение">¶</a></dt>
+<dd><p>(score ∈ [0, 1], score без обрезки) по формуле заказчика.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mae_target</strong> (<em>float</em>)</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.evaluate.evaluate_predictions">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.evaluate.</span></span><span class="sig-name descname"><span class="pre">evaluate_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cur_dev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mae_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">late_threshold_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">120.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/evaluate.html#evaluate_predictions"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.evaluate.evaluate_predictions" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Три метрики прогноза задержки: score заказчика, MAE и F1 алерта «опоздание».</p>
+<p>y_true, y_pred — фактическая и прогнозная задержка на целевой остановке, с.
+cur_dev — cur_dev_s тех же точек (нужен, только если mae_target не задан).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mae_target</strong> (<em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>late_threshold_s</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict[str, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.evaluate.build_split">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.evaluate.</span></span><span class="sig-name descname"><span class="pre">build_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traffic</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/evaluate.html#build_split"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.evaluate.build_split" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Датасет признаков ровно как в ML-ядре (build_dataset), со статистиками расписания train.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>labels</strong> (<em>str</em>)</p></li>
+<li><p><strong>traffic</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>DataFrame</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.evaluate.main">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.evaluate.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/evaluate.html#main"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.evaluate.main" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-ml_service_app.finetune">
+<span id="id2"></span><h2>Дообучение (консоль)<a class="headerlink" href="#module-ml_service_app.finetune" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Дообучение модели из консоли (без HTTP): поверх деревьев текущей модели достраиваются новые.</p>
+<p>Бустинг продолжается через init_model, как в fine_tune ML-ядра (само ядро не меняется).
+Запуск в отдельном контейнере (живой сервис не тормозит; ./models и ./dataset смонтированы):</p>
+<blockquote>
+<div><p>docker compose run –rm –no-deps ml-service python -m app.finetune
+docker compose run –rm –no-deps ml-service python -m app.finetune –activate
+docker compose restart ml-service        # сервис подхватывает активированную модель</p>
+</div></blockquote>
+<p>Новые данные — CSV в формате датасета (labels_*.csv + traffic.csv), пути относительно корня
+проекта: –labels dataset/new/labels.csv –traffic dataset/new/traffic.csv.
+По умолчанию берётся день test. Без –val-labels валидация — последние –val-ratio новых
+данных по времени. Модель активируется, только если MAE на валидации лучше текущей (или –force).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.finetune.fine_tune">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.finetune.</span></span><span class="sig-name descname"><span class="pre">fine_tune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/finetune.html#fine_tune"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.finetune.fine_tune" title="Ссылка на это определение">¶</a></dt>
+<dd><p>То же, что dfn.fine_tune (init_model, параметры ядра), но добавляет ровно <cite>iterations</cite>
+деревьев: dfn.fine_tune передаёт base_trees + additional, а CatBoost при init_model
+считает iterations числом НОВЫХ деревьев. ML-ядро не меняем — обходим здесь.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base</strong> (<em>CatBoostRegressor</em>)</p></li>
+<li><p><strong>train_df</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>val_df</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>iterations</strong> (<em>int</em>)</p></li>
+<li><p><strong>lr</strong> (<em>float</em>)</p></li>
+<li><p><strong>train_dir</strong> (<em>Path</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>CatBoostRegressor</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ml_service_app.finetune.main">
+<span class="sig-prename descclassname"><span class="pre">ml_service_app.finetune.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ml_service_app/finetune.html#main"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ml_service_app.finetune.main" title="Ссылка на это определение">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>argv</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-data_functions">
+<span id="id3"></span><h2>ML-ядро<a class="headerlink" href="#module-data_functions" title="Ссылка на этот заголовок">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.haversine_distance">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">haversine_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#haversine_distance"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.haversine_distance" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Вычисляет расстояние в метрах между массивами координат на сфере.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lat1</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>lon1</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>lat2</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>lon2</strong> (<em>ndarray</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.init_stop_coordinates">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">init_stop_coordinates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#init_stop_coordinates"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.init_stop_coordinates" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Заполняет кэш координат остановок из доступных файлов расписания.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.load_and_preprocess_traffic">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">load_and_preprocess_traffic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traffic_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#load_and_preprocess_traffic"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.load_and_preprocess_traffic" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Загружает телематику, фильтрует GPS, восстанавливает скорость и
+рассчитывает 5-минутные оконные характеристики кинематики движения.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>traffic_path</strong> (<em>Path</em><em> | </em><em>StringIO</em><em> | </em><em>str</em>)</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>DataFrame</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.load_and_preprocess_labels">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">load_and_preprocess_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#load_and_preprocess_labels"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.load_and_preprocess_labels" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Загружает метки и контрольные точки T, генерирует временные признаки
+и признаки текущего отклонения от графика.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>labels_path</strong> (<em>Path</em><em> | </em><em>StringIO</em><em> | </em><em>str</em>)</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>DataFrame</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.load_and_preprocess_schedule">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">load_and_preprocess_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schedule_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#load_and_preprocess_schedule"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.load_and_preprocess_schedule" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Загружает расписание, кэширует координаты остановок из geom и переводит даты в datetime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>schedule_path</strong> (<em>Path</em><em> | </em><em>str</em>)</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>DataFrame</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.compute_schedule_features">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">compute_schedule_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_schedule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traffic_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#compute_schedule_features"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.compute_schedule_features" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Считает историческую статистику опозданий по рейсам (tr_id) на основе расписания
+и формирует исторический профиль почасовой скорости движения.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_schedule</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>traffic_path</strong> (<em>Path</em><em> | </em><em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>DataFrame</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.build_dataset">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">build_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels_or_points_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traffic_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'T'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance_minutes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#build_dataset"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.build_dataset" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Объединяет признаки меток, расписания и телематики в единый датафрейм
+строго назад во времени (merge_asof).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>labels_or_points_df</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>traffic_df</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>schedule_features</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>time_col</strong> (<em>str</em>)</p></li>
+<li><p><strong>tolerance_minutes</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>DataFrame</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.train">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'target_delay_s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_on_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#train"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.train" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Обучает CatBoostRegressor предсказывать остаток (дельту) отклонения:
+target_delta = target_delay_s - cur_dev_s.
+Если fit_on_all=True, после валидации модель дообучается на объединении train+test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_df</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>val_df</strong> (<em>DataFrame</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>target_col</strong> (<em>str</em>)</p></li>
+<li><p><strong>val_ratio</strong> (<em>float</em>)</p></li>
+<li><p><strong>fit_on_all</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>CatBoostRegressor</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.predict">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#predict"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.predict" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Выполняет инференс: возвращает cur_dev_s + предсказанная дельта.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>CatBoostRegressor</em>)</p></li>
+<li><p><strong>test_df</strong> (<em>DataFrame</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.fine_tune">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">fine_tune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_data_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'target_delay_s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#fine_tune"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.fine_tune" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Дообучает модель CatBoost на новых данных через механизм init_model.
+Существующие деревья сохраняются, поверх достраиваются новые под свежее распределение.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_model</strong> (<em>CatBoostRegressor</em><em> | </em><em>Path</em><em> | </em><em>str</em>)</p></li>
+<li><p><strong>new_data_df</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>val_df</strong> (<em>DataFrame</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>target_col</strong> (<em>str</em>)</p></li>
+<li><p><strong>additional_iterations</strong> (<em>int</em>)</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>)</p></li>
+<li><p><strong>output_model_path</strong> (<em>Path</em><em> | </em><em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>CatBoostRegressor</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_functions.make_submission">
+<span class="sig-prename descclassname"><span class="pre">data_functions.</span></span><span class="sig-name descname"><span class="pre">make_submission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_sub_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data_functions.html#make_submission"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#data_functions.make_submission" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Формирует и сохраняет submission.csv строго по спецификации организаторов:
+разделитель „;“, колонки sample_id;prediction. Порядок строк строго по sample_sub_path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>CatBoostRegressor</em>)</p></li>
+<li><p><strong>test_df</strong> (<em>DataFrame</em>)</p></li>
+<li><p><strong>sample_sub_path</strong> (<em>Path</em>)</p></li>
+<li><p><strong>output_path</strong> (<em>Path</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="feeder.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Replay-фидер (services/feeder)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ML-модуль</a><ul>
+<li><a class="reference internal" href="#module-ml_service_app.main">HTTP-сервис и адаптер</a><ul>
+<li><a class="reference internal" href="#ml_service_app.main.lifespan"><code class="docutils literal notranslate"><span class="pre">lifespan()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictionPoint"><code class="docutils literal notranslate"><span class="pre">PredictionPoint</span></code></a><ul>
+<li><a class="reference internal" href="#ml_service_app.main.PredictionPoint.sample_id"><code class="docutils literal notranslate"><span class="pre">PredictionPoint.sample_id</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictionPoint.tr_id"><code class="docutils literal notranslate"><span class="pre">PredictionPoint.tr_id</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictionPoint.T"><code class="docutils literal notranslate"><span class="pre">PredictionPoint.T</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictionPoint.target_stop_id"><code class="docutils literal notranslate"><span class="pre">PredictionPoint.target_stop_id</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictionPoint.target_time_begin"><code class="docutils literal notranslate"><span class="pre">PredictionPoint.target_time_begin</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictionPoint.cur_dev_s"><code class="docutils literal notranslate"><span class="pre">PredictionPoint.cur_dev_s</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictionPoint.model_config"><code class="docutils literal notranslate"><span class="pre">PredictionPoint.model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow"><code class="docutils literal notranslate"><span class="pre">TelemetryRow</span></code></a><ul>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.tr_id"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.tr_id</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.unit_id"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.unit_id</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.event_time"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.event_time</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.location_valid"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.location_valid</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.lon"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.lon</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.lat"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.lat</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.alt"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.alt</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.speed"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.speed</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.heading"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.heading</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.is_hist_data"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.is_hist_data</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.TelemetryRow.model_config"><code class="docutils literal notranslate"><span class="pre">TelemetryRow.model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictRequest"><code class="docutils literal notranslate"><span class="pre">PredictRequest</span></code></a><ul>
+<li><a class="reference internal" href="#ml_service_app.main.PredictRequest.points"><code class="docutils literal notranslate"><span class="pre">PredictRequest.points</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictRequest.telemetry"><code class="docutils literal notranslate"><span class="pre">PredictRequest.telemetry</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictRequest.model_config"><code class="docutils literal notranslate"><span class="pre">PredictRequest.model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ml_service_app.main.Prediction"><code class="docutils literal notranslate"><span class="pre">Prediction</span></code></a><ul>
+<li><a class="reference internal" href="#ml_service_app.main.Prediction.sample_id"><code class="docutils literal notranslate"><span class="pre">Prediction.sample_id</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.Prediction.tr_id"><code class="docutils literal notranslate"><span class="pre">Prediction.tr_id</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.Prediction.predicted_delay_s"><code class="docutils literal notranslate"><span class="pre">Prediction.predicted_delay_s</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.Prediction.predicted_delta_s"><code class="docutils literal notranslate"><span class="pre">Prediction.predicted_delta_s</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.Prediction.features"><code class="docutils literal notranslate"><span class="pre">Prediction.features</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.Prediction.explanation"><code class="docutils literal notranslate"><span class="pre">Prediction.explanation</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.Prediction.model_config"><code class="docutils literal notranslate"><span class="pre">Prediction.model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictResponse"><code class="docutils literal notranslate"><span class="pre">PredictResponse</span></code></a><ul>
+<li><a class="reference internal" href="#ml_service_app.main.PredictResponse.predictions"><code class="docutils literal notranslate"><span class="pre">PredictResponse.predictions</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictResponse.timings_ms"><code class="docutils literal notranslate"><span class="pre">PredictResponse.timings_ms</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictResponse.model_validation_mae_s"><code class="docutils literal notranslate"><span class="pre">PredictResponse.model_validation_mae_s</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.PredictResponse.model_config"><code class="docutils literal notranslate"><span class="pre">PredictResponse.model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ml_service_app.main.health"><code class="docutils literal notranslate"><span class="pre">health()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.model_info"><code class="docutils literal notranslate"><span class="pre">model_info()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.predict"><code class="docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.stats"><code class="docutils literal notranslate"><span class="pre">stats()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.main.metrics"><code class="docutils literal notranslate"><span class="pre">metrics()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.adapter.ModelRuntime"><code class="docutils literal notranslate"><span class="pre">ModelRuntime</span></code></a><ul>
+<li><a class="reference internal" href="#ml_service_app.adapter.ModelRuntime.load"><code class="docutils literal notranslate"><span class="pre">ModelRuntime.load()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.adapter.ModelRuntime.ready"><code class="docutils literal notranslate"><span class="pre">ModelRuntime.ready</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.adapter.ModelRuntime.predict_batch"><code class="docutils literal notranslate"><span class="pre">ModelRuntime.predict_batch()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.adapter.ModelRuntime.info"><code class="docutils literal notranslate"><span class="pre">ModelRuntime.info()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.adapter.ModelRuntime.retrain"><code class="docutils literal notranslate"><span class="pre">ModelRuntime.retrain()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-ml_service_app.explain">Объяснение прогнозов (SHAP)</a><ul>
+<li><a class="reference internal" href="#ml_service_app.explain.shap_values"><code class="docutils literal notranslate"><span class="pre">shap_values()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.explain.explain"><code class="docutils literal notranslate"><span class="pre">explain()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.explain.global_importance"><code class="docutils literal notranslate"><span class="pre">global_importance()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-ml_service_app.evaluate">Оценка модели (метрики)</a><ul>
+<li><a class="reference internal" href="#ml_service_app.evaluate.calibrate_mae_target"><code class="docutils literal notranslate"><span class="pre">calibrate_mae_target()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.evaluate.customer_score"><code class="docutils literal notranslate"><span class="pre">customer_score()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.evaluate.evaluate_predictions"><code class="docutils literal notranslate"><span class="pre">evaluate_predictions()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.evaluate.build_split"><code class="docutils literal notranslate"><span class="pre">build_split()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.evaluate.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-ml_service_app.finetune">Дообучение (консоль)</a><ul>
+<li><a class="reference internal" href="#ml_service_app.finetune.fine_tune"><code class="docutils literal notranslate"><span class="pre">fine_tune()</span></code></a></li>
+<li><a class="reference internal" href="#ml_service_app.finetune.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-data_functions">ML-ядро</a><ul>
+<li><a class="reference internal" href="#data_functions.haversine_distance"><code class="docutils literal notranslate"><span class="pre">haversine_distance()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.init_stop_coordinates"><code class="docutils literal notranslate"><span class="pre">init_stop_coordinates()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.load_and_preprocess_traffic"><code class="docutils literal notranslate"><span class="pre">load_and_preprocess_traffic()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.load_and_preprocess_labels"><code class="docutils literal notranslate"><span class="pre">load_and_preprocess_labels()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.load_and_preprocess_schedule"><code class="docutils literal notranslate"><span class="pre">load_and_preprocess_schedule()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.compute_schedule_features"><code class="docutils literal notranslate"><span class="pre">compute_schedule_features()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.build_dataset"><code class="docutils literal notranslate"><span class="pre">build_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.predict"><code class="docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.fine_tune"><code class="docutils literal notranslate"><span class="pre">fine_tune()</span></code></a></li>
+<li><a class="reference internal" href="#data_functions.make_submission"><code class="docutils literal notranslate"><span class="pre">make_submission()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=9ca2116e"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=cd1d70c9"></script>
+    </body>
+</html>

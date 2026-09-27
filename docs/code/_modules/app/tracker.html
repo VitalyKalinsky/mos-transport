@@ -1,0 +1,722 @@
+<!doctype html>
+<html class="no-js" lang="ru" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Алфавитный указатель" href="../../genindex.html" /><link rel="search" title="Поиск" href="../../search.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>app.tracker - mos-transport · документация по коду</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">mos-transport · документация по коду</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">mos-transport · документация по коду</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Поиск" name="q" aria-label="Поиск">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Модули</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../backend.html">Backend (services/backend)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndtp.html">NDTP-кодек (libs/ndtp)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feeder.html">Replay-фидер (services/feeder)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ml.html">ML-модуль</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Исходный код app.tracker</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Состояние ТС: наложение телеметрии на нитку графика (map matching) и производные признаки.</span>
+
+<span class="sd">* Фактическое прибытие — геозона ``stop_radius_m`` вокруг остановки. Проверяется и точка, и отрезок</span>
+<span class="sd">  трека между пакетами. Сопоставление идёт по порядку расписания в окне lookahead, поэтому кольцевые</span>
+<span class="sd">  маршруты и остановки встречного направления не дают ложных срабатываний.</span>
+<span class="sd">* Текущее отклонение ``cur_dev_s`` — задержка на последней остановке с планом ≤ T (как в разметке).</span>
+<span class="sd">  Если ТС до неё ещё не доехало, берётся последнее детектированное отклонение (``CUR_DEV_MODE``).</span>
+<span class="sd">* Производные признаки: средняя и плановая скорость на сегменте, время простоя, возраст телеметрии,</span>
+<span class="sd">  серия сбоев GPS, тренд отклонения.</span>
+<span class="sd">"""</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.geo</span><span class="w"> </span><span class="kn">import</span> <span class="n">haversine_m</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.reference</span><span class="w"> </span><span class="kn">import</span> <span class="n">VehicleSchedule</span>
+
+
+<div class="viewcode-block" id="fmt_utc">
+<a class="viewcode-back" href="../../backend.html#app.tracker.fmt_utc">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fmt_utc</span><span class="p">(</span><span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""unix-с → строка времени в формате traffic.csv (ML-ядро парсит именно его)."""</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">"</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Arrival">
+<a class="viewcode-back" href="../../backend.html#app.tracker.Arrival">[документация]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Arrival</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Прибытие на остановку.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        idx: Индекс остановки в нитке графика.</span>
+<span class="sd">        fact_ts: Фактическое (или оценочное) время, unix-с.</span>
+<span class="sd">        delay_s: Отклонение от плана, с.</span>
+<span class="sd">        detected: ``False`` — остановка пропущена детектором (нет GPS в геозоне), отклонение перенесено.</span>
+<span class="sd">    """</span>
+
+    <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">fact_ts</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">delay_s</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">detected</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="VehicleState">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState">[документация]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">VehicleState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Живое состояние одного ТС (по одному на терминал).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        unit_id: Терминал (NDTP peerAddress).</span>
+<span class="sd">        tr_id: ТС; ``None`` — терминал без наряда.</span>
+<span class="sd">        schedule: Нитка графика; ``None`` — ТС без расписания (серое на карте).</span>
+<span class="sd">        cfg: Настройки.</span>
+<span class="sd">    """</span>
+
+    <span class="n">unit_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">tr_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">schedule</span><span class="p">:</span> <span class="n">VehicleSchedule</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">Settings</span>
+
+    <span class="c1"># последняя телеметрия</span>
+    <span class="n">last_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>                 <span class="c1"># event_time последнего пакета (время данных)</span>
+    <span class="n">last_rx_wall</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>            <span class="c1"># время приёма (wall-clock) — для контроля связи</span>
+    <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pos_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>                  <span class="c1"># время последней валидной координаты (для dead reckoning)</span>
+    <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">heading</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">location_valid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">gps_fail_streak</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">packets</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">history</span><span class="p">:</span> <span class="n">deque</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">40</span><span class="p">))</span>   <span class="c1"># сырые строки для ML (с запасом к ml_history_rows)</span>
+
+    <span class="c1"># нитка графика</span>
+    <span class="n">next_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">initialized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">arrivals</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Arrival</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">last_arrival</span><span class="p">:</span> <span class="n">Arrival</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">arrivals_detected</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">arrivals_skipped</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># сегмент (от последней пройденной остановки)</span>
+    <span class="n">seg_start_ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">seg_dist_m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">standing_since</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># темп и наблюдения перегонов (для ETA-движка и индекса загруженности)</span>
+    <span class="n">pace_samples</span><span class="p">:</span> <span class="n">deque</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">seg_observations</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">eta</span><span class="p">:</span> <span class="nb">object</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># прогноз</span>
+    <span class="n">prediction</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pred_trail</span><span class="p">:</span> <span class="n">deque</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">180</span><span class="p">))</span>
+    <span class="n">pending_eval</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># для онлайн-MAE по факту прибытия</span>
+    <span class="n">dirty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># пришли новые данные → ТС попадёт в ближайший батч ML</span>
+
+    <span class="c1"># ------------------------------------------------------------------ ingest</span>
+<div class="viewcode-block" id="VehicleState.reset_schedule_state">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.reset_schedule_state">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_schedule_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Сбрасывает привязку к нитке графика (перезапуск реплея)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arrivals</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_arrival</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seg_start_ts</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seg_dist_m</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">standing_since</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pending_eval</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_trail</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pace_samples</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seg_observations</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prediction</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="VehicleState.ingest">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.ingest">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">valid</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+               <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">heading</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">is_hist</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+               <span class="n">rx_wall</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Arrival</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Применяет пакет телеметрии.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ts: Время пакета (время данных), unix-с.</span>
+<span class="sd">            lon: Долгота или ``None``.</span>
+<span class="sd">            lat: Широта или ``None``.</span>
+<span class="sd">            valid: Флаг достоверности координат (бит 7 Nav00).</span>
+<span class="sd">            speed: Скорость, км/ч.</span>
+<span class="sd">            heading: Курс, градусы.</span>
+<span class="sd">            alt: Высота, м.</span>
+<span class="sd">            is_hist: Пакет из «чёрного ящика» (передан после восстановления связи).</span>
+<span class="sd">            rx_wall: Время приёма (wall-clock).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[Arrival]: Новые детектированные прибытия (0 или 1).</span>
+<span class="sd">        """</span>
+        <span class="n">rx_wall</span> <span class="o">=</span> <span class="n">rx_wall</span> <span class="ow">or</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1"># скачок времени назад &gt; 1 ч (перезапуск реплея/эмулятора) → начинаем нитку заново</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_ts</span> <span class="ow">and</span> <span class="n">ts</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_ts</span> <span class="o">-</span> <span class="mi">3600</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_schedule_state</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_ts</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">packets</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_rx_wall</span> <span class="o">=</span> <span class="n">rx_wall</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirty</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">has_pos</span> <span class="o">=</span> <span class="n">valid</span> <span class="ow">and</span> <span class="n">lon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">lat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="c1"># в ML уходит и невалидный пакет: признак gps_failure считается ML-ядром по location_valid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">"tr_id"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr_id</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"unit_id"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_id</span><span class="p">,</span>
+            <span class="s2">"event_time"</span><span class="p">:</span> <span class="n">fmt_utc</span><span class="p">(</span><span class="n">ts</span><span class="p">),</span>
+            <span class="s2">"location_valid"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">has_pos</span><span class="p">),</span>
+            <span class="s2">"lon"</span><span class="p">:</span> <span class="n">lon</span> <span class="k">if</span> <span class="n">has_pos</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"lat"</span><span class="p">:</span> <span class="n">lat</span> <span class="k">if</span> <span class="n">has_pos</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"alt"</span><span class="p">:</span> <span class="n">alt</span> <span class="k">if</span> <span class="n">has_pos</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"speed"</span><span class="p">:</span> <span class="n">speed</span> <span class="k">if</span> <span class="n">has_pos</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"heading"</span><span class="p">:</span> <span class="n">heading</span> <span class="k">if</span> <span class="n">has_pos</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"is_hist_data"</span><span class="p">:</span> <span class="n">is_hist</span><span class="p">,</span>
+        <span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">ts</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_ts</span><span class="p">:</span>            <span class="c1"># опоздавший (исторический) пакет — только в историю, положение не откатываем</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">prev_lon</span><span class="p">,</span> <span class="n">prev_lat</span><span class="p">,</span> <span class="n">prev_pos_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_ts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_ts</span> <span class="o">=</span> <span class="n">ts</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_pos</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gps_fail_streak</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">location_valid</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="p">[]</span>  <span class="c1"># положение остаётся последним валидным</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gps_fail_streak</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location_valid</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_ts</span> <span class="o">=</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">ts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">heading</span> <span class="o">=</span> <span class="n">speed</span><span class="p">,</span> <span class="n">heading</span>
+
+        <span class="c1"># простой: считаем от первого пакета со скоростью ниже порога</span>
+        <span class="k">if</span> <span class="n">speed</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">standing_speed_kmh</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">standing_since</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">standing_since</span> <span class="o">=</span> <span class="n">ts</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">standing_since</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># пройденный путь на сегменте (отсекаем GPS-скачки)</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">prev_lon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">prev_lat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">haversine_m</span><span class="p">(</span><span class="n">prev_lon</span><span class="p">,</span> <span class="n">prev_lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ts</span> <span class="o">-</span> <span class="n">prev_pos_ts</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="o">/</span> <span class="n">dt</span> <span class="o">&lt;</span> <span class="mf">40.0</span> <span class="ow">and</span> <span class="n">dt</span> <span class="o">&lt;=</span> <span class="mi">120</span><span class="p">:</span>   <span class="c1"># &lt; 144 км/ч и без длинного разрыва связи</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">seg_dist_m</span> <span class="o">+=</span> <span class="n">d</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="p">(</span><span class="n">prev_lon</span><span class="p">,</span> <span class="n">prev_lat</span><span class="p">,</span> <span class="n">prev_pos_ts</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_match_schedule</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------ schedule matching</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_match_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                        <span class="n">prev</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Arrival</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Ищет прохождение ближайших по графику остановок; первая найденная — прибытие."""</span>
+        <span class="n">sch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span>
+        <span class="k">if</span> <span class="n">sch</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">stops</span> <span class="o">=</span> <span class="n">sch</span><span class="o">.</span><span class="n">stops</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">stops</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="c1"># первая привязка (старт потока посреди дня): часть нитки, которую ТС ещё может проходить</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sch</span><span class="o">.</span><span class="n">last_planned_before</span><span class="p">(</span><span class="n">ts</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">max_late_s</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">seg_start_ts</span> <span class="o">=</span> <span class="n">ts</span>
+
+        <span class="c1"># остановки, которые давно должны были быть пройдены, считаем пропущенными детектором</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">stops</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span><span class="p">]</span><span class="o">.</span><span class="n">plan_ts</span> <span class="o">&lt;</span> <span class="n">ts</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">max_late_s</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_skip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">hit</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">stop_lookahead</span><span class="p">)):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">stops</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">plan_ts</span> <span class="o">-</span> <span class="n">ts</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">max_early_s</span><span class="p">:</span>  <span class="c1"># дальше по графику — слишком рано, это следующий круг</span>
+                <span class="k">break</span>
+            <span class="n">hit_ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_passage_time</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">hit_ts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">hit</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">hit_ts</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">hit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">j</span><span class="p">,</span> <span class="n">hit_ts</span> <span class="o">=</span> <span class="n">hit</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>  <span class="c1"># перескочили остановки — GPS не попал в их геозоны</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_skip</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">Arrival</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">hit_ts</span><span class="p">,</span> <span class="n">hit_ts</span> <span class="o">-</span> <span class="n">stops</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">plan_ts</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observe_pace</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">hit_ts</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arrivals</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_arrival</span> <span class="o">=</span> <span class="n">arr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arrivals_detected</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seg_start_ts</span> <span class="o">=</span> <span class="n">ts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seg_dist_m</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">arr</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_observe_pace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fact_ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Темп ТС: факт/план по последнему детектированному перегону (без межрейсовых отстоев)."""</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_arrival</span>
+        <span class="k">if</span> <span class="n">prev</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">prev</span><span class="o">.</span><span class="n">detected</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">-</span> <span class="n">prev</span><span class="o">.</span><span class="n">idx</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">stops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">stops</span>
+        <span class="n">plan_dt</span> <span class="o">=</span> <span class="n">stops</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">plan_ts</span> <span class="o">-</span> <span class="n">stops</span><span class="p">[</span><span class="n">prev</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">plan_ts</span>
+        <span class="n">fact_dt</span> <span class="o">=</span> <span class="n">fact_ts</span> <span class="o">-</span> <span class="n">prev</span><span class="o">.</span><span class="n">fact_ts</span>
+        <span class="c1"># &lt; 30 с — шум детектора даёт огромные отношения; ≥ 6 мин — внутри отстой</span>
+        <span class="k">if</span> <span class="mi">30</span> <span class="o">&lt;=</span> <span class="n">plan_dt</span> <span class="o">&lt;</span> <span class="mi">360</span> <span class="ow">and</span> <span class="n">fact_dt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ratio</span> <span class="o">=</span> <span class="n">fact_dt</span> <span class="o">/</span> <span class="n">plan_dt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pace_samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">-</span> <span class="n">prev</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">stops</span><span class="p">[</span><span class="n">prev</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">stop_key</span> <span class="o">!=</span> <span class="n">stops</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">stop_key</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">seg_observations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">stops</span><span class="p">[</span><span class="n">prev</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">stop_key</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="n">stops</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">stop_key</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">fact_ts</span><span class="p">))</span>
+
+<div class="viewcode-block" id="VehicleState.pop_segment_observations">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.pop_segment_observations">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop_segment_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Забирает накопленные наблюдения проездов (seg_id, факт/план, время) для индекса загруженности."""</span>
+        <span class="n">obs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg_observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg_observations</span><span class="p">,</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">obs</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_passage_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slon</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">slat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                      <span class="n">prev</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Время прохождения геозоны остановки.</span>
+
+<span class="sd">        GPS приходит раз в 10–15 с (60–80 м пути), и одиночная точка часто «проскакивает» геозону 45 м.</span>
+<span class="sd">        Поэтому проверяется отрезок трека prev→cur: если он проходит в пределах радиуса,</span>
+<span class="sd">        берётся момент ближайшего подхода (линейная интерполяция по времени).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float | None: Время прохождения, unix-с; ``None`` — геозона не пересечена.</span>
+<span class="sd">        """</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">stop_radius_m</span>
+        <span class="k">if</span> <span class="n">prev</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ts</span> <span class="k">if</span> <span class="n">haversine_m</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">slon</span><span class="p">,</span> <span class="n">slat</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">r</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">plon</span><span class="p">,</span> <span class="n">plat</span><span class="p">,</span> <span class="n">pts</span> <span class="o">=</span> <span class="n">prev</span>
+        <span class="c1"># локальная равнопромежуточная проекция (метры) относительно остановки</span>
+        <span class="n">kx</span> <span class="o">=</span> <span class="mf">111320.0</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">slat</span><span class="p">))</span>
+        <span class="n">ky</span> <span class="o">=</span> <span class="mf">110540.0</span>
+        <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span> <span class="o">=</span> <span class="p">(</span><span class="n">plon</span> <span class="o">-</span> <span class="n">slon</span><span class="p">)</span> <span class="o">*</span> <span class="n">kx</span><span class="p">,</span> <span class="p">(</span><span class="n">plat</span> <span class="o">-</span> <span class="n">slat</span><span class="p">)</span> <span class="o">*</span> <span class="n">ky</span>
+        <span class="n">bx</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="p">(</span><span class="n">lon</span> <span class="o">-</span> <span class="n">slon</span><span class="p">)</span> <span class="o">*</span> <span class="n">kx</span><span class="p">,</span> <span class="p">(</span><span class="n">lat</span> <span class="o">-</span> <span class="n">slat</span><span class="p">)</span> <span class="o">*</span> <span class="n">ky</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">bx</span> <span class="o">-</span> <span class="n">ax</span><span class="p">,</span> <span class="n">by</span> <span class="o">-</span> <span class="n">ay</span>
+        <span class="n">seg2</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">dy</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">seg2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">ax</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">ay</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span> <span class="o">/</span> <span class="n">seg2</span><span class="p">))</span>
+        <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">ax</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="n">dx</span><span class="p">,</span> <span class="n">ay</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="n">dy</span>
+        <span class="k">if</span> <span class="n">cx</span> <span class="o">*</span> <span class="n">cx</span> <span class="o">+</span> <span class="n">cy</span> <span class="o">*</span> <span class="n">cy</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="o">*</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">pts</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">ts</span> <span class="o">-</span> <span class="n">pts</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_skip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrivals</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arrivals_skipped</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># оценка: переносим последнее известное отклонение (помечено detected=False)</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_arrival</span><span class="o">.</span><span class="n">delay_s</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_arrival</span> <span class="k">else</span> <span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arrivals</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Arrival</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">plan_ts</span> <span class="o">+</span> <span class="n">last</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># --------------------------------------------------------- derived features</span>
+<div class="viewcode-block" id="VehicleState.current_deviation">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.current_deviation">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">current_deviation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Текущее отклонение ``cur_dev_s`` на момент T.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            T: Момент прогноза (время данных).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple[float, str]: Отклонение, с, и способ: ``fact``, ``carried`` (перенесено через</span>
+<span class="sd">            пропуск детектора), ``last_detected``, ``lower_bound``, ``before_start``, ``no_schedule``.</span>
+<span class="sd">        """</span>
+        <span class="n">sch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span>
+        <span class="k">if</span> <span class="n">sch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">"no_schedule"</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">sch</span><span class="o">.</span><span class="n">last_planned_before</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">"before_start"</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrivals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">arr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">arr</span><span class="o">.</span><span class="n">fact_ts</span> <span class="o">&lt;=</span> <span class="n">T</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">delay_s</span><span class="p">),</span> <span class="p">(</span><span class="s2">"fact"</span> <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">detected</span> <span class="k">else</span> <span class="s2">"carried"</span><span class="p">)</span>
+        <span class="c1"># ТС ещё не прибыло на остановку с планом ≤ T. В разметке здесь факт после T — онлайн он неизвестен.</span>
+        <span class="c1"># (ETA по остаточному пути проверялась офлайн — точность хуже, см. scripts/validate_matching.py)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">"before_start"</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_arrival</span><span class="o">.</span><span class="n">delay_s</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_arrival</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">cur_dev_mode</span> <span class="o">==</span> <span class="s2">"last_detected"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">last</span><span class="p">),</span> <span class="s2">"last_detected"</span>
+        <span class="n">lower</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">plan_ts</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">last</span><span class="p">)),</span> <span class="s2">"lower_bound"</span></div>
+
+
+<div class="viewcode-block" id="VehicleState.target">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.target">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Целевая остановка прогноза: первая с планом в (T+10, T+15] мин.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Индекс или ``-1`` (нет расписания или остановки в окне — прогноз не строится).</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">first_in_window</span><span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">horizon_min_s</span><span class="p">,</span> <span class="n">T</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">horizon_max_s</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VehicleState.dwell_s">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.dwell_s">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dwell_s</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Длительность текущей стоянки, с (до последнего пакета, не до T: без связи простой не растёт)."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">standing_since</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_ts</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">standing_since</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VehicleState.segment_info">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.segment_info">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">segment_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Текущий сегмент между остановками.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: ``from``, ``to``, ``avg_speed_kmh`` (факт), ``plan_speed_kmh``, ``dist_to_next_m``,</span>
+<span class="sd">            ``progress`` (0..1); значения ``None``, если данных недостаточно.</span>
+<span class="sd">        """</span>
+        <span class="n">sch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span>
+        <span class="n">info</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"from"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"to"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"avg_speed_kmh"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"plan_speed_kmh"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="s2">"dist_to_next_m"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"progress"</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">sch</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">info</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">)</span>
+        <span class="n">prev_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">nxt_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">prev_i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">prev_i</span><span class="p">]</span>
+            <span class="n">info</span><span class="p">[</span><span class="s2">"from"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"idx"</span><span class="p">:</span> <span class="n">prev_i</span><span class="p">,</span> <span class="s2">"stop_key"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">stop_key</span><span class="p">,</span> <span class="s2">"address"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="s2">"plan_ts"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">plan_ts</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">nxt_i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">nxt_i</span><span class="p">]</span>
+            <span class="n">info</span><span class="p">[</span><span class="s2">"to"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"idx"</span><span class="p">:</span> <span class="n">nxt_i</span><span class="p">,</span> <span class="s2">"stop_key"</span><span class="p">:</span> <span class="n">q</span><span class="o">.</span><span class="n">stop_key</span><span class="p">,</span> <span class="s2">"address"</span><span class="p">:</span> <span class="n">q</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="s2">"plan_ts"</span><span class="p">:</span> <span class="n">q</span><span class="o">.</span><span class="n">plan_ts</span><span class="p">}</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">[</span><span class="s2">"dist_to_next_m"</span><span class="p">]</span> <span class="o">=</span> <span class="n">haversine_m</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span>
+        <span class="c1"># &lt; 20 с от начала сегмента скорость по 1–2 точкам слишком шумная</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg_start_ts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_ts</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg_start_ts</span> <span class="o">+</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="s2">"avg_speed_kmh"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg_dist_m</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_ts</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">seg_start_ts</span><span class="p">)</span> <span class="o">*</span> <span class="mf">3.6</span>
+        <span class="k">if</span> <span class="n">prev_i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">nxt_i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">prev_i</span><span class="p">],</span> <span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">nxt_i</span><span class="p">]</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">haversine_m</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">plan_ts</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">plan_ts</span>
+            <span class="k">if</span> <span class="n">dt</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">[</span><span class="s2">"plan_speed_kmh"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">/</span> <span class="n">dt</span> <span class="o">*</span> <span class="mf">3.6</span>
+                <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s2">"dist_to_next_m"</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="s2">"progress"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">info</span><span class="p">[</span><span class="s2">"dist_to_next_m"</span><span class="p">]</span> <span class="o">/</span> <span class="n">dist</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">info</span></div>
+
+
+<div class="viewcode-block" id="VehicleState.deviation_trend">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.deviation_trend">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deviation_trend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Наклон отклонения по последним ``n`` детектированным остановкам.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float | None: с/остановку; ``None`` при &lt; 3 точках (тренд по двум — шум).</span>
+<span class="sd">        """</span>
+        <span class="n">pts</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">((</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrivals</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">detected</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">)[</span><span class="o">-</span><span class="n">n</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">delay_s</span> <span class="o">-</span> <span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">delay_s</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VehicleState.at_stop">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.at_stop">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">at_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""ТС в геозоне предыдущей или следующей остановки (радиус ×1.5: остановочный карман шире точки)."""</span>
+        <span class="n">sch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span>
+        <span class="k">if</span> <span class="n">sch</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_idx</span><span class="p">):</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">):</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">sch</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">haversine_m</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">stop_radius_m</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="VehicleState.ml_history">
+<a class="viewcode-back" href="../../backend.html#app.tracker.VehicleState.ml_history">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ml_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Последние ``rows`` пакетов с ``event_time ≤ T`` в порядке поступления.</span>
+
+<span class="sd">        Порядок поступления, а не сортировка: так же упорядочены строки traffic.csv при обучении</span>
+<span class="sd">        (паритет признака ``speed_diff``).</span>
+<span class="sd">        """</span>
+        <span class="n">cutoff</span> <span class="o">=</span> <span class="n">fmt_utc</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>  <span class="c1"># строки одного формата сравниваются лексикографически = хронологически</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="k">if</span> <span class="n">h</span><span class="p">[</span><span class="s2">"event_time"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">cutoff</span><span class="p">][</span><span class="o">-</span><span class="n">rows</span><span class="p">:]</span></div>
+</div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=9ca2116e"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/translations.js?v=cd1d70c9"></script>
+    </body>
+</html>

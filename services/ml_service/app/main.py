@@ -79,6 +79,8 @@ class Prediction(BaseModel):
     predicted_delay_s: float
     predicted_delta_s: float
     features: dict[str, Any]
+    explanation: dict[str, Any] | None = Field(
+        None, description="SHAP: cur_dev_s + base_s + Σ patterns[].seconds = predicted_delay_s")
 
 
 class PredictResponse(BaseModel):

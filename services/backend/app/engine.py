@@ -1,4 +1,9 @@
-"""Оркестрация: поток NDTP → состояние ТС → признаки → ML-прогноз → риск/инциденты → дашборд."""
+"""Оркестрация: поток NDTP → состояние ТС → признаки → ML-прогноз → риск/инциденты → дашборд.
+
+Приём пакетов (:meth:`Engine.on_frame`) синхронный и дешёвый (p95 < 0.3 мс): он только обновляет
+состояние ТС. Тяжёлая работа — батч-запрос к ML, ETA, инциденты, снимок — идёт в отдельном
+цикле :meth:`Engine.run`, поэтому поток NDTP не ждёт ML.
+"""
 from __future__ import annotations
 
 import asyncio
@@ -22,10 +27,23 @@ from .tracker import VehicleState, fmt_utc
 
 log = logging.getLogger("backend.engine")
 
-LEVEL_ORDER = {"red": 3, "yellow": 2, "green": 1, "gray": 0}
+LEVEL_ORDER = {"red": 3, "yellow": 2, "green": 1, "gray": 0}  # для сортировки: самые проблемные — первыми
 
 
 class Engine:
+    """Центральный движок backend: состояние всех ТС, цикл прогноза, инциденты, снимок для дашборда.
+
+    Args:
+        cfg: Настройки.
+        ref: Справочники (расписание, сеть).
+        ml: Клиент ML-сервиса.
+
+    Attributes:
+        vehicles (dict[int, VehicleState]): unit_id → состояние ТС.
+        snapshot (dict): Последний снимок состояния (отдаётся в REST и WebSocket).
+        live_overrides (Overrides | None): Применённые сценарии what-if.
+    """
+
     def __init__(self, cfg: Settings, ref: Reference, ml: MLClient) -> None:
         self.cfg, self.ref, self.ml = cfg, ref, ml
         self.clock = DataClock(cfg.clock_freerun_max_s)
@@ -49,6 +67,7 @@ class Engine:
         self.e2e_ms = LatencyWindow()
         self.predictions_total = 0
         self.fallback_predictions = 0
+        # онлайн-точность: |прогноз − факт| модели и baseline по реально детектированным прибытиям
         self.acc_model: deque[float] = deque(maxlen=5000)
         self.acc_base: deque[float] = deque(maxlen=5000)
 
@@ -62,7 +81,7 @@ class Engine:
         self.segment_levels: dict[str, str] = {}
         self.snapshot: dict[str, Any] = {}
         self.subscribers: set[asyncio.Queue] = set()
-        self._new_data = asyncio.Event()
+        self._new_data = asyncio.Event()  # будит цикл прогноза при новом пакете (событийный запуск)
 
         # ETA на ближайшие остановки, живые воздействия (what-if, применённые к прогнозу), таймлайн
         self.eta = EtaEngine(ref)
@@ -75,6 +94,13 @@ class Engine:
 
     # ================================================================ ingest
     def on_frame(self, frame: ndtp.Frame, conn: ConnInfo, rx_wall: float) -> None:
+        """Обрабатывает NDTP-кадр (вызывается TCP-сервером в event loop).
+
+        Args:
+            frame: Разобранный кадр.
+            conn: Соединение терминала.
+            rx_wall: Время приёма (wall-clock).
+        """
         t0 = time.perf_counter()
         self.frames_total += 1
         self.last_packet_wall = rx_wall
@@ -92,13 +118,14 @@ class Engine:
 
         unit = frame.peer_address
         st = self.vehicles.get(unit)
-        if st is None:
+        if st is None:  # первый пакет терминала — заводим состояние, даже если он без наряда
             tr = self.ref.tr_for_unit(unit)
             if tr is None:
                 self.unknown_units.add(unit)
             st = VehicleState(unit, tr, self.ref.schedules.get(tr) if tr is not None else None, self.cfg)
             self.vehicles[unit] = st
         if st.tr_id is not None:
+            # часы данных — только по ТС из датасета: эмулятор шлёт «сегодня» и сбил бы время реплея
             self.clock.observe(float(nav.timestamp), rx_wall)
 
         arrivals = st.ingest(float(nav.timestamp), nav.lon, nav.lat, nav.location_valid,
@@ -131,6 +158,7 @@ class Engine:
 
     # ============================================================== predict
     async def run(self) -> None:
+        """Бесконечный цикл прогноза (задача asyncio). Исключения цикла логируются, цикл не падает."""
         await self.ml.refresh_info()
         while True:
             started = time.perf_counter()
@@ -154,9 +182,11 @@ class Engine:
                 pass
 
     async def predict_cycle(self) -> None:
+        """Один цикл: батч в ML по всем ТС с целевой остановкой → риск → ETA → инциденты → снимок → рассылка."""
         wall = time.time()
         T = self.clock.now(wall)
         self.cycles += 1
+        # раз в ~30 циклов: дочитать метаданные модели (ML мог стартовать позже) и почистить чужие терминалы
         if self.cycles % 30 == 0 and self.ml.model_info is None:
             await self.ml.refresh_info()
         if self.cycles % 30 == 0:
@@ -172,7 +202,7 @@ class Engine:
                 continue
             cur_dev, method = st.current_deviation(T)
             stop = st.schedule.stops[k]
-            sid = f"{st.tr_id}_{int(T)}"
+            sid = f"{st.tr_id}_{int(T)}"  # тот же формат sample_id, что в разметке
             points.append({"sample_id": sid, "tr_id": st.tr_id, "T": fmt_utc(T),
                            "target_stop_id": stop.item_id, "target_time_begin": fmt_utc(stop.plan_ts),
                            "cur_dev_s": round(cur_dev, 3)})
@@ -183,6 +213,7 @@ class Engine:
         preds = await self.ml.predict(points, telemetry) if points else []
         source = "model"
         if preds is None:
+            # деградация: baseline «задержка сохранится» — худший, но честный прогноз без ML
             source = "fallback"
             preds = [{"predicted_delay_s": p["cur_dev_s"], "predicted_delta_s": 0.0, "features": {}} for p in points]
             self.fallback_predictions += len(points)
@@ -221,6 +252,7 @@ class Engine:
 
     def _apply_prediction(self, st: VehicleState, k: int, T: float, cur_dev: float, method: str,
                           pred: dict, source: str) -> None:
+        """Прогноз ML → P(late), уровень риска, причины; сохраняет в ``st.prediction``."""
         cfg = self.cfg
         stop = st.schedule.stops[k]
         p = float(pred["predicted_delay_s"])
@@ -233,7 +265,7 @@ class Engine:
         causes = diagnose(
             pred=p, cur_dev=cur_dev, dwell_s=dwell, at_stop=st.at_stop(), seg=seg, speed=st.speed,
             telemetry_age_s=telemetry_age, gps_fail_streak=st.gps_fail_streak,
-            trend=st.deviation_trend(), is_peak=hour_local in (7, 8, 9, 10, 17, 18, 19, 20),
+            trend=st.deviation_trend(), is_peak=hour_local in (7, 8, 9, 10, 17, 18, 19, 20),  # часы пик МСК
             source=source, cfg=cfg,
         )
         st.prediction = {
@@ -246,6 +278,7 @@ class Engine:
             "segment": seg, "dwell_s": dwell, "telemetry_age_s": telemetry_age,
             "causes": [c.__dict__ for c in causes[:3]],
             "features": pred.get("features", {}),
+            "explanation": pred.get("explanation"),  # SHAP-вклады паттернов (ML-сервис)
         }
         # трейл для графика и отложенная оценка точности (1 прогноз на минуту данных)
         if not st.pred_trail or T - st.pred_trail[-1][0] >= 30:
@@ -256,6 +289,7 @@ class Engine:
 
     # ============================================================ status
     def _update_status(self, wall: float) -> None:
+        """Отслеживает переходы связи и ML и пишет их в журнал событий (только при смене состояния)."""
         if self.last_packet_wall is None:
             link = "waiting"
         elif wall - self.last_packet_wall <= self.cfg.link_timeout_s:
@@ -285,6 +319,12 @@ class Engine:
         (log.warning if level == "error" else log.info)(text)
 
     def status(self) -> dict:
+        """Режим работы системы.
+
+        Returns:
+            dict: ``mode`` (online | waiting | degraded), ``reasons``, ``link``, доступность ML,
+            темп часов данных и время хода без пакетов.
+        """
         wall = time.time()
         reasons = []
         if self._link_state == "lost":
@@ -304,12 +344,13 @@ class Engine:
 
     # ============================================================ incidents
     def _update_incidents(self, T: float) -> None:
+        """Открывает инцидент при жёлтом/красном риске, закрывает после 2 мин в зелёной зоне."""
         active: set[str] = set()
         for st in self.vehicles.values():
             p = st.prediction
             if not p or p.get("status") != "ok":
                 continue
-            key = str(st.tr_id)
+            key = str(st.tr_id)  # один открытый инцидент на ТС: новый эпизод не плодит дубликаты
             inc = self.incidents.get(key)
             if p["level"] in ("red", "yellow"):
                 active.add(key)
@@ -353,6 +394,7 @@ class Engine:
                         "avg_speed_kmh": _r(seg.get("avg_speed_kmh"), 1),
                         "plan_speed_kmh": _r(seg.get("plan_speed_kmh"), 1)},
             "causes": p.get("causes", []),
+            "explanation": p.get("explanation"),
             "dwell_s": _r(p.get("dwell_s")), "telemetry_age_s": _r(p.get("telemetry_age_s")),
             "lon": st.lon, "lat": st.lat,
             "opened": self._local(inc["opened_T"]), "opened_T": inc["opened_T"],
@@ -362,6 +404,14 @@ class Engine:
         }
 
     def acknowledge(self, incident_id: str) -> bool:
+        """Отмечает инцидент принятым в работу.
+
+        Args:
+            incident_id: ID инцидента.
+
+        Returns:
+            bool: ``False`` — нет открытого инцидента с таким ID.
+        """
         for inc in self.incidents.values():
             if inc["id"] == incident_id:
                 self.acked.add(incident_id)
@@ -371,11 +421,13 @@ class Engine:
 
     # ============================================================ snapshot
     def _local(self, ts: float | None) -> str | None:
+        """unix-с → «ЧЧ:ММ:СС» в часовом поясе отображения (МСК)."""
         if ts is None:
             return None
         return datetime.fromtimestamp(ts, tz=self.tz).strftime("%H:%M:%S")
 
     def vehicle_view(self, st: VehicleState, T: float) -> dict:
+        """Компактное представление ТС для карты и списков (попадает в снимок на каждом цикле)."""
         p = st.prediction or {}
         stale = (T - st.last_ts) > self.cfg.vehicle_stale_s if st.last_ts else True
         if st.schedule is None:
@@ -389,6 +441,7 @@ class Engine:
         seg = p.get("segment") or {}
         eta: EtaResult | None = st.eta
         rn = self.route_names.get(st.tr_id) if st.tr_id is not None else None
+        # «призрак» — расчётное положение без связи; дашборд рисует его пунктиром
         ghost = eta is not None and eta.mode == "dead_reckoning" and eta.est_lat is not None
         return {
             "unit_id": st.unit_id, "tr_id": st.tr_id,
@@ -412,6 +465,14 @@ class Engine:
         }
 
     def vehicle_detail(self, key: int) -> dict | None:
+        """Карточка ТС: прогноз с объяснением, признаки модели, трейл, прибытия, путь, ETA, статистика.
+
+        Args:
+            key: unit_id или tr_id.
+
+        Returns:
+            dict | None: ``None`` — ТС не найдено.
+        """
         st = self.vehicles.get(key) or next((v for v in self.vehicles.values() if v.tr_id == key), None)
         if st is None:
             return None
@@ -435,7 +496,7 @@ class Engine:
 
     def export_trips(self, tr: int) -> list[tuple[int, int]]:
         """Рейсы ТС (для GTFS): кэш разбиения графика по межрейсовым отстоям."""
-        cache = self.__dict__.setdefault("_trips_cache", {})
+        cache = self.__dict__.setdefault("_trips_cache", {})  # расписание статично — считаем один раз
         if tr not in cache:
             from .export import trips_of
             cache[tr] = trips_of(self.ref.schedules[tr])
@@ -462,6 +523,7 @@ class Engine:
         return frames
 
     def eta_view(self, st: VehicleState) -> dict | None:
+        """ETA ТС в JSON-виде (время в МСК); ``None`` — ETA ещё не посчитан."""
         e: EtaResult | None = st.eta
         if e is None:
             return None
@@ -475,6 +537,7 @@ class Engine:
         }
 
     def _upcoming_path(self, st: VehicleState, T: float) -> list[list[float]]:
+        """Путь по дорогам от ТС до целевой остановки прогноза (подсветка на карте)."""
         if st.schedule is None or not st.initialized:
             return []
         p = st.prediction or {}
@@ -519,6 +582,7 @@ class Engine:
         })
 
     def _build_snapshot(self, T: float, wall: float) -> None:
+        """Собирает снимок для дашборда: KPI, ТС, инциденты, риск маршрутов и участков, журнал, метрики."""
         vehicles = [self.vehicle_view(st, T) for st in self.vehicles.values()]
         vehicles.sort(key=lambda v: (-LEVEL_ORDER[v["level"]], -(v["predicted_delay_s"] or -1e9)))
         incidents = []
@@ -526,6 +590,7 @@ class Engine:
             st = next((v for v in self.vehicles.values() if v.tr_id == inc["tr_id"]), None)
             if st is not None:
                 incidents.append(self._incident_view(inc, st))
+        # непринятые и красные — наверх: диспетчер видит главное без прокрутки
         incidents.sort(key=lambda i: (i["acknowledged"], -LEVEL_ORDER.get(i["level"], 0), -(i["predicted_delay_s"] or 0)))
         self.segment_levels = self._segment_levels()
 
@@ -570,6 +635,7 @@ class Engine:
         self._record_frame(T, vehicles)
 
     def perf_brief(self) -> dict:
+        """Краткие метрики для панели «Производительность» дашборда."""
         return {
             "packets_per_s": round(self.packets.rate(), 2),
             "ml_p95_ms": self.ml.latency.summary()["p95"],
@@ -579,6 +645,11 @@ class Engine:
         }
 
     def accuracy(self) -> dict:
+        """Онлайн-MAE модели и baseline по фактическим прибытиям на целевые остановки.
+
+        Returns:
+            dict: ``n``, ``mae_model_s``, ``mae_baseline_s`` (``None``, пока нет прибытий).
+        """
         n = len(self.acc_model)
         if not n:
             return {"n": 0, "mae_model_s": None, "mae_baseline_s": None}
@@ -586,6 +657,7 @@ class Engine:
                 "mae_baseline_s": round(sum(self.acc_base) / n, 1)}
 
     def metrics(self) -> dict:
+        """Полные метрики: приём, цикл прогноза, задержки ML и «пакет → прогноз», онлайн-точность, статус."""
         return {
             "ingest": {
                 "packets_total": self.packets.total, "packets_per_s": round(self.packets.rate(), 2),
@@ -607,11 +679,17 @@ class Engine:
 
     # ============================================================ pub/sub
     def subscribe(self) -> asyncio.Queue:
+        """Подписка WebSocket-клиента на снимки.
+
+        Returns:
+            asyncio.Queue: Очередь длиной 2 — память не растёт при медленном клиенте.
+        """
         q: asyncio.Queue = asyncio.Queue(maxsize=2)
         self.subscribers.add(q)
         return q
 
     def unsubscribe(self, q: asyncio.Queue) -> None:
+        """Отписка клиента (при закрытии WebSocket)."""
         self.subscribers.discard(q)
 
     def _broadcast(self) -> None:
@@ -626,6 +704,7 @@ class Engine:
 
 
 def _r(v, nd: int = 0):
+    """Округление с пропуском ``None`` (JSON снимка компактнее без лишних знаков)."""
     if v is None:
         return None
     return round(float(v), nd) if nd else round(float(v))

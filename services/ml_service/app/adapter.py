@@ -9,6 +9,7 @@ train ↔ serve (нет training/serving skew).
 from __future__ import annotations
 
 import io
+import json
 import logging
 import os
 import threading
@@ -20,6 +21,8 @@ import pandas as pd
 
 import data_functions as dfn  # ML-ядро (импортируется как есть)
 from catboost import CatBoostRegressor
+
+from .explain import explain
 
 log = logging.getLogger("ml.adapter")
 
@@ -68,11 +71,19 @@ class ModelRuntime:
         self._warmup()
 
     def _read_validation_mae(self) -> float | None:
-        tsv = Path(dfn.PATHS["catboost_info"]) / "test_error.tsv"
+        # <модель>.json — после дообучения из консоли (app.finetune)
         try:
-            return float(pd.read_csv(tsv, sep="\t")["MAE"].min())
-        except Exception:  # noqa: BLE001 — метрика опциональна
-            return None
+            return float(json.loads(self.model_path.with_suffix(".json").read_text("utf-8"))["validation_mae_s"])
+        except Exception:  # noqa: BLE001
+            pass
+        # catboost_info — после /v1/train, fine-tuning — после дообучения в ноутбуке (fine_tune)
+        for key in ("catboost_info", "finetune_info"):
+            tsv = Path(dfn.PATHS[key]) / "test_error.tsv"
+            try:
+                return float(pd.read_csv(tsv, sep="\t")["MAE"].min())
+            except Exception:  # noqa: BLE001 — метрика опциональна
+                continue
+        return None
 
     def _warmup(self) -> None:
         """Прогрев (JIT/аллокации CatBoost) — чтобы первый реальный запрос не был медленным."""
@@ -134,17 +145,22 @@ class ModelRuntime:
         t2 = time.perf_counter()
         preds = dfn.predict(model, dataset)
         timings["inference_ms"] = (time.perf_counter() - t2) * 1000
+
+        t3 = time.perf_counter()
+        explanations = explain(model, dataset)
+        timings["shap_ms"] = (time.perf_counter() - t3) * 1000
         timings["total_ms"] = (time.perf_counter() - t0) * 1000
 
         out = []
         feat_cols = list(dfn.FEATURE_COLS)
-        for row, pred in zip(dataset.to_dict("records"), preds):
+        for row, pred, expl in zip(dataset.to_dict("records"), preds, explanations):
             out.append({
                 "sample_id": str(row["sample_id"]),
                 "tr_id": int(row["tr_id"]),
                 "predicted_delay_s": float(pred),
                 "predicted_delta_s": float(pred - row["cur_dev_s"]),
                 "features": {c: _jsonable(row.get(c)) for c in feat_cols},
+                "explanation": expl,
             })
         return out, timings
 
@@ -186,10 +202,10 @@ class ModelRuntime:
             train_labels = dfn.load_and_preprocess_labels(P["train_labels"])
             train_schedule = dfn.load_and_preprocess_schedule(P["train_schedule"])
             schedule_features = dfn.compute_schedule_features(train_schedule)
-            train_full = dfn.build_dataset(train_labels, train_traffic, schedule_features)
+            train_full = dfn.build_dataset(*_align_keys(train_labels, train_traffic), schedule_features)
             test_traffic = dfn.load_and_preprocess_traffic(P["test_traffic"])
             test_labels = dfn.load_and_preprocess_labels(P["test_labels"])
-            test_full = dfn.build_dataset(test_labels, test_traffic, schedule_features)
+            test_full = dfn.build_dataset(*_align_keys(test_labels, test_traffic), schedule_features)
             model = dfn.train(train_df=train_full, val_df=test_full)
             with self._lock:
                 self.model = model
@@ -201,6 +217,16 @@ class ModelRuntime:
         except Exception as e:  # noqa: BLE001
             log.exception("training failed")
             self.training_job = {"status": "failed", "error": str(e), "finished_at": time.time()}
+
+
+def _align_keys(labels: pd.DataFrame, traffic: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """dtype-выравнивание ключей merge_asof в build_dataset: pandas 3 читает CSV с разным
+    разрешением datetime (us/ns) и отказывается сливать такие колонки."""
+    labels["tr_id"] = labels["tr_id"].astype("int64")
+    labels["T"] = labels["T"].astype("datetime64[ns]")
+    traffic["tr_id"] = traffic["tr_id"].astype("int64")
+    traffic["event_time"] = traffic["event_time"].astype("datetime64[ns]")
+    return labels, traffic
 
 
 def _norm_time(s: pd.Series) -> pd.Series:

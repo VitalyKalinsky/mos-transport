@@ -1,4 +1,8 @@
-"""Backend: приём NDTP, сопоставление с расписанием, оркестрация прогнозов, API и WebSocket для дашборда."""
+"""Backend: приём NDTP, сопоставление с расписанием, оркестрация прогнозов, REST API и WebSocket дашборда.
+
+Точка входа: ``uvicorn app.main:app``. Swagger: http://localhost:8000/docs.
+Расширенные эндпоинты (ETA, what-if, маршруты, экспорт) регистрируются в :mod:`app.api_ext`.
+"""
 from __future__ import annotations
 
 import asyncio
@@ -24,16 +28,21 @@ from . import api_ext
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"),
                     format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)  # иначе лог на каждый батч к ML
 log = logging.getLogger("backend")
 
 STARTED = time.time()
-state: dict = {}
+state: dict = {}  # общие объекты процесса; заполняется в lifespan, пуст до готовности (→ 503)
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    """Запуск: справочники → ML-клиент → движок → NDTP-сервер → цикл прогноза; при остановке — обратный порядок.
+
+    ML-сервис при старте не требуется: backend поднимается и работает на baseline, пока ML недоступен.
+    """
     t0 = time.perf_counter()
+    # чтение CSV блокирующее — в отдельном потоке, чтобы не держать event loop
     ref = await asyncio.to_thread(load_reference, settings.schedule_path, settings.units_path)
     ml = MLClient(settings)
     engine = Engine(settings, ref, ml)
@@ -66,11 +75,17 @@ app = FastAPI(
     ),
     lifespan=lifespan,
 )
+# CORS открыт: фиды /api/export/* забирают внешние карты; в проде доступ режется на балансировщике
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 api_ext.register(app, state)
 
 
 def _engine() -> Engine:
+    """Движок или HTTP 503, пока идёт старт.
+
+    Raises:
+        HTTPException: 503 — lifespan ещё не завершился.
+    """
     eng = state.get("engine")
     if eng is None:
         raise HTTPException(503, "starting")
@@ -80,6 +95,13 @@ def _engine() -> Engine:
 # ------------------------------------------------------------------ service
 @app.get("/health", tags=["service"], summary="Liveness/readiness")
 def health():
+    """Проверка живости для Docker healthcheck.
+
+    Всегда 200: при недоступном ML сервис жив и работает в деградированном режиме.
+
+    Returns:
+        dict: ``status`` (ok/starting), ``uptime_s``, ``startup_s``, ``mode`` (online/degraded).
+    """
     eng = state.get("engine")
     return {"status": "ok" if eng else "starting", "uptime_s": round(time.time() - STARTED, 1),
             "startup_s": state.get("startup_s"), **({"mode": eng.status()["mode"]} if eng else {})}
@@ -87,11 +109,24 @@ def health():
 
 @app.get("/api/status", tags=["service"], summary="Режим работы системы (online / degraded) и причины")
 def status():
+    """Режим работы: связь с телематикой, доступность ML, причины деградации.
+
+    Raises:
+        HTTPException: 503 — сервис стартует.
+    """
     return _engine().status()
 
 
 @app.get("/api/metrics", tags=["service"], summary="Метрики производительности, надёжности и онлайн-точности")
 def metrics():
+    """Метрики приёма NDTP, цикла прогноза, задержек (p50/p95/p99) и онлайн-точности модели.
+
+    Returns:
+        dict: Разделы ``ingest``, ``prediction``, ``accuracy_online``, ``status``, ``ndtp``.
+
+    Raises:
+        HTTPException: 503 — сервис стартует.
+    """
     eng = _engine()
     srv: NDTPServer = state["server"]
     return {
@@ -105,6 +140,7 @@ def metrics():
 
 @app.get("/metrics", tags=["service"], response_class=PlainTextResponse, summary="Prometheus-метрики")
 def prometheus():
+    """Те же метрики в текстовом формате Prometheus (без клиентской библиотеки)."""
     m = metrics()
     lines = [
         f"ndtp_packets_total {m['ingest']['packets_total']}",
@@ -122,13 +158,18 @@ def prometheus():
                       ("e2e_packet_to_prediction_ms", m["prediction"]["e2e_packet_to_prediction_ms"]),
                       ("ingest_processing_us", m["ingest"]["processing_us"])):
         for q in ("p50", "p95", "p99"):
-            if key[q] is not None:
+            if key[q] is not None:  # пустое окно сразу после старта
                 lines.append(f'{name}{{quantile="{q}"}} {key[q]}')
     return "\n".join(lines) + "\n"
 
 
 @app.get("/api/connections", tags=["ndtp"], summary="Активные NDTP-соединения терминалов")
 def connections():
+    """Активные TCP-соединения: терминал, байты, кадры, ошибки, версия протокола.
+
+    Returns:
+        list[dict]: Поля :class:`app.ndtp_server.ConnInfo`.
+    """
     srv: NDTPServer = state["server"]
     return [c.__dict__ for c in srv.connections.values()]
 
@@ -140,6 +181,17 @@ def parse_ndtp(hex_data: str = Body(
         examples=["7e7e26000000c15c0200cc110000000100650001000200000000"
                   "001ba1b76a0d2b5f1609473821e0842d0030003d01060df0000e02"],
         description="Один или несколько NDTP-кадров в hex (пробелы допускаются)")):
+    """Разбирает NDTP-кадры тем же декодером, что и TCP-сервер. Пример — реальный кадр эмулятора.
+
+    Args:
+        hex_data: Кадры в hex; пробелы и переводы строк игнорируются.
+
+    Returns:
+        dict: ``frames`` (заголовки, ячейки, навигация), ``errors``, ``last_error``.
+
+    Raises:
+        HTTPException: 400 — строка не является hex.
+    """
     try:
         raw = bytes.fromhex("".join(hex_data.split()))
     except ValueError as e:
@@ -161,6 +213,11 @@ def parse_ndtp(hex_data: str = Body(
 # ------------------------------------------------------------------ dispatcher
 @app.get("/api/state", tags=["dispatcher"], summary="Полный снимок: KPI, ТС, инциденты, риск участков")
 def snapshot():
+    """Полный снимок состояния; то же, что приходит по WebSocket ``/ws``.
+
+    Raises:
+        HTTPException: 503 — первый цикл прогноза ещё не завершён.
+    """
     snap = _engine().snapshot
     if not snap:
         raise HTTPException(503, "first prediction cycle has not completed yet")
@@ -169,12 +226,25 @@ def snapshot():
 
 @app.get("/api/vehicles", tags=["dispatcher"], summary="Текущее положение и риск всех ТС")
 def vehicles():
+    """ТС: положение, уровень риска, прогноз на T+10…15 мин, P(опоздание), причина, ближайшие остановки.
+
+    Returns:
+        list[dict]: Пустой список до первого цикла прогноза.
+    """
     return _engine().snapshot.get("vehicles", [])
 
 
 @app.get("/api/vehicles/{vehicle_id}", tags=["dispatcher"],
          summary="Детали ТС (unit_id или tr_id): признаки модели, трейл прогнозов, факт прибытий")
 def vehicle(vehicle_id: int):
+    """Карточка ТС: прогноз, SHAP-объяснение, признаки модели, ETA, история прогнозов и прибытий.
+
+    Args:
+        vehicle_id: unit_id терминала или tr_id ТС.
+
+    Raises:
+        HTTPException: 404 — ТС не найдено.
+    """
     d = _engine().vehicle_detail(vehicle_id)
     if d is None:
         raise HTTPException(404, "vehicle not found")
@@ -183,12 +253,25 @@ def vehicle(vehicle_id: int):
 
 @app.get("/api/incidents", tags=["dispatcher"], summary="Открытые инциденты (карточки) и недавно закрытые")
 def incidents():
+    """Карточки инцидентов: ТС, прогноз опоздания, P(late), причина, участок, целевая остановка, SHAP.
+
+    Returns:
+        dict: ``open`` — активные, ``resolved`` — недавно закрытые.
+    """
     snap = _engine().snapshot
     return {"open": snap.get("incidents", []), "resolved": snap.get("resolved", [])}
 
 
 @app.post("/api/incidents/{incident_id}/ack", tags=["dispatcher"], summary="Принять инцидент в работу")
 def ack(incident_id: str):
+    """Отмечает инцидент принятым диспетчером.
+
+    Args:
+        incident_id: ID инцидента из ``/api/incidents``.
+
+    Raises:
+        HTTPException: 404 — инцидент не найден или уже закрыт.
+    """
     if not _engine().acknowledge(incident_id):
         raise HTTPException(404, "incident not found")
     return {"ok": True}
@@ -196,6 +279,11 @@ def ack(incident_id: str):
 
 @app.get("/api/network", tags=["dispatcher"], summary="Маршрутная сеть: остановки, сегменты, маршруты")
 def network():
+    """Маршрутная сеть для карты: остановки, сегменты по дорогам, маршруты расписания и реальные маршруты.
+
+    Returns:
+        dict: ``stops``, ``segments``, ``routes``, ``real_routes``.
+    """
     ref = state["ref"]
     return {
         "stops": [{"key": s["key"], "lon": s["lon"], "lat": s["lat"], "address": s["address"],
@@ -210,6 +298,11 @@ def network():
 
 @app.get("/api/model", tags=["dispatcher"], summary="Информация о модели (прокси ML-сервиса)")
 async def model():
+    """Метаданные модели из ML-сервиса: деревья, признаки, важности, валидационная MAE.
+
+    Raises:
+        HTTPException: 503 — ML-сервис недоступен.
+    """
     ml: MLClient = state["ml"]
     await ml.refresh_info()
     if ml.model_info is None:
@@ -219,9 +312,13 @@ async def model():
 
 @app.websocket("/ws")
 async def ws(websocket: WebSocket):
+    """Поток снимков состояния для дашборда (≈1 раз в секунду).
+
+    Первым сообщением сразу уходит текущий снимок: дашборд не ждёт следующий цикл.
+    """
     await websocket.accept()
     eng = _engine()
-    q = eng.subscribe()
+    q = eng.subscribe()  # очередь длиной 2: медленный клиент получает только свежий снимок
     try:
         if eng.snapshot:
             await websocket.send_json(eng.snapshot)

@@ -1,0 +1,460 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Mos-Transport ML Service",
+  "description": "Инференс модели прогноза задержки (CatBoost, горизонт 10–15 мин). Признаки считаются функциями ML-ядра `notebooks/data_functions.py` без изменений.",
+  "version": "1.0.0"
+ },
+ "paths": {
+  "/health": {
+   "get": {
+    "tags": [
+     "service"
+    ],
+    "summary": "Health",
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/model": {
+   "get": {
+    "tags": [
+     "model"
+    ],
+    "summary": "Model Info",
+    "operationId": "model_info_v1_model_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/predict": {
+   "post": {
+    "tags": [
+     "model"
+    ],
+    "summary": "Predict",
+    "operationId": "predict_v1_predict_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PredictRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PredictResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/train": {
+   "post": {
+    "tags": [
+     "model"
+    ],
+    "summary": "Train",
+    "description": "Переобучение по пайплайну ноутбука (функции ML-ядра). Выключено по умолчанию.",
+    "operationId": "train_v1_train_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/stats": {
+   "get": {
+    "tags": [
+     "service"
+    ],
+    "summary": "Stats",
+    "operationId": "stats_v1_stats_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/metrics": {
+   "get": {
+    "tags": [
+     "service"
+    ],
+    "summary": "Metrics",
+    "operationId": "metrics_metrics_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/plain": {
+        "schema": {
+         "type": "string"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "PredictRequest": {
+    "properties": {
+     "points": {
+      "items": {
+       "$ref": "#/components/schemas/PredictionPoint"
+      },
+      "type": "array",
+      "title": "Points"
+     },
+     "telemetry": {
+      "items": {
+       "$ref": "#/components/schemas/TelemetryRow"
+      },
+      "type": "array",
+      "title": "Telemetry",
+      "description": "Сырая телеметрия (как строки traffic.csv) с event_time ≤ T; достаточно последних ~20 пакетов на ТС"
+     }
+    },
+    "type": "object",
+    "required": [
+     "points"
+    ],
+    "title": "PredictRequest"
+   },
+   "PredictResponse": {
+    "properties": {
+     "predictions": {
+      "items": {
+       "$ref": "#/components/schemas/Prediction"
+      },
+      "type": "array",
+      "title": "Predictions"
+     },
+     "timings_ms": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "type": "object",
+      "title": "Timings Ms"
+     },
+     "model_validation_mae_s": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model Validation Mae S"
+     }
+    },
+    "type": "object",
+    "required": [
+     "predictions",
+     "timings_ms",
+     "model_validation_mae_s"
+    ],
+    "title": "PredictResponse"
+   },
+   "Prediction": {
+    "properties": {
+     "sample_id": {
+      "type": "string",
+      "title": "Sample Id"
+     },
+     "tr_id": {
+      "type": "integer",
+      "title": "Tr Id"
+     },
+     "predicted_delay_s": {
+      "type": "number",
+      "title": "Predicted Delay S"
+     },
+     "predicted_delta_s": {
+      "type": "number",
+      "title": "Predicted Delta S"
+     },
+     "features": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Features"
+     },
+     "explanation": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Explanation",
+      "description": "SHAP: cur_dev_s + base_s + Σ patterns[].seconds = predicted_delay_s"
+     }
+    },
+    "type": "object",
+    "required": [
+     "sample_id",
+     "tr_id",
+     "predicted_delay_s",
+     "predicted_delta_s",
+     "features"
+    ],
+    "title": "Prediction"
+   },
+   "PredictionPoint": {
+    "properties": {
+     "sample_id": {
+      "type": "string",
+      "title": "Sample Id",
+      "examples": [
+       "131672_1767670500"
+      ]
+     },
+     "tr_id": {
+      "type": "integer",
+      "title": "Tr Id",
+      "examples": [
+       131672
+      ]
+     },
+     "T": {
+      "type": "string",
+      "title": "T",
+      "description": "Момент прогноза (UTC, 'YYYY-MM-DD HH:MM:SS')",
+      "examples": [
+       "2026-01-06 03:35:00"
+      ]
+     },
+     "target_stop_id": {
+      "type": "integer",
+      "title": "Target Stop Id",
+      "examples": [
+       53700172828
+      ]
+     },
+     "target_time_begin": {
+      "type": "string",
+      "title": "Target Time Begin",
+      "description": "Плановое прибытие на целевую остановку",
+      "examples": [
+       "2026-01-06 03:50:00"
+      ]
+     },
+     "cur_dev_s": {
+      "type": "number",
+      "title": "Cur Dev S",
+      "description": "Отклонение на последней пройденной остановке, с",
+      "examples": [
+       274.0
+      ]
+     }
+    },
+    "type": "object",
+    "required": [
+     "sample_id",
+     "tr_id",
+     "T",
+     "target_stop_id",
+     "target_time_begin",
+     "cur_dev_s"
+    ],
+    "title": "PredictionPoint"
+   },
+   "TelemetryRow": {
+    "properties": {
+     "tr_id": {
+      "type": "integer",
+      "title": "Tr Id"
+     },
+     "unit_id": {
+      "type": "integer",
+      "title": "Unit Id"
+     },
+     "event_time": {
+      "type": "string",
+      "title": "Event Time"
+     },
+     "location_valid": {
+      "type": "boolean",
+      "title": "Location Valid"
+     },
+     "lon": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lon"
+     },
+     "lat": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lat"
+     },
+     "alt": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Alt"
+     },
+     "speed": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Speed"
+     },
+     "heading": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Heading"
+     },
+     "is_hist_data": {
+      "type": "boolean",
+      "title": "Is Hist Data",
+      "default": false
+     }
+    },
+    "type": "object",
+    "required": [
+     "tr_id",
+     "unit_id",
+     "event_time",
+     "location_valid"
+    ],
+    "title": "TelemetryRow"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}

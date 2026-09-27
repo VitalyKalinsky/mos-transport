@@ -1,0 +1,1036 @@
+<!doctype html>
+<html class="no-js" lang="ru" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Алфавитный указатель" href="../../genindex.html" /><link rel="search" title="Поиск" href="../../search.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>app.engine - mos-transport · документация по коду</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">mos-transport · документация по коду</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">mos-transport · документация по коду</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Поиск" name="q" aria-label="Поиск">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Модули</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../backend.html">Backend (services/backend)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndtp.html">NDTP-кодек (libs/ndtp)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feeder.html">Replay-фидер (services/feeder)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ml.html">ML-модуль</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Исходный код app.engine</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Оркестрация: поток NDTP → состояние ТС → признаки → ML-прогноз → риск/инциденты → дашборд.</span>
+
+<span class="sd">Приём пакетов (:meth:`Engine.on_frame`) синхронный и дешёвый (p95 &lt; 0.3 мс): он только обновляет</span>
+<span class="sd">состояние ТС. Тяжёлая работа — батч-запрос к ML, ETA, инциденты, снимок — идёт в отдельном</span>
+<span class="sd">цикле :meth:`Engine.run`, поэтому поток NDTP не ждёт ML.</span>
+<span class="sd">"""</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">timezone</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ndtp</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.clock</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataClock</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.eta</span><span class="w"> </span><span class="kn">import</span> <span class="n">EtaEngine</span><span class="p">,</span> <span class="n">EtaResult</span><span class="p">,</span> <span class="n">Overrides</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">LatencyWindow</span><span class="p">,</span> <span class="n">RateCounter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ml_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ndtp_server</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConnInfo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.reference</span><span class="w"> </span><span class="kn">import</span> <span class="n">Reference</span><span class="p">,</span> <span class="n">seg_id</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.risk</span><span class="w"> </span><span class="kn">import</span> <span class="n">diagnose</span><span class="p">,</span> <span class="n">laplace_sf</span><span class="p">,</span> <span class="n">risk_level</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.tracker</span><span class="w"> </span><span class="kn">import</span> <span class="n">VehicleState</span><span class="p">,</span> <span class="n">fmt_utc</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"backend.engine"</span><span class="p">)</span>
+
+<span class="n">LEVEL_ORDER</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"red"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"yellow"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"gray"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>  <span class="c1"># для сортировки: самые проблемные — первыми</span>
+
+
+<div class="viewcode-block" id="Engine">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Engine</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Центральный движок backend: состояние всех ТС, цикл прогноза, инциденты, снимок для дашборда.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cfg: Настройки.</span>
+<span class="sd">        ref: Справочники (расписание, сеть).</span>
+<span class="sd">        ml: Клиент ML-сервиса.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        vehicles (dict[int, VehicleState]): unit_id → состояние ТС.</span>
+<span class="sd">        snapshot (dict): Последний снимок состояния (отдаётся в REST и WebSocket).</span>
+<span class="sd">        live_overrides (Overrides | None): Применённые сценарии what-if.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="n">Reference</span><span class="p">,</span> <span class="n">ml</span><span class="p">:</span> <span class="n">MLClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">ml</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">DataClock</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">clock_freerun_max_s</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">VehicleState</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">display_tz_offset_h</span><span class="p">))</span>
+
+        <span class="c1"># приём</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">packets</span> <span class="o">=</span> <span class="n">RateCounter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames_total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handshakes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_packets</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unknown_units</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ingest_us</span> <span class="o">=</span> <span class="n">LatencyWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_packet_wall</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ever_connected</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># прогноз</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycles</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_overruns</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_ms</span> <span class="o">=</span> <span class="n">LatencyWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e2e_ms</span> <span class="o">=</span> <span class="n">LatencyWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictions_total</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fallback_predictions</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># онлайн-точность: |прогноз − факт| модели и baseline по реально детектированным прибытиям</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_model</span><span class="p">:</span> <span class="n">deque</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_base</span><span class="p">:</span> <span class="n">deque</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">5000</span><span class="p">)</span>
+
+        <span class="c1"># инциденты и события</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">incidents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolved</span><span class="p">:</span> <span class="n">deque</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acked</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span> <span class="n">deque</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_link_state</span> <span class="o">=</span> <span class="s2">"waiting"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ml_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segment_levels</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snapshot</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_new_data</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>  <span class="c1"># будит цикл прогноза при новом пакете (событийный запуск)</span>
+
+        <span class="c1"># ETA на ближайшие остановки, живые воздействия (what-if, применённые к прогнозу), таймлайн</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">EtaEngine</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">live_overrides</span><span class="p">:</span> <span class="n">Overrides</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">live_scenarios</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">live_ovs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>             <span class="c1"># (Overrides, until_T) — для истечения по времени</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeline</span><span class="p">:</span> <span class="n">deque</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">timeline_frames</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_frame_T</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>      <span class="c1"># tr_id → реальный маршрут из реестра (номер, id)</span>
+
+    <span class="c1"># ================================================================ ingest</span>
+<div class="viewcode-block" id="Engine.on_frame">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.on_frame">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">ndtp</span><span class="o">.</span><span class="n">Frame</span><span class="p">,</span> <span class="n">conn</span><span class="p">:</span> <span class="n">ConnInfo</span><span class="p">,</span> <span class="n">rx_wall</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Обрабатывает NDTP-кадр (вызывается TCP-сервером в event loop).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame: Разобранный кадр.</span>
+<span class="sd">            conn: Соединение терминала.</span>
+<span class="sd">            rx_wall: Время приёма (wall-clock).</span>
+<span class="sd">        """</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames_total</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_packet_wall</span> <span class="o">=</span> <span class="n">rx_wall</span>
+        <span class="k">if</span> <span class="n">frame</span><span class="o">.</span><span class="n">is_handshake</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handshakes</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">frame</span><span class="o">.</span><span class="n">is_telemetry</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">nav</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">nav</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">nav</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">hit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">rx_wall</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">frame</span><span class="o">.</span><span class="n">is_history</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history_packets</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">unit</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">peer_address</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">st</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># первый пакет терминала — заводим состояние, даже если он без наряда</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">tr_for_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unknown_units</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">VehicleState</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">schedules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span> <span class="k">if</span> <span class="n">tr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="p">[</span><span class="n">unit</span><span class="p">]</span> <span class="o">=</span> <span class="n">st</span>
+        <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">tr_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># часы данных — только по ТС из датасета: эмулятор шлёт «сегодня» и сбил бы время реплея</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">nav</span><span class="o">.</span><span class="n">timestamp</span><span class="p">),</span> <span class="n">rx_wall</span><span class="p">)</span>
+
+        <span class="n">arrivals</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">nav</span><span class="o">.</span><span class="n">timestamp</span><span class="p">),</span> <span class="n">nav</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">nav</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">nav</span><span class="o">.</span><span class="n">location_valid</span><span class="p">,</span>
+                             <span class="n">nav</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span> <span class="n">nav</span><span class="o">.</span><span class="n">heading</span><span class="p">,</span> <span class="n">nav</span><span class="o">.</span><span class="n">alt</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">is_history</span><span class="p">,</span> <span class="n">rx_wall</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">arr</span> <span class="ow">in</span> <span class="n">arrivals</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ingest_us</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_new_data</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_evict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wall</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Терминалы без наряда, молчащие &gt; unknown_unit_ttl_s, убираем из оперативной картины</span>
+<span class="sd">        (ТС с нарядом не удаляются — для них важно последнее известное состояние)."""</span>
+        <span class="n">ttl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">unknown_unit_ttl_s</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="p">[</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                     <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">wall</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">last_rx_wall</span> <span class="o">&gt;</span> <span class="n">ttl</span><span class="p">]:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="p">[</span><span class="n">unit</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">st</span><span class="p">:</span> <span class="n">VehicleState</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Онлайн-оценка точности: сравнение прогнозов, сделанных за 10–15 мин, с фактом прибытия."""</span>
+        <span class="c1"># прогнозы по остановкам, пропущенным детектором, оценить нельзя</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">pending_eval</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="n">idx</span><span class="p">]:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">pending_eval</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">pending_eval</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">preds</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">arr</span><span class="o">.</span><span class="n">detected</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">_T</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cur</span> <span class="ow">in</span> <span class="n">preds</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">pred</span> <span class="o">-</span> <span class="n">arr</span><span class="o">.</span><span class="n">delay_s</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc_base</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">cur</span> <span class="o">-</span> <span class="n">arr</span><span class="o">.</span><span class="n">delay_s</span><span class="p">))</span>
+
+    <span class="c1"># ============================================================== predict</span>
+<div class="viewcode-block" id="Engine.run">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.run">[документация]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Бесконечный цикл прогноза (задача asyncio). Исключения цикла логируются, цикл не падает."""</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">refresh_info</span><span class="p">()</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">started</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_cycle</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 — цикл прогноза не должен падать никогда</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">"predict cycle failed"</span><span class="p">)</span>
+            <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cycle_ms</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">elapsed</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">predict_interval_s</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cycle_overruns</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># Событийный запуск: новый пакет → прогноз не позже чем через min_interval;</span>
+            <span class="c1"># без данных цикл всё равно идёт раз в predict_interval_s (деградация, часы, статусы).</span>
+            <span class="c1"># Пакеты, пришедшие во время цикла, коалесцируются в следующий батч — очередь не копится.</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">predict_min_interval_s</span> <span class="o">-</span> <span class="n">elapsed</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_new_data</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_new_data</span><span class="o">.</span><span class="n">wait</span><span class="p">(),</span>
+                                       <span class="n">timeout</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">predict_interval_s</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">predict_min_interval_s</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+                <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Engine.predict_cycle">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.predict_cycle">[документация]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">predict_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Один цикл: батч в ML по всем ТС с целевой остановкой → риск → ETA → инциденты → снимок → рассылка."""</span>
+        <span class="n">wall</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycles</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># раз в ~30 циклов: дочитать метаданные модели (ML мог стартовать позже) и почистить чужие терминалы</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycles</span> <span class="o">%</span> <span class="mi">30</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">model_info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">refresh_info</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycles</span> <span class="o">%</span> <span class="mi">30</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_evict</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
+
+        <span class="n">points</span><span class="p">,</span> <span class="n">telemetry</span><span class="p">,</span> <span class="n">ctx</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">st</span><span class="o">.</span><span class="n">last_ts</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">target</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">prediction</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"no_target"</span><span class="p">,</span> <span class="s2">"T"</span><span class="p">:</span> <span class="n">T</span><span class="p">}</span>
+                <span class="k">continue</span>
+            <span class="n">cur_dev</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">current_deviation</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">sid</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>  <span class="c1"># тот же формат sample_id, что в разметке</span>
+            <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"sample_id"</span><span class="p">:</span> <span class="n">sid</span><span class="p">,</span> <span class="s2">"tr_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="p">,</span> <span class="s2">"T"</span><span class="p">:</span> <span class="n">fmt_utc</span><span class="p">(</span><span class="n">T</span><span class="p">),</span>
+                           <span class="s2">"target_stop_id"</span><span class="p">:</span> <span class="n">stop</span><span class="o">.</span><span class="n">item_id</span><span class="p">,</span> <span class="s2">"target_time_begin"</span><span class="p">:</span> <span class="n">fmt_utc</span><span class="p">(</span><span class="n">stop</span><span class="o">.</span><span class="n">plan_ts</span><span class="p">),</span>
+                           <span class="s2">"cur_dev_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">cur_dev</span><span class="p">,</span> <span class="mi">3</span><span class="p">)})</span>
+            <span class="n">telemetry</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">ml_history</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">ml_history_rows</span><span class="p">))</span>
+            <span class="n">ctx</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">st</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">cur_dev</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">dirty</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">last_rx_wall</span><span class="p">))</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">dirty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">preds</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">telemetry</span><span class="p">)</span> <span class="k">if</span> <span class="n">points</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="s2">"model"</span>
+        <span class="k">if</span> <span class="n">preds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># деградация: baseline «задержка сохранится» — худший, но честный прогноз без ML</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="s2">"fallback"</span>
+            <span class="n">preds</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"predicted_delay_s"</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s2">"cur_dev_s"</span><span class="p">],</span> <span class="s2">"predicted_delta_s"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">"features"</span><span class="p">:</span> <span class="p">{}}</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fallback_predictions</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">publish_wall</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">cur_dev</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dirty</span><span class="p">,</span> <span class="n">rx_wall</span><span class="p">),</span> <span class="n">pred</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">preds</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_apply_prediction</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">cur_dev</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dirty</span> <span class="ow">and</span> <span class="n">rx_wall</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">e2e_ms</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">publish_wall</span> <span class="o">-</span> <span class="n">rx_wall</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predictions_total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+        <span class="c1"># истечение применённых сценариев what-if</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_ovs</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;=</span> <span class="n">T</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_ovs</span><span class="p">):</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.whatif</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">live_ovs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">o</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_ovs</span> <span class="k">if</span> <span class="n">u</span> <span class="o">&gt;</span> <span class="n">T</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">live_scenarios</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_scenarios</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">"until_T"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">T</span><span class="p">]</span>
+            <span class="n">merged</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_ovs</span><span class="p">:</span>
+                <span class="n">merged</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">live_overrides</span> <span class="o">=</span> <span class="n">merged</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"info"</span><span class="p">,</span> <span class="s2">"Срок действия сценария what-if истёк"</span><span class="p">)</span>
+        <span class="c1"># ETA на ближайшие остановки (кинематика + график; при обрыве — счисление пути)</span>
+        <span class="n">scheduled</span> <span class="o">=</span> <span class="p">[</span><span class="n">st</span> <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">st</span><span class="o">.</span><span class="n">last_ts</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">update_traffic</span><span class="p">(</span><span class="n">scheduled</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">scheduled</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">eta_stops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_overrides</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">"eta failed for unit </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">unit_id</span><span class="p">)</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_status</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_incidents</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_snapshot</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">wall</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_broadcast</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">st</span><span class="p">:</span> <span class="n">VehicleState</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cur_dev</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                          <span class="n">pred</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Прогноз ML → P(late), уровень риска, причины; сохраняет в ``st.prediction``."""</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span>
+        <span class="n">stop</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pred</span><span class="p">[</span><span class="s2">"predicted_delay_s"</span><span class="p">])</span>
+        <span class="n">telemetry_age</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">T</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">last_ts</span><span class="p">)</span>
+        <span class="n">p_late</span> <span class="o">=</span> <span class="n">laplace_sf</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">late_threshold_s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">error_scale_s</span><span class="p">)</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">risk_level</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">p_late</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">segment_info</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">dwell</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">dwell_s</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">hour_local</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tz</span><span class="p">)</span><span class="o">.</span><span class="n">hour</span>
+        <span class="n">causes</span> <span class="o">=</span> <span class="n">diagnose</span><span class="p">(</span>
+            <span class="n">pred</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">cur_dev</span><span class="o">=</span><span class="n">cur_dev</span><span class="p">,</span> <span class="n">dwell_s</span><span class="o">=</span><span class="n">dwell</span><span class="p">,</span> <span class="n">at_stop</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">at_stop</span><span class="p">(),</span> <span class="n">seg</span><span class="o">=</span><span class="n">seg</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span>
+            <span class="n">telemetry_age_s</span><span class="o">=</span><span class="n">telemetry_age</span><span class="p">,</span> <span class="n">gps_fail_streak</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">gps_fail_streak</span><span class="p">,</span>
+            <span class="n">trend</span><span class="o">=</span><span class="n">st</span><span class="o">.</span><span class="n">deviation_trend</span><span class="p">(),</span> <span class="n">is_peak</span><span class="o">=</span><span class="n">hour_local</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>  <span class="c1"># часы пик МСК</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">prediction</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span> <span class="s2">"T"</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="s2">"source"</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+            <span class="s2">"predicted_delay_s"</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span> <span class="s2">"predicted_delta_s"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"predicted_delta_s"</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)),</span>
+            <span class="s2">"p_late"</span><span class="p">:</span> <span class="n">p_late</span><span class="p">,</span> <span class="s2">"level"</span><span class="p">:</span> <span class="n">level</span><span class="p">,</span>
+            <span class="s2">"cur_dev_s"</span><span class="p">:</span> <span class="n">cur_dev</span><span class="p">,</span> <span class="s2">"cur_dev_method"</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
+            <span class="s2">"target_idx"</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s2">"target_stop_id"</span><span class="p">:</span> <span class="n">stop</span><span class="o">.</span><span class="n">item_id</span><span class="p">,</span> <span class="s2">"target_address"</span><span class="p">:</span> <span class="n">stop</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+            <span class="s2">"target_plan_ts"</span><span class="p">:</span> <span class="n">stop</span><span class="o">.</span><span class="n">plan_ts</span><span class="p">,</span> <span class="s2">"target_stop_key"</span><span class="p">:</span> <span class="n">stop</span><span class="o">.</span><span class="n">stop_key</span><span class="p">,</span>
+            <span class="s2">"segment"</span><span class="p">:</span> <span class="n">seg</span><span class="p">,</span> <span class="s2">"dwell_s"</span><span class="p">:</span> <span class="n">dwell</span><span class="p">,</span> <span class="s2">"telemetry_age_s"</span><span class="p">:</span> <span class="n">telemetry_age</span><span class="p">,</span>
+            <span class="s2">"causes"</span><span class="p">:</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">causes</span><span class="p">[:</span><span class="mi">3</span><span class="p">]],</span>
+            <span class="s2">"features"</span><span class="p">:</span> <span class="n">pred</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"features"</span><span class="p">,</span> <span class="p">{}),</span>
+            <span class="s2">"explanation"</span><span class="p">:</span> <span class="n">pred</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"explanation"</span><span class="p">),</span>  <span class="c1"># SHAP-вклады паттернов (ML-сервис)</span>
+        <span class="p">}</span>
+        <span class="c1"># трейл для графика и отложенная оценка точности (1 прогноз на минуту данных)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">st</span><span class="o">.</span><span class="n">pred_trail</span> <span class="ow">or</span> <span class="n">T</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">pred_trail</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">30</span><span class="p">:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">pred_trail</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">cur_dev</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">p_late</span><span class="p">))</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">pending_eval</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">lst</span> <span class="ow">or</span> <span class="n">T</span> <span class="o">-</span> <span class="n">lst</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cur_dev</span><span class="p">))</span>
+
+    <span class="c1"># ============================================================ status</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wall</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Отслеживает переходы связи и ML и пишет их в журнал событий (только при смене состояния)."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_packet_wall</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="s2">"waiting"</span>
+        <span class="k">elif</span> <span class="n">wall</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_packet_wall</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">link_timeout_s</span><span class="p">:</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="s2">"online"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="s2">"lost"</span>
+        <span class="k">if</span> <span class="n">link</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_state</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">link</span> <span class="o">==</span> <span class="s2">"lost"</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"error"</span><span class="p">,</span> <span class="s2">"Потеряна связь с источником телематики — работа по последнему "</span>
+                                     <span class="s2">"известному состоянию и историческим данным"</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">link</span> <span class="o">==</span> <span class="s2">"online"</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_state</span> <span class="o">==</span> <span class="s2">"lost"</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"info"</span><span class="p">,</span> <span class="s2">"Связь с источником телематики восстановлена"</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">link</span> <span class="o">==</span> <span class="s2">"online"</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"info"</span><span class="p">,</span> <span class="s2">"Поток телематики NDTP подключён"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_link_state</span> <span class="o">=</span> <span class="n">link</span>
+        <span class="n">ml_ok</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">available</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">breaker_open</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ml_state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ml_ok</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">failures</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>  <span class="c1"># ML ещё ни разу не вызывался — не шумим в журнале при старте</span>
+        <span class="k">if</span> <span class="n">ml_ok</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ml_state</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ml_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">ml_ok</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"info"</span> <span class="k">if</span> <span class="n">ml_ok</span> <span class="k">else</span> <span class="s2">"error"</span><span class="p">,</span>
+                            <span class="s2">"ML-сервис доступен"</span> <span class="k">if</span> <span class="n">ml_ok</span> <span class="k">else</span> <span class="s2">"ML-сервис недоступен — прогноз по baseline (текущее отклонение)"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ml_state</span> <span class="o">=</span> <span class="n">ml_ok</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">appendleft</span><span class="p">({</span><span class="s2">"wall"</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span> <span class="s2">"level"</span><span class="p">:</span> <span class="n">level</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">:</span> <span class="n">text</span><span class="p">})</span>
+        <span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span> <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"error"</span> <span class="k">else</span> <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">)(</span><span class="n">text</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Engine.status">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.status">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Режим работы системы.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: ``mode`` (online | waiting | degraded), ``reasons``, ``link``, доступность ML,</span>
+<span class="sd">            темп часов данных и время хода без пакетов.</span>
+<span class="sd">        """</span>
+        <span class="n">wall</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">reasons</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_state</span> <span class="o">==</span> <span class="s2">"lost"</span><span class="p">:</span>
+            <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Нет связи с телематикой: прогноз по последнему известному состоянию и истории"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_state</span> <span class="o">==</span> <span class="s2">"waiting"</span><span class="p">:</span>
+            <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Ожидание потока телематики NDTP"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ml_state</span><span class="p">:</span>
+            <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"ML-сервис недоступен: прогноз = текущее отклонение (baseline)"</span><span class="p">)</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="s2">"online"</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">reasons</span> <span class="k">else</span> <span class="p">(</span><span class="s2">"waiting"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_state</span> <span class="o">==</span> <span class="s2">"waiting"</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ml_state</span> <span class="k">else</span> <span class="s2">"degraded"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"mode"</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span> <span class="s2">"reasons"</span><span class="p">:</span> <span class="n">reasons</span><span class="p">,</span> <span class="s2">"link"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_state</span><span class="p">,</span>
+            <span class="s2">"last_packet_age_s"</span><span class="p">:</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_packet_wall</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">round</span><span class="p">(</span><span class="n">wall</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_packet_wall</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s2">"ml_available"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ml_state</span><span class="p">),</span> <span class="s2">"ml_breaker_open"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">breaker_open</span><span class="p">,</span>
+            <span class="s2">"ml_last_error"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">last_error</span><span class="p">,</span>
+            <span class="s2">"clock_rate"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">rate</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">"clock_freerun_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">freerun_s</span><span class="p">(</span><span class="n">wall</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">}</span></div>
+
+
+    <span class="c1"># ============================================================ incidents</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_incidents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Открывает инцидент при жёлтом/красном риске, закрывает после 2 мин в зелёной зоне."""</span>
+        <span class="n">active</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">prediction</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"status"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"ok"</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="p">)</span>  <span class="c1"># один открытый инцидент на ТС: новый эпизод не плодит дубликаты</span>
+            <span class="n">inc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">incidents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"red"</span><span class="p">,</span> <span class="s2">"yellow"</span><span class="p">):</span>
+                <span class="n">active</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">inc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">inc</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"key"</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span> <span class="s2">"tr_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="p">,</span> <span class="s2">"unit_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">unit_id</span><span class="p">,</span>
+                           <span class="s2">"opened_T"</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="s2">"opened_wall"</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span> <span class="s2">"peak_delay_s"</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s2">"predicted_delay_s"</span><span class="p">],</span>
+                           <span class="s2">"peak_level"</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]}</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">incidents</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">inc</span>
+                    <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"red"</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"warn"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"ТС </span><span class="si">{</span><span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="si">}</span><span class="s2">: прогноз опоздания </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">'predicted_delay_s'</span><span class="p">])</span><span class="si">}</span><span class="s2"> с — </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="s1">'causes'</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">'title'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">inc</span><span class="p">[</span><span class="s2">"green_since"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">inc</span><span class="p">[</span><span class="s2">"peak_delay_s"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="s2">"peak_delay_s"</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="s2">"predicted_delay_s"</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">LEVEL_ORDER</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">LEVEL_ORDER</span><span class="p">[</span><span class="n">inc</span><span class="p">[</span><span class="s2">"peak_level"</span><span class="p">]]:</span>
+                    <span class="n">inc</span><span class="p">[</span><span class="s2">"peak_level"</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">inc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># гистерезис: закрываем после 2 мин (время данных) в «зелёной» зоне</span>
+                <span class="n">inc</span><span class="p">[</span><span class="s2">"green_since"</span><span class="p">]</span> <span class="o">=</span> <span class="n">inc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"green_since"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">T</span>
+                <span class="k">if</span> <span class="n">T</span> <span class="o">-</span> <span class="n">inc</span><span class="p">[</span><span class="s2">"green_since"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">120</span><span class="p">:</span>
+                    <span class="n">inc</span><span class="p">[</span><span class="s2">"closed_T"</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resolved</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_incident_view</span><span class="p">(</span><span class="n">inc</span><span class="p">,</span> <span class="n">st</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">incidents</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">acked</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="s2">"id"</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">active</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_incident_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">st</span><span class="p">:</span> <span class="n">VehicleState</span><span class="p">,</span> <span class="n">final</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">prediction</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"segment"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"id"</span><span class="p">:</span> <span class="n">inc</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span> <span class="s2">"tr_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="p">,</span> <span class="s2">"unit_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">unit_id</span><span class="p">,</span>
+            <span class="s2">"route_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">route_id</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"level"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"level"</span><span class="p">,</span> <span class="s2">"gray"</span><span class="p">),</span> <span class="s2">"peak_level"</span><span class="p">:</span> <span class="n">inc</span><span class="p">[</span><span class="s2">"peak_level"</span><span class="p">],</span>
+            <span class="s2">"predicted_delay_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"predicted_delay_s"</span><span class="p">)),</span> <span class="s2">"peak_delay_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="s2">"peak_delay_s"</span><span class="p">]),</span>
+            <span class="s2">"p_late"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"p_late"</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span> <span class="s2">"cur_dev_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"cur_dev_s"</span><span class="p">)),</span>
+            <span class="s2">"source"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"source"</span><span class="p">),</span>
+            <span class="s2">"target"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"stop_id"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target_stop_id"</span><span class="p">),</span> <span class="s2">"address"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target_address"</span><span class="p">),</span>
+                       <span class="s2">"plan"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target_plan_ts"</span><span class="p">)),</span>
+                       <span class="s2">"eta"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target_plan_ts"</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"predicted_delay_s"</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">))</span>
+                       <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target_plan_ts"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">"segment"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"from"</span><span class="p">:</span> <span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"from"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"address"</span><span class="p">),</span> <span class="s2">"to"</span><span class="p">:</span> <span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"to"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"address"</span><span class="p">),</span>
+                        <span class="s2">"avg_speed_kmh"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"avg_speed_kmh"</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="s2">"plan_speed_kmh"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"plan_speed_kmh"</span><span class="p">),</span> <span class="mi">1</span><span class="p">)},</span>
+            <span class="s2">"causes"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"causes"</span><span class="p">,</span> <span class="p">[]),</span>
+            <span class="s2">"explanation"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"explanation"</span><span class="p">),</span>
+            <span class="s2">"dwell_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"dwell_s"</span><span class="p">)),</span> <span class="s2">"telemetry_age_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"telemetry_age_s"</span><span class="p">)),</span>
+            <span class="s2">"lon"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="s2">"lat"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span>
+            <span class="s2">"opened"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="s2">"opened_T"</span><span class="p">]),</span> <span class="s2">"opened_T"</span><span class="p">:</span> <span class="n">inc</span><span class="p">[</span><span class="s2">"opened_T"</span><span class="p">],</span>
+            <span class="s2">"closed"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">inc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"closed_T"</span><span class="p">))</span> <span class="k">if</span> <span class="n">final</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"acknowledged"</span><span class="p">:</span> <span class="n">inc</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">acked</span><span class="p">,</span>
+            <span class="s2">"recovering"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">inc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"green_since"</span><span class="p">)),</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="Engine.acknowledge">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.acknowledge">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">acknowledge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">incident_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Отмечает инцидент принятым в работу.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            incident_id: ID инцидента.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: ``False`` — нет открытого инцидента с таким ID.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">inc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">incidents</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">inc</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span> <span class="o">==</span> <span class="n">incident_id</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">acked</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">incident_id</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"info"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Инцидент ТС </span><span class="si">{</span><span class="n">inc</span><span class="p">[</span><span class="s1">'tr_id'</span><span class="p">]</span><span class="si">}</span><span class="s2"> принят в работу диспетчером"</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+    <span class="c1"># ============================================================ snapshot</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_local</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""unix-с → «ЧЧ:ММ:СС» в часовом поясе отображения (МСК)."""</span>
+        <span class="k">if</span> <span class="n">ts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tz</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%H:%M:%S"</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Engine.vehicle_view">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.vehicle_view">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vehicle_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">st</span><span class="p">:</span> <span class="n">VehicleState</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Компактное представление ТС для карты и списков (попадает в снимок на каждом цикле)."""</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">prediction</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">stale</span> <span class="o">=</span> <span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">last_ts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">vehicle_stale_s</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">last_ts</span> <span class="k">else</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="s2">"gray"</span>
+        <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"status"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"ok"</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="s2">"gray"</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="s2">"stale"</span> <span class="k">if</span> <span class="n">stale</span> <span class="k">else</span> <span class="p">(</span><span class="s2">"no_gps"</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">st</span><span class="o">.</span><span class="n">location_valid</span> <span class="k">else</span>
+                                       <span class="p">(</span><span class="s2">"standing"</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">speed</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">standing_speed_kmh</span> <span class="k">else</span> <span class="s2">"moving"</span><span class="p">))</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"segment"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">eta</span><span class="p">:</span> <span class="n">EtaResult</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">eta</span>
+        <span class="n">rn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">route_names</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">tr_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="c1"># «призрак» — расчётное положение без связи; дашборд рисует его пунктиром</span>
+        <span class="n">ghost</span> <span class="o">=</span> <span class="n">eta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">eta</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"dead_reckoning"</span> <span class="ow">and</span> <span class="n">eta</span><span class="o">.</span><span class="n">est_lat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"unit_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">unit_id</span><span class="p">,</span> <span class="s2">"tr_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">tr_id</span><span class="p">,</span>
+            <span class="s2">"route_id"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">route_id</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"route_ref"</span><span class="p">:</span> <span class="n">rn</span><span class="p">[</span><span class="s2">"ref"</span><span class="p">]</span> <span class="k">if</span> <span class="n">rn</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"eta_mode"</span><span class="p">:</span> <span class="n">eta</span><span class="o">.</span><span class="n">mode</span> <span class="k">if</span> <span class="n">eta</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"est_lat"</span><span class="p">:</span> <span class="n">eta</span><span class="o">.</span><span class="n">est_lat</span> <span class="k">if</span> <span class="n">ghost</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"est_lon"</span><span class="p">:</span> <span class="n">eta</span><span class="o">.</span><span class="n">est_lon</span> <span class="k">if</span> <span class="n">ghost</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"next_stops"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"address"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="s2">"eta"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">eta_ts</span><span class="p">),</span> <span class="s2">"delay_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">delay_s</span><span class="p">)}</span>
+                           <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="p">(</span><span class="n">eta</span><span class="o">.</span><span class="n">stops</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">eta</span> <span class="k">else</span> <span class="p">[])],</span>
+            <span class="s2">"scheduled"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"lon"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="s2">"lat"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="s2">"heading"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">heading</span><span class="p">,</span> <span class="s2">"speed"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s2">"state"</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span> <span class="s2">"level"</span><span class="p">:</span> <span class="n">level</span><span class="p">,</span> <span class="s2">"stale"</span><span class="p">:</span> <span class="n">stale</span><span class="p">,</span>
+            <span class="s2">"last_seen"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">last_ts</span><span class="p">)</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">last_ts</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"age_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">last_ts</span><span class="p">)</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">last_ts</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"predicted_delay_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"predicted_delay_s"</span><span class="p">)),</span> <span class="s2">"p_late"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"p_late"</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="s2">"cur_dev_s"</span><span class="p">:</span> <span class="n">_r</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"cur_dev_s"</span><span class="p">)),</span> <span class="s2">"source"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"source"</span><span class="p">),</span>
+            <span class="s2">"cause"</span><span class="p">:</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"causes"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[{}])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"status"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"ok"</span> <span class="ow">and</span> <span class="n">level</span> <span class="o">!=</span> <span class="s2">"green"</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"target_address"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target_address"</span><span class="p">),</span> <span class="s2">"target_plan"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target_plan_ts"</span><span class="p">)),</span>
+            <span class="s2">"seg_from"</span><span class="p">:</span> <span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"from"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"address"</span><span class="p">),</span> <span class="s2">"seg_to"</span><span class="p">:</span> <span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"to"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"address"</span><span class="p">),</span>
+            <span class="s2">"no_target"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"status"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"no_target"</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="Engine.vehicle_detail">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.vehicle_detail">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vehicle_detail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Карточка ТС: прогноз с объяснением, признаки модели, трейл, прибытия, путь, ETA, статистика.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key: unit_id или tr_id.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict | None: ``None`` — ТС не найдено.</span>
+<span class="sd">        """</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">next</span><span class="p">((</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">tr_id</span> <span class="o">==</span> <span class="n">key</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">st</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">prediction</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">vehicle_view</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">T</span><span class="p">),</span>
+            <span class="s2">"prediction"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"features"</span><span class="p">,)},</span>
+            <span class="s2">"features"</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"features"</span><span class="p">,</span> <span class="p">{}),</span>
+            <span class="s2">"trail"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"t"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="s2">"cur_dev_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">"predicted_delay_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">pr</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                       <span class="s2">"p_late"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">pl</span><span class="p">,</span> <span class="mi">3</span><span class="p">)}</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">pl</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">pred_trail</span><span class="p">],</span>
+            <span class="s2">"arrivals"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"stop"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="s2">"plan"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">plan_ts</span><span class="p">),</span>
+                          <span class="s2">"fact"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">fact_ts</span><span class="p">),</span> <span class="s2">"delay_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">delay_s</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span>
+                         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">arrivals</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">idx</span><span class="p">)[</span><span class="o">-</span><span class="mi">12</span><span class="p">:]</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">detected</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="k">else</span> <span class="p">[],</span>
+            <span class="s2">"upcoming"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_upcoming_path</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">T</span><span class="p">),</span>
+            <span class="s2">"eta"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta_view</span><span class="p">(</span><span class="n">st</span><span class="p">),</span>
+            <span class="s2">"stats"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"packets"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">packets</span><span class="p">,</span> <span class="s2">"arrivals_detected"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">arrivals_detected</span><span class="p">,</span>
+                      <span class="s2">"arrivals_skipped"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">arrivals_skipped</span><span class="p">,</span> <span class="s2">"gps_fail_streak"</span><span class="p">:</span> <span class="n">st</span><span class="o">.</span><span class="n">gps_fail_streak</span><span class="p">},</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="Engine.export_trips">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.export_trips">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_trips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tr</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Рейсы ТС (для GTFS): кэш разбиения графика по межрейсовым отстоям."""</span>
+        <span class="n">cache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"_trips_cache"</span><span class="p">,</span> <span class="p">{})</span>  <span class="c1"># расписание статично — считаем один раз</span>
+        <span class="k">if</span> <span class="n">tr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.export</span><span class="w"> </span><span class="kn">import</span> <span class="n">trips_of</span>
+            <span class="n">cache</span><span class="p">[</span><span class="n">tr</span><span class="p">]</span> <span class="o">=</span> <span class="n">trips_of</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">schedules</span><span class="p">[</span><span class="n">tr</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">tr</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Engine.future_frames">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.future_frames">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">future_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minutes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">step_s</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Прогнозные кадры таймлайна: положение ТС по ETA на T+step … T+minutes."""</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">minutes</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">//</span> <span class="n">step_s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">T</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">step_s</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">eta</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">st</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">stops</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">position_at</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">nxt</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">st</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">stops</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">eta_ts</span> <span class="o">&gt;=</span> <span class="n">t</span><span class="p">),</span> <span class="n">st</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">nxt</span><span class="o">.</span><span class="n">delay_s</span>
+                <span class="n">lvl</span> <span class="o">=</span> <span class="s2">"red"</span> <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">red_threshold_s</span> <span class="k">else</span> <span class="s2">"yellow"</span> <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">late_threshold_s</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">early_threshold_s</span> <span class="k">else</span> <span class="s2">"green"</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">st</span><span class="o">.</span><span class="n">unit_id</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lvl</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"T"</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="s2">"t"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="s2">"v"</span><span class="p">:</span> <span class="n">v</span><span class="p">,</span> <span class="s2">"future"</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">frames</span></div>
+
+
+<div class="viewcode-block" id="Engine.eta_view">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.eta_view">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eta_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">st</span><span class="p">:</span> <span class="n">VehicleState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""ETA ТС в JSON-виде (время в МСК); ``None`` — ETA ещё не посчитан."""</span>
+        <span class="n">e</span><span class="p">:</span> <span class="n">EtaResult</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">eta</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"mode"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="s2">"pace"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">pace</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="s2">"est_lat"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">est_lat</span><span class="p">,</span> <span class="s2">"est_lon"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">est_lon</span><span class="p">,</span>
+            <span class="s2">"stops"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"idx"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">idx</span><span class="p">,</span> <span class="s2">"stop_id"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">stop_id</span><span class="p">,</span> <span class="s2">"address"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+                       <span class="s2">"plan"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">plan_ts</span><span class="p">),</span> <span class="s2">"eta"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">eta_ts</span><span class="p">),</span>
+                       <span class="s2">"eta_ts"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">eta_ts</span><span class="p">,</span> <span class="s2">"delay_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">delay_s</span><span class="p">),</span> <span class="s2">"sigma_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">sigma_s</span><span class="p">),</span>
+                       <span class="s2">"skipped"</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">skipped</span><span class="p">}</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">stops</span><span class="p">],</span>
+        <span class="p">}</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_upcoming_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">st</span><span class="p">:</span> <span class="n">VehicleState</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Путь по дорогам от ТС до целевой остановки прогноза (подсветка на карте)."""</span>
+        <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">st</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">prediction</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">stops</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">stops</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stops</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target_idx"</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">+</span> <span class="mi">8</span><span class="p">))</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="p">[[</span><span class="n">st</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">lon</span><span class="p">]]</span> <span class="k">if</span> <span class="n">st</span><span class="o">.</span><span class="n">lat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">next_idx</span><span class="p">),</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">polyline</span><span class="p">(</span><span class="n">stops</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">stops</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">coords</span>
+        <span class="k">return</span> <span class="n">path</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_segment_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Уровни риска участков сети: путь каждого ТС от текущего сегмента до целевой остановки."""</span>
+        <span class="n">levels</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">prediction</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"status"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"ok"</span> <span class="ow">or</span> <span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"green"</span> <span class="ow">or</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">stops</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span><span class="o">.</span><span class="n">stops</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">st</span><span class="o">.</span><span class="n">next_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stops</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="s2">"target_idx"</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">stops</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">stop_key</span> <span class="o">==</span> <span class="n">stops</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">stop_key</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">sid</span> <span class="o">=</span> <span class="n">seg_id</span><span class="p">(</span><span class="n">stops</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">stop_key</span><span class="p">,</span> <span class="n">stops</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">stop_key</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">sid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">segments</span> <span class="ow">and</span> <span class="n">LEVEL_ORDER</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">LEVEL_ORDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">levels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="s2">"gray"</span><span class="p">),</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">levels</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">levels</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_record_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">vehicles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Кадр таймлайна: компактное состояние всех ТС раз в timeline_step_s секунд данных."""</span>
+        <span class="k">if</span> <span class="n">T</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_frame_T</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">timeline_step_s</span> <span class="ow">and</span> <span class="n">T</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_frame_T</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">T</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_frame_T</span> <span class="o">-</span> <span class="mi">3600</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timeline</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>              <span class="c1"># перезапуск источника — история другого времени</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_frame_T</span> <span class="o">=</span> <span class="n">T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeline</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">"T"</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="s2">"t"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">T</span><span class="p">),</span>
+            <span class="s2">"v"</span><span class="p">:</span> <span class="p">[[</span><span class="n">v</span><span class="p">[</span><span class="s2">"unit_id"</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="s2">"lon"</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="s2">"predicted_delay_s"</span><span class="p">],</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">"stale"</span><span class="p">]</span> <span class="k">else</span> <span class="mi">0</span><span class="p">]</span>
+                  <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vehicles</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">],</span>
+            <span class="s2">"inc"</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="s2">"tr_id"</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">incidents</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span>
+            <span class="s2">"mode"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">()[</span><span class="s2">"mode"</span><span class="p">],</span>
+        <span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_snapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">wall</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Собирает снимок для дашборда: KPI, ТС, инциденты, риск маршрутов и участков, журнал, метрики."""</span>
+        <span class="n">vehicles</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vehicle_view</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="n">vehicles</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">LEVEL_ORDER</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]],</span> <span class="o">-</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">"predicted_delay_s"</span><span class="p">]</span> <span class="ow">or</span> <span class="o">-</span><span class="mf">1e9</span><span class="p">)))</span>
+        <span class="n">incidents</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">inc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">incidents</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">tr_id</span> <span class="o">==</span> <span class="n">inc</span><span class="p">[</span><span class="s2">"tr_id"</span><span class="p">]),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">st</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">incidents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_incident_view</span><span class="p">(</span><span class="n">inc</span><span class="p">,</span> <span class="n">st</span><span class="p">))</span>
+        <span class="c1"># непринятые и красные — наверх: диспетчер видит главное без прокрутки</span>
+        <span class="n">incidents</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">"acknowledged"</span><span class="p">],</span> <span class="o">-</span><span class="n">LEVEL_ORDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">"level"</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">"predicted_delay_s"</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segment_levels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_segment_levels</span><span class="p">()</span>
+
+        <span class="n">routes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vehicles</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="p">[</span><span class="s2">"route_id"</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">routes</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">"route_id"</span><span class="p">],</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s2">"route_id"</span><span class="p">],</span> <span class="s2">"vehicles"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"red"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"yellow"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                                  <span class="s2">"green"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"level"</span><span class="p">:</span> <span class="s2">"gray"</span><span class="p">})</span>
+            <span class="n">r</span><span class="p">[</span><span class="s2">"vehicles"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"red"</span><span class="p">,</span> <span class="s2">"yellow"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">):</span>
+                <span class="n">r</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">LEVEL_ORDER</span><span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">LEVEL_ORDER</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]]:</span>
+                    <span class="n">r</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span>
+
+        <span class="n">counts</span> <span class="o">=</span> <span class="p">{</span><span class="n">lvl</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vehicles</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span> <span class="o">==</span> <span class="n">lvl</span><span class="p">)</span> <span class="k">for</span> <span class="n">lvl</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"red"</span><span class="p">,</span> <span class="s2">"yellow"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">,</span> <span class="s2">"gray"</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snapshot</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"snapshot"</span><span class="p">,</span>
+            <span class="s2">"wall"</span><span class="p">:</span> <span class="n">wall</span><span class="p">,</span>
+            <span class="s2">"data_time_utc"</span><span class="p">:</span> <span class="n">fmt_utc</span><span class="p">(</span><span class="n">T</span><span class="p">)[:</span><span class="mi">19</span><span class="p">],</span>
+            <span class="s2">"data_time_local"</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tz</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"</span><span class="si">%d</span><span class="s2">.%m.%Y %H:%M:%S"</span><span class="p">),</span>
+            <span class="s2">"status"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">(),</span>
+            <span class="s2">"kpi"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"vehicles_total"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">vehicles</span><span class="p">),</span>
+                <span class="s2">"scheduled"</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vehicles</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">"scheduled"</span><span class="p">]),</span>
+                <span class="s2">"stale"</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vehicles</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">"stale"</span><span class="p">]),</span>
+                <span class="s2">"no_target"</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vehicles</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">"no_target"</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">v</span><span class="p">[</span><span class="s2">"stale"</span><span class="p">]),</span>
+                <span class="o">**</span><span class="n">counts</span><span class="p">,</span>
+                <span class="s2">"incidents_open"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">incidents</span><span class="p">),</span>
+                <span class="s2">"incidents_unacked"</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">incidents</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="p">[</span><span class="s2">"acknowledged"</span><span class="p">]),</span>
+            <span class="p">},</span>
+            <span class="s2">"vehicles"</span><span class="p">:</span> <span class="n">vehicles</span><span class="p">,</span>
+            <span class="s2">"incidents"</span><span class="p">:</span> <span class="n">incidents</span><span class="p">,</span>
+            <span class="s2">"resolved"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resolved</span><span class="p">)[:</span><span class="mi">15</span><span class="p">],</span>
+            <span class="s2">"routes"</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">routes</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">LEVEL_ORDER</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]],</span> <span class="n">r</span><span class="p">[</span><span class="s2">"id"</span><span class="p">])),</span>
+            <span class="s2">"segments"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">segment_levels</span><span class="p">,</span>
+            <span class="s2">"events"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"time"</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s2">"wall"</span><span class="p">],</span> <span class="n">tz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tz</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%H:%M:%S"</span><span class="p">),</span>
+                        <span class="s2">"level"</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s2">"level"</span><span class="p">],</span> <span class="s2">"text"</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]}</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">)[:</span><span class="mi">12</span><span class="p">]],</span>
+            <span class="s2">"perf"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_brief</span><span class="p">(),</span>
+            <span class="s2">"live_scenarios"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">live_scenarios</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_record_frame</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">vehicles</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Engine.perf_brief">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.perf_brief">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">perf_brief</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Краткие метрики для панели «Производительность» дашборда."""</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"packets_per_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">rate</span><span class="p">(),</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="s2">"ml_p95_ms"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">latency</span><span class="o">.</span><span class="n">summary</span><span class="p">()[</span><span class="s2">"p95"</span><span class="p">],</span>
+            <span class="s2">"e2e_p95_ms"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">e2e_ms</span><span class="o">.</span><span class="n">summary</span><span class="p">()[</span><span class="s2">"p95"</span><span class="p">],</span>
+            <span class="s2">"cycle_p95_ms"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_ms</span><span class="o">.</span><span class="n">summary</span><span class="p">()[</span><span class="s2">"p95"</span><span class="p">],</span>
+            <span class="s2">"accuracy"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(),</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="Engine.accuracy">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.accuracy">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">accuracy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Онлайн-MAE модели и baseline по фактическим прибытиям на целевые остановки.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: ``n``, ``mae_model_s``, ``mae_baseline_s`` (``None``, пока нет прибытий).</span>
+<span class="sd">        """</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc_model</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"mae_model_s"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"mae_baseline_s"</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span> <span class="s2">"mae_model_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc_model</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="s2">"mae_baseline_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc_base</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span></div>
+
+
+<div class="viewcode-block" id="Engine.metrics">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.metrics">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Полные метрики: приём, цикл прогноза, задержки ML и «пакет → прогноз», онлайн-точность, статус."""</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"ingest"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"packets_total"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">total</span><span class="p">,</span> <span class="s2">"packets_per_s"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">packets</span><span class="o">.</span><span class="n">rate</span><span class="p">(),</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="s2">"frames_total"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames_total</span><span class="p">,</span> <span class="s2">"handshakes"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">handshakes</span><span class="p">,</span>
+                <span class="s2">"history_packets"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">history_packets</span><span class="p">,</span> <span class="s2">"unknown_units"</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unknown_units</span><span class="p">),</span>
+                <span class="s2">"processing_us"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingest_us</span><span class="o">.</span><span class="n">summary</span><span class="p">(),</span>
+            <span class="p">},</span>
+            <span class="s2">"prediction"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"cycles"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycles</span><span class="p">,</span> <span class="s2">"cycle_overruns"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_overruns</span><span class="p">,</span>
+                <span class="s2">"cycle_ms"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_ms</span><span class="o">.</span><span class="n">summary</span><span class="p">(),</span>
+                <span class="s2">"predictions_total"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">predictions_total</span><span class="p">,</span>
+                <span class="s2">"fallback_predictions"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">fallback_predictions</span><span class="p">,</span>
+                <span class="s2">"ml_request_ms"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">latency</span><span class="o">.</span><span class="n">summary</span><span class="p">(),</span>
+                <span class="s2">"e2e_packet_to_prediction_ms"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">e2e_ms</span><span class="o">.</span><span class="n">summary</span><span class="p">(),</span>
+            <span class="p">},</span>
+            <span class="s2">"accuracy_online"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(),</span>
+            <span class="s2">"status"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">(),</span>
+        <span class="p">}</span></div>
+
+
+    <span class="c1"># ============================================================ pub/sub</span>
+<div class="viewcode-block" id="Engine.subscribe">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.subscribe">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Подписка WebSocket-клиента на снимки.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            asyncio.Queue: Очередь длиной 2 — память не растёт при медленном клиенте.</span>
+<span class="sd">        """</span>
+        <span class="n">q</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">q</span></div>
+
+
+<div class="viewcode-block" id="Engine.unsubscribe">
+<a class="viewcode-back" href="../../backend.html#app.engine.Engine.unsubscribe">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Отписка клиента (при закрытии WebSocket)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">q</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_broadcast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span><span class="p">):</span>
+            <span class="c1"># медленный клиент не копит очередь: держим только самый свежий снимок</span>
+            <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">full</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">q</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">QueueEmpty</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">snapshot</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_r</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">nd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Округление с пропуском ``None`` (JSON снимка компактнее без лишних знаков)."""</span>
+    <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">nd</span><span class="p">)</span> <span class="k">if</span> <span class="n">nd</span> <span class="k">else</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=9ca2116e"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/translations.js?v=cd1d70c9"></script>
+    </body>
+</html>

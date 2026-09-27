@@ -1,12 +1,12 @@
-"""Состояние ТС: наложение телеметрии на нитку графика и производные признаки.
+"""Состояние ТС: наложение телеметрии на нитку графика (map matching) и производные признаки.
 
-* Детекция фактического прибытия на остановку — геозона `stop_radius_m` вокруг точки остановки,
-  последовательное сопоставление по порядку расписания (окно lookahead), чтобы кольцевые
-  маршруты и остановки встречного направления не давали ложных срабатываний.
-* Текущее отклонение (cur_dev_s) — по определению разметки: задержка на последней остановке,
-  плановое время которой ≤ T. Если ТС до неё ещё не доехало — нижняя оценка (T − план).
-* Производные признаки для диспетчера: средняя скорость на сегменте, плановая скорость сегмента,
-  время простоя, возраст телеметрии, серия сбоев GPS, тренд отклонения.
+* Фактическое прибытие — геозона ``stop_radius_m`` вокруг остановки. Проверяется и точка, и отрезок
+  трека между пакетами. Сопоставление идёт по порядку расписания в окне lookahead, поэтому кольцевые
+  маршруты и остановки встречного направления не дают ложных срабатываний.
+* Текущее отклонение ``cur_dev_s`` — задержка на последней остановке с планом ≤ T (как в разметке).
+  Если ТС до неё ещё не доехало, берётся последнее детектированное отклонение (``CUR_DEV_MODE``).
+* Производные признаки: средняя и плановая скорость на сегменте, время простоя, возраст телеметрии,
+  серия сбоев GPS, тренд отклонения.
 """
 from __future__ import annotations
 
@@ -22,37 +22,56 @@ from .reference import VehicleSchedule
 
 
 def fmt_utc(ts: float) -> str:
+    """unix-с → строка времени в формате traffic.csv (ML-ядро парсит именно его)."""
     return datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")
 
 
 @dataclass(slots=True)
 class Arrival:
+    """Прибытие на остановку.
+
+    Attributes:
+        idx: Индекс остановки в нитке графика.
+        fact_ts: Фактическое (или оценочное) время, unix-с.
+        delay_s: Отклонение от плана, с.
+        detected: ``False`` — остановка пропущена детектором (нет GPS в геозоне), отклонение перенесено.
+    """
+
     idx: int
     fact_ts: float
     delay_s: float
-    detected: bool = True     # False — остановка пропущена детектором (нет GPS в геозоне)
+    detected: bool = True
 
 
 @dataclass
 class VehicleState:
+    """Живое состояние одного ТС (по одному на терминал).
+
+    Args:
+        unit_id: Терминал (NDTP peerAddress).
+        tr_id: ТС; ``None`` — терминал без наряда.
+        schedule: Нитка графика; ``None`` — ТС без расписания (серое на карте).
+        cfg: Настройки.
+    """
+
     unit_id: int
     tr_id: int | None
     schedule: VehicleSchedule | None
     cfg: Settings
 
     # последняя телеметрия
-    last_ts: float = 0.0                 # event_time последнего пакета (data-time)
-    last_rx_wall: float = 0.0            # когда пакет получен (wall-clock, для контроля связи)
+    last_ts: float = 0.0                 # event_time последнего пакета (время данных)
+    last_rx_wall: float = 0.0            # время приёма (wall-clock) — для контроля связи
     lon: float | None = None
     lat: float | None = None
-    pos_ts: float = 0.0                  # время последней валидной координаты
+    pos_ts: float = 0.0                  # время последней валидной координаты (для dead reckoning)
     speed: float = 0.0
     heading: float = 0.0
     location_valid: bool = False
     gps_fail_streak: int = 0
     packets: int = 0
 
-    history: deque = field(default_factory=lambda: deque(maxlen=40))   # сырые строки для ML
+    history: deque = field(default_factory=lambda: deque(maxlen=40))   # сырые строки для ML (с запасом к ml_history_rows)
 
     # нитка графика
     next_idx: int = 0
@@ -75,11 +94,12 @@ class VehicleState:
     # прогноз
     prediction: dict | None = None
     pred_trail: deque = field(default_factory=lambda: deque(maxlen=180))
-    pending_eval: dict[int, list[tuple[float, float, float]]] = field(default_factory=dict)
-    dirty: bool = True
+    pending_eval: dict[int, list[tuple[float, float, float]]] = field(default_factory=dict)  # для онлайн-MAE по факту прибытия
+    dirty: bool = True  # пришли новые данные → ТС попадёт в ближайший батч ML
 
     # ------------------------------------------------------------------ ingest
     def reset_schedule_state(self) -> None:
+        """Сбрасывает привязку к нитке графика (перезапуск реплея)."""
         self.next_idx = 0
         self.initialized = False
         self.arrivals.clear()
@@ -97,7 +117,22 @@ class VehicleState:
     def ingest(self, ts: float, lon: float | None, lat: float | None, valid: bool,
                speed: float, heading: float, alt: float, is_hist: bool,
                rx_wall: float | None = None) -> list[Arrival]:
-        """Применяет пакет телеметрии. Возвращает список новых прибытий на остановки."""
+        """Применяет пакет телеметрии.
+
+        Args:
+            ts: Время пакета (время данных), unix-с.
+            lon: Долгота или ``None``.
+            lat: Широта или ``None``.
+            valid: Флаг достоверности координат (бит 7 Nav00).
+            speed: Скорость, км/ч.
+            heading: Курс, градусы.
+            alt: Высота, м.
+            is_hist: Пакет из «чёрного ящика» (передан после восстановления связи).
+            rx_wall: Время приёма (wall-clock).
+
+        Returns:
+            list[Arrival]: Новые детектированные прибытия (0 или 1).
+        """
         rx_wall = rx_wall or time.time()
         # скачок времени назад > 1 ч (перезапуск реплея/эмулятора) → начинаем нитку заново
         if self.last_ts and ts < self.last_ts - 3600:
@@ -108,6 +143,7 @@ class VehicleState:
         self.dirty = True
 
         has_pos = valid and lon is not None and lat is not None
+        # в ML уходит и невалидный пакет: признак gps_failure считается ML-ядром по location_valid
         self.history.append({
             "tr_id": self.tr_id if self.tr_id is not None else 0,
             "unit_id": self.unit_id,
@@ -121,7 +157,7 @@ class VehicleState:
             "is_hist_data": is_hist,
         })
 
-        if ts < self.last_ts:            # опоздавший (исторический) пакет — только в историю
+        if ts < self.last_ts:            # опоздавший (исторический) пакет — только в историю, положение не откатываем
             return []
         prev_lon, prev_lat, prev_pos_ts = self.lon, self.lat, self.pos_ts
         self.last_ts = ts
@@ -129,14 +165,14 @@ class VehicleState:
         if not has_pos:
             self.gps_fail_streak += 1
             self.location_valid = False
-            return []
+            return []  # положение остаётся последним валидным
 
         self.gps_fail_streak = 0
         self.location_valid = True
         self.lon, self.lat, self.pos_ts = lon, lat, ts
         self.speed, self.heading = speed, heading
 
-        # простой
+        # простой: считаем от первого пакета со скоростью ниже порога
         if speed < self.cfg.standing_speed_kmh:
             if self.standing_since is None:
                 self.standing_since = ts
@@ -157,13 +193,14 @@ class VehicleState:
     # ------------------------------------------------------ schedule matching
     def _match_schedule(self, ts: float, lon: float, lat: float,
                         prev: tuple[float, float, float] | None = None) -> list[Arrival]:
+        """Ищет прохождение ближайших по графику остановок; первая найденная — прибытие."""
         sch = self.schedule
         if sch is None or not sch.stops:
             return []
         stops = sch.stops
         n = len(stops)
         if not self.initialized:
-            # первая привязка: часть нитки, которую ТС ещё может проходить
+            # первая привязка (старт потока посреди дня): часть нитки, которую ТС ещё может проходить
             self.next_idx = max(0, sch.last_planned_before(ts - self.cfg.max_late_s) + 1)
             self.initialized = True
             self.seg_start_ts = ts
@@ -176,7 +213,7 @@ class VehicleState:
         hit: tuple[int, float] | None = None
         for j in range(self.next_idx, min(n, self.next_idx + self.cfg.stop_lookahead)):
             s = stops[j]
-            if s.plan_ts - ts > self.cfg.max_early_s:
+            if s.plan_ts - ts > self.cfg.max_early_s:  # дальше по графику — слишком рано, это следующий круг
                 break
             hit_ts = self._passage_time(s.lon, s.lat, lon, lat, ts, prev)
             if hit_ts is not None:
@@ -186,7 +223,7 @@ class VehicleState:
             return []
 
         j, hit_ts = hit
-        for k in range(self.next_idx, j):
+        for k in range(self.next_idx, j):  # перескочили остановки — GPS не попал в их геозоны
             self._skip(k)
         arr = Arrival(j, hit_ts, hit_ts - stops[j].plan_ts, True)
         self._observe_pace(j, hit_ts)
@@ -206,6 +243,7 @@ class VehicleState:
         stops = self.schedule.stops
         plan_dt = stops[j].plan_ts - stops[prev.idx].plan_ts
         fact_dt = fact_ts - prev.fact_ts
+        # < 30 с — шум детектора даёт огромные отношения; ≥ 6 мин — внутри отстой
         if 30 <= plan_dt < 360 and fact_dt > 0:
             ratio = fact_dt / plan_dt
             self.pace_samples.append(ratio)
@@ -213,6 +251,7 @@ class VehicleState:
                 self.seg_observations.append((f"{stops[prev.idx].stop_key}>{stops[j].stop_key}", ratio, fact_ts))
 
     def pop_segment_observations(self) -> list:
+        """Забирает накопленные наблюдения проездов (seg_id, факт/план, время) для индекса загруженности."""
         obs, self.seg_observations = self.seg_observations, []
         return obs
 
@@ -220,9 +259,12 @@ class VehicleState:
                       prev: tuple[float, float, float] | None) -> float | None:
         """Время прохождения геозоны остановки.
 
-        Точки GPS приходят раз в 10–15 с (60–80 м пути), поэтому проверяем не только точку,
-        но и отрезок трека prev→cur: если он проходит в пределах радиуса — берём момент
-        ближайшего подхода (линейная интерполяция по времени).
+        GPS приходит раз в 10–15 с (60–80 м пути), и одиночная точка часто «проскакивает» геозону 45 м.
+        Поэтому проверяется отрезок трека prev→cur: если он проходит в пределах радиуса,
+        берётся момент ближайшего подхода (линейная интерполяция по времени).
+
+        Returns:
+            float | None: Время прохождения, unix-с; ``None`` — геозона не пересечена.
         """
         r = self.cfg.stop_radius_m
         if prev is None:
@@ -244,13 +286,21 @@ class VehicleState:
     def _skip(self, k: int) -> None:
         if k not in self.arrivals:
             self.arrivals_skipped += 1
-            # оценка: переносим последнее известное отклонение (для cur_dev_s, помечено detected=False)
+            # оценка: переносим последнее известное отклонение (помечено detected=False)
             last = self.last_arrival.delay_s if self.last_arrival else 0.0
             self.arrivals[k] = Arrival(k, self.schedule.stops[k].plan_ts + last, last, False)
 
     # --------------------------------------------------------- derived features
     def current_deviation(self, T: float) -> tuple[float, str]:
-        """cur_dev_s на момент T и способ его получения."""
+        """Текущее отклонение ``cur_dev_s`` на момент T.
+
+        Args:
+            T: Момент прогноза (время данных).
+
+        Returns:
+            tuple[float, str]: Отклонение, с, и способ: ``fact``, ``carried`` (перенесено через
+            пропуск детектора), ``last_detected``, ``lower_bound``, ``before_start``, ``no_schedule``.
+        """
         sch = self.schedule
         if sch is None:
             return 0.0, "no_schedule"
@@ -260,7 +310,7 @@ class VehicleState:
         arr = self.arrivals.get(k)
         if arr is not None and arr.fact_ts <= T:
             return float(arr.delay_s), ("fact" if arr.detected else "carried")
-        # ТС ещё не прибыло на остановку с плановым временем ≤ T → опоздание не меньше (T − план).
+        # ТС ещё не прибыло на остановку с планом ≤ T. В разметке здесь факт после T — онлайн он неизвестен.
         # (ETA по остаточному пути проверялась офлайн — точность хуже, см. scripts/validate_matching.py)
         if not self.initialized:
             return 0.0, "before_start"
@@ -271,16 +321,28 @@ class VehicleState:
         return float(max(lower, last)), "lower_bound"
 
     def target(self, T: float) -> int:
+        """Целевая остановка прогноза: первая с планом в (T+10, T+15] мин.
+
+        Returns:
+            int: Индекс или ``-1`` (нет расписания или остановки в окне — прогноз не строится).
+        """
         if self.schedule is None:
             return -1
         return self.schedule.first_in_window(T + self.cfg.horizon_min_s, T + self.cfg.horizon_max_s)
 
     def dwell_s(self, T: float) -> float:
+        """Длительность текущей стоянки, с (до последнего пакета, не до T: без связи простой не растёт)."""
         if self.standing_since is None:
             return 0.0
         return max(0.0, min(T, self.last_ts) - self.standing_since)
 
     def segment_info(self, T: float) -> dict:
+        """Текущий сегмент между остановками.
+
+        Returns:
+            dict: ``from``, ``to``, ``avg_speed_kmh`` (факт), ``plan_speed_kmh``, ``dist_to_next_m``,
+            ``progress`` (0..1); значения ``None``, если данных недостаточно.
+        """
         sch = self.schedule
         info: dict = {"from": None, "to": None, "avg_speed_kmh": None, "plan_speed_kmh": None,
                       "dist_to_next_m": None, "progress": None}
@@ -297,6 +359,7 @@ class VehicleState:
             info["to"] = {"idx": nxt_i, "stop_key": q.stop_key, "address": q.address, "plan_ts": q.plan_ts}
             if self.lon is not None:
                 info["dist_to_next_m"] = haversine_m(self.lon, self.lat, q.lon, q.lat)
+        # < 20 с от начала сегмента скорость по 1–2 точкам слишком шумная
         if self.seg_start_ts is not None and self.last_ts > self.seg_start_ts + 20:
             info["avg_speed_kmh"] = self.seg_dist_m / (self.last_ts - self.seg_start_ts) * 3.6
         if prev_i >= 0 and nxt_i is not None:
@@ -310,13 +373,18 @@ class VehicleState:
         return info
 
     def deviation_trend(self, n: int = 4) -> float | None:
-        """Наклон отклонения по последним n детектированным остановкам, с/остановку."""
+        """Наклон отклонения по последним ``n`` детектированным остановкам.
+
+        Returns:
+            float | None: с/остановку; ``None`` при < 3 точках (тренд по двум — шум).
+        """
         pts = sorted((a for a in self.arrivals.values() if a.detected), key=lambda a: a.idx)[-n:]
         if len(pts) < 3:
             return None
         return (pts[-1].delay_s - pts[0].delay_s) / (len(pts) - 1)
 
     def at_stop(self) -> bool:
+        """ТС в геозоне предыдущей или следующей остановки (радиус ×1.5: остановочный карман шире точки)."""
         sch = self.schedule
         if sch is None or self.lon is None:
             return False
@@ -328,6 +396,10 @@ class VehicleState:
         return False
 
     def ml_history(self, T: float, rows: int) -> list[dict]:
-        """Последние пакеты с event_time ≤ T в порядке поступления (как в потоке)."""
-        cutoff = fmt_utc(T)
+        """Последние ``rows`` пакетов с ``event_time ≤ T`` в порядке поступления.
+
+        Порядок поступления, а не сортировка: так же упорядочены строки traffic.csv при обучении
+        (паритет признака ``speed_diff``).
+        """
+        cutoff = fmt_utc(T)  # строки одного формата сравниваются лексикографически = хронологически
         return [h for h in self.history if h["event_time"] <= cutoff][-rows:]

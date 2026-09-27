@@ -18,6 +18,25 @@
   const delayCls = (s) => (s === null || s === undefined ? "" : s >= 240 ? "d-late" : s >= 120 || s <= -60 ? "d-warn" : "d-ok");
   const pct = (p) => (p === null || p === undefined ? "—" : `${Math.round(p * 100)}%`);
   const lvlIcon = (l) => `<i class="lvl lvl-${l}" aria-hidden="true"></i>`;
+
+  // SHAP: вклад паттернов поведения ТС в прогноз ML, с (+ — к опозданию, − — к опережению)
+  const shapCls = (s) => (s > 0 ? "up" : "down");
+  function shapTags(e) {
+    if (!e) return "";
+    return e.patterns.filter((p) => Math.abs(p.seconds) >= 5).slice(0, 3)
+      .map((p) => `<span class="tag shap ${shapCls(p.seconds)}">${esc(p.title)} ${fmtDelay(p.seconds)}</span>`).join(" ");
+  }
+  function shapBlock(e, predicted) {
+    if (!e) return "";
+    const shown = e.patterns.filter((p) => Math.abs(p.seconds) >= 1);
+    const max = Math.max(1, ...shown.map((p) => Math.abs(p.seconds)));
+    const rows = shown.map((p) => `<div class="shap-row"><span>${esc(p.title)}</span>
+      <span class="shap-bar"><i class="${shapCls(p.seconds)}" style="width:${Math.round(Math.abs(p.seconds) / max * 100)}%"></i></span>
+      <span class="num">${fmtDelay(p.seconds)}</span></div>`).join("");
+    return `<div><h5>Почему такой прогноз (SHAP)</h5>
+      <div class="delay-sub">Сейчас ${fmtDelay(e.cur_dev_s)} · средняя поправка модели ${fmtDelay(e.base_s)} · вклады паттернов ниже → прогноз ${fmtDelay(predicted)}</div>
+      ${rows}</div>`;
+  }
   const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage недоступен */ } }
   function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -399,6 +418,7 @@
       <div class="row"><span class="k">Участок</span><span>${esc(i.segment.from || "—")} → ${esc(i.segment.to || "—")}${i.segment.avg_speed_kmh !== null ? ` · ${i.segment.avg_speed_kmh} км/ч${i.segment.plan_speed_kmh ? ` (план ${i.segment.plan_speed_kmh})` : ""}` : ""}</span></div>
       <div class="cause"><b>${esc(c.title || "")}</b><span class="detail">${esc(c.detail || "")}</span></div>
       ${more ? `<div>${more}</div>` : ""}
+      ${i.explanation ? `<div class="shap-tags"><span class="k">ML-факторы</span> ${shapTags(i.explanation)}</div>` : ""}
       <div class="reco">${esc(c.recommendation || "")}</div>
       <div class="card-actions">
         <button class="btn" data-act="track" data-unit="${i.unit_id}">Отслеживать</button>
@@ -520,6 +540,7 @@
       </div>
       ${etaRows ? `<div><h5>Прибытие на ближайшие остановки (ETA)</h5><table class="tbl"><tr><th>Остановка</th><th>План</th><th>Прогноз</th><th class="num">Откл.</th></tr>${etaRows}</table></div>` : ""}
       ${causes ? `<div><h5>Причины и рекомендации</h5>${causes}</div>` : ""}
+      ${shapBlock(p.explanation, d.predicted_delay_s)}
       ${d.scheduled ? `<div><h5>Моделирование (what-if)</h5><div class="quick">
         <button class="btn" data-act="whatif" data-type="breakdown" data-unit="${d.unit_id}">Поломка</button>
         <button class="btn" data-act="whatif" data-type="skip_stops" data-unit="${d.unit_id}">Пропуск остановок</button>
