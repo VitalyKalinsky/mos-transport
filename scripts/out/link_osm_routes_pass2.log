@@ -1,0 +1,35 @@
+  122658: candidate 480 score 0.57
+  122658: candidate 127 score 0.13
+  122658: candidate 129 score 0.33
+  122658: candidate 310 score 0.57
+  122658: candidate 638 score 0.43
+  122658: candidate 743 score 0.23
+122658: no confident match ({'ref': None, 'score': 0.567})
+  129964: candidate с856 score 0.45
+  129964 811: Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: HTTPError
+  129964: candidate 824 score 0.98
+  129964: candidate м19 score 0.12
+  129964 <= Мёд: Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: HTTPError
+129964: -> 824 (98%)
+  130072: candidate 497 score 0.08
+  130072: candidate 374 score 0.09
+  130072: candidate 319 score 0.08
+  130072: candidate 400к score 0.55
+  130072: candidate 16 score 0.12
+  130072: candidate 20 score 0.16
+130072: no confident match ({'ref': None, 'score': 0.554})
+  133957: candidate 150 score 0.05
+  133957: candidate с976 score 0.56
+  133957: candidate с923 score 0.22
+  133957: candidate 816 score 0.05
+  133957: candidate 261 score 0.15
+  133957 718: Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: TimeoutError
+133957: no confident match ({'ref': None, 'score': 0.561})
+  134040: candidate 330 score 0.09
+  134040: candidate 752 score 0.12
+  134040 м16: Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: TimeoutError
+  134040: candidate 226 score 0.06
+  134040: candidate 261 score 0.07
+  134040 288: Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: TimeoutError
+134040: no confident match ({'ref': None, 'score': 0.12})
+134494: overpass error Overpass недоступен: overpass-api.de: URLError; overpass-api.de: URLError; maps.mail.ru: HTTPError; maps.mail.ru: HTTPError; overpass.kumi.systems: TimeoutError; overpass.kumi.systems: TimeoutError

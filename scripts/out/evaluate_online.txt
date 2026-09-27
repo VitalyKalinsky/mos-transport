@@ -1,0 +1,11 @@
+n = 353
+MAE zero-forecast           : 103.3 s
+MAE baseline cur_dev (label): 93.4 s
+MAE baseline cur_dev (online): 143.9 s
+MAE model, cur_dev из разметки : 71.1 s
+MAE model, cur_dev онлайн (GPS): 92.2 s
+ML batch     1 points: median    28.6 ms  (28.65 ms/point)
+ML batch    10 points: median    16.3 ms  (1.63 ms/point)
+ML batch    50 points: median    20.2 ms  (0.40 ms/point)
+ML batch   200 points: median    46.6 ms  (0.23 ms/point)
+ML batch  1000 points: median    82.3 ms  (0.08 ms/point)

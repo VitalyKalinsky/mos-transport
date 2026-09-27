@@ -1,0 +1,1697 @@
+<!doctype html>
+<html class="no-js" lang="ru" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Алфавитный указатель" href="#" /><link rel="search" title="Поиск" href="search.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 --><title>Алфавитный указатель - mos-transport · документация по коду</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mos-transport · документация по коду</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">mos-transport · документация по коду</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Поиск" name="q" aria-label="Поиск">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Модули</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="backend.html">Backend (services/backend)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndtp.html">NDTP-кодек (libs/ndtp)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="feeder.html">Replay-фидер (services/feeder)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ml.html">ML-модуль</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          
+<section class="genindex-section">
+  <h1 id="index">Алфавитный указатель</h1>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#J"><strong>J</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#V"><strong>V</strong></a> | <a href="#W"><strong>W</strong></a></div>
+</section>
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.engine.Engine.accuracy">accuracy() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.main.ack">ack() (в модуле app.main)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.acknowledge">acknowledge() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.metrics.LatencyWindow.add">add() (метод app.metrics.LatencyWindow)</a>
+</li>
+        <li><a href="feeder.html#feeder.Replay.add_incident">add_incident() (метод feeder.Replay)</a>
+</li>
+        <li><a href="backend.html#app.eta.StopEta.address">address (атрибут app.eta.StopEta)</a>
+
+        <ul>
+          <li><a href="backend.html#app.reference.PlannedStop.address">(атрибут app.reference.PlannedStop)</a>
+</li>
+        </ul></li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.alarm">alarm (атрибут ndtp.codec.NavRecord)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.TelemetryRow.alt">alt (атрибут ml_service_app.main.TelemetryRow)</a>
+
+        <ul>
+          <li><a href="ndtp.html#ndtp.codec.NavRecord.alt">(атрибут ndtp.codec.NavRecord)</a>
+</li>
+        </ul></li>
+        <li>
+    app.api_ext
+
+        <ul>
+          <li><a href="backend.html#module-app.api_ext">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.clock
+
+        <ul>
+          <li><a href="backend.html#module-app.clock">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.config
+
+        <ul>
+          <li><a href="backend.html#module-app.config">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.engine
+
+        <ul>
+          <li><a href="backend.html#module-app.engine">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.eta
+
+        <ul>
+          <li><a href="backend.html#module-app.eta">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.export
+
+        <ul>
+          <li><a href="backend.html#module-app.export">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.geo
+
+        <ul>
+          <li><a href="backend.html#module-app.geo">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.geometry
+
+        <ul>
+          <li><a href="backend.html#module-app.geometry">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.main
+
+        <ul>
+          <li><a href="backend.html#module-app.main">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    app.metrics
+
+        <ul>
+          <li><a href="backend.html#module-app.metrics">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.ml_client
+
+        <ul>
+          <li><a href="backend.html#module-app.ml_client">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.ndtp_server
+
+        <ul>
+          <li><a href="backend.html#module-app.ndtp_server">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.reference
+
+        <ul>
+          <li><a href="backend.html#module-app.reference">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.regions
+
+        <ul>
+          <li><a href="backend.html#module-app.regions">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.risk
+
+        <ul>
+          <li><a href="backend.html#module-app.risk">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.routes_registry
+
+        <ul>
+          <li><a href="backend.html#module-app.routes_registry">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.routing
+
+        <ul>
+          <li><a href="backend.html#module-app.routing">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.tracker
+
+        <ul>
+          <li><a href="backend.html#module-app.tracker">module</a>
+</li>
+        </ul></li>
+        <li>
+    app.whatif
+
+        <ul>
+          <li><a href="backend.html#module-app.whatif">module</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.api_ext.ApplyRequest">ApplyRequest (класс в app.api_ext)</a>
+</li>
+        <li><a href="backend.html#app.tracker.Arrival">Arrival (класс в app.tracker)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.arrivals">arrivals (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.arrivals_detected">arrivals_detected (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.arrivals_skipped">arrivals_skipped (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.at_stop">at_stop() (метод app.tracker.VehicleState)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="B" class="genindex-section">
+  <h2>B</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.bat_voltage_v">bat_voltage_v (атрибут ndtp.codec.NavRecord)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.body">body (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="backend.html#app.ml_client.MLClient.breaker_open">breaker_open (свойство app.ml_client.MLClient)</a>
+</li>
+        <li><a href="backend.html#app.whatif.WhatIf.build">build() (метод app.whatif.WhatIf)</a>
+</li>
+        <li><a href="ml.html#data_functions.build_dataset">build_dataset() (в модуле data_functions)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.build_frame">build_frame() (в модуле ndtp.codec)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ndtp.html#ndtp.codec.build_handshake">build_handshake() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.build_realtime">build_realtime() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.build_result">build_result() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.evaluate.build_split">build_split() (в модуле ml_service_app.evaluate)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.builtin_routes_dir">builtin_routes_dir (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.TrafficUpdate.bus_lane">bus_lane (атрибут app.api_ext.TrafficUpdate)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo.bytes">bytes (атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ml.html#ml_service_app.evaluate.calibrate_mae_target">calibrate_mae_target() (в модуле ml_service_app.evaluate)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.candidates_near">candidates_near() (в модуле app.routes_registry)</a>
+</li>
+        <li><a href="backend.html#app.risk.Cause">Cause (класс в app.risk)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.cells">cells (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.CellSpec">CellSpec (класс в ndtp.codec)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.cfg">cfg (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.clock_freerun_max_s">clock_freerun_max_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.ml_client.MLClient.close">close() (метод app.ml_client.MLClient)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.closed_stops">closed_stops (атрибут app.eta.Overrides)</a>
+</li>
+        <li><a href="backend.html#app.risk.Cause.code">code (атрибут app.risk.Cause)</a>
+</li>
+        <li><a href="ml.html#data_functions.compute_schedule_features">compute_schedule_features() (в модуле data_functions)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo.conn_id">conn_id (атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo.connected_at">connected_at (атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+        <li><a href="backend.html#app.main.connections">connections() (в модуле app.main)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo">ConnInfo (класс в app.ndtp_server)</a>
+</li>
+        <li><a href="backend.html#app.geometry.Polyline.coords">coords (атрибут app.geometry.Polyline)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.crc16_modbus">crc16_modbus() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.crc16_modbus_fast">crc16_modbus_fast() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="backend.html#app.geometry.Polyline.cum">cum (атрибут app.geometry.Polyline)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.cur_dev_mode">cur_dev_mode (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictionPoint.cur_dev_s">cur_dev_s (атрибут ml_service_app.main.PredictionPoint)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.current_deviation">current_deviation() (метод app.tracker.VehicleState)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.evaluate.customer_score">customer_score() (в модуле ml_service_app.evaluate)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.cut_segments">cut_segments (атрибут app.eta.Overrides)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    data_functions
+
+        <ul>
+          <li><a href="ml.html#module-data_functions">module</a>
+</li>
+        </ul></li>
+        <li><a href="feeder.html#feeder.Replay.data_now">data_now() (метод feeder.Replay)</a>
+</li>
+        <li><a href="backend.html#app.clock.DataClock">DataClock (класс в app.clock)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.default_error_scale_s">default_error_scale_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.tracker.Arrival.delay_s">delay_s (атрибут app.tracker.Arrival)</a>
+
+        <ul>
+          <li><a href="backend.html#app.eta.StopEta.delay_s">(свойство app.eta.StopEta)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.routes_registry.RouteRegistry.delete">delete() (метод app.routes_registry.RouteRegistry)</a>
+</li>
+        <li><a href="backend.html#app.risk.Cause.detail">detail (атрибут app.risk.Cause)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.tracker.Arrival.detected">detected (атрибут app.tracker.Arrival)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.detour">detour (атрибут app.eta.Overrides)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.deviation_trend">deviation_trend() (метод app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.risk.diagnose">diagnose() (в модуле app.risk)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.dirty">dirty (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.display_tz_offset_h">display_tz_offset_h (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.whatif.Plan.domino">domino (атрибут app.whatif.Plan)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.ApplyRequest.duration_min">duration_min (атрибут app.api_ext.ApplyRequest)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.dwell_factor">dwell_factor (атрибут app.eta.Overrides)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.dwell_s">dwell_s() (метод app.tracker.VehicleState)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.config.Settings.early_threshold_s">early_threshold_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.encode_cell">encode_cell() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.encode_nav">encode_nav() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine">Engine (класс в app.engine)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo.errors">errors (атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaResult.est_lat">est_lat (атрибут app.eta.EtaResult)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaResult.est_lon">est_lon (атрибут app.eta.EtaResult)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.eta">eta (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.eta_stops">eta_stops (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.eta.StopEta.eta_ts">eta_ts (атрибут app.eta.StopEta)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.engine.Engine.eta_view">eta_view() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaEngine">EtaEngine (класс в app.eta)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaResult">EtaResult (класс в app.eta)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.evaluate.evaluate_predictions">evaluate_predictions() (в модуле ml_service_app.evaluate)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.TelemetryRow.event_time">event_time (атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+        <li><a href="feeder.html#feeder.Replay.expire_incidents">expire_incidents() (метод feeder.Replay)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.explain.explain">explain() (в модуле ml_service_app.explain)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.Prediction.explanation">explanation (атрибут ml_service_app.main.Prediction)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.export_trips">export_trips() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.extra_delay">extra_delay (атрибут app.eta.Overrides)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="F" class="genindex-section">
+  <h2>F</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.tracker.Arrival.fact_ts">fact_ts (атрибут app.tracker.Arrival)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.Prediction.features">features (атрибут ml_service_app.main.Prediction)</a>
+</li>
+        <li><a href="backend.html#app.export.feed">feed() (в модуле app.export)</a>
+
+        <ul>
+          <li><a href="ndtp.html#ndtp.codec.StreamDecoder.feed">(метод ndtp.codec.StreamDecoder)</a>
+</li>
+        </ul></li>
+        <li>
+    feeder
+
+        <ul>
+          <li><a href="feeder.html#module-feeder">module</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.config.Settings.feeder_url">feeder_url (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.CellSpec.fields">fields (атрибут ndtp.codec.CellSpec)</a>
+</li>
+        <li><a href="ml.html#data_functions.fine_tune">fine_tune() (в модуле data_functions)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.finetune.fine_tune">(в модуле ml_service_app.finetune)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.reference.VehicleSchedule.first_in_window">first_in_window() (метод app.reference.VehicleSchedule)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.CellSpec.fmt">fmt (атрибут ndtp.codec.CellSpec)</a>
+</li>
+        <li><a href="backend.html#app.tracker.fmt_utc">fmt_utc() (в модуле app.tracker)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame">Frame (класс в ndtp.codec)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo.frames">frames (атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+        <li><a href="backend.html#app.clock.DataClock.freerun_s">freerun_s() (метод app.clock.DataClock)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.from_cell">from_cell() (метод класса ndtp.codec.NavRecord)</a>
+</li>
+        <li><a href="feeder.html#feeder.Replay.frozen">frozen() (метод feeder.Replay)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.future_frames">future_frames() (метод app.engine.Engine)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="G" class="genindex-section">
+  <h2>G</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="feeder.html#feeder.garbage">garbage() (в модуле feeder)</a>
+</li>
+        <li><a href="backend.html#app.export.geojson">geojson() (в модуле app.export)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.geometry_by_router">geometry_by_router() (в модуле app.routes_registry)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ml.html#ml_service_app.explain.global_importance">global_importance() (в модуле ml_service_app.explain)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.gps_fail_streak">gps_fail_streak (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.export.gtfs_static">gtfs_static() (в модуле app.export)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="H" class="genindex-section">
+  <h2>H</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ndtp.html#ndtp.codec.Frame.handshake">handshake (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ml.html#data_functions.haversine_distance">haversine_distance() (в модуле data_functions)</a>
+</li>
+        <li><a href="backend.html#app.geo.haversine_m">haversine_m() (в модуле app.geo)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.heading">heading (атрибут app.tracker.VehicleState)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.TelemetryRow.heading">(атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+          <li><a href="ndtp.html#ndtp.codec.NavRecord.heading">(атрибут ndtp.codec.NavRecord)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.main.health">health() (в модуле app.main)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.health">(в модуле ml_service_app.main)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.tracker.VehicleState.history">history (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.metrics.RateCounter.hit">hit() (метод app.metrics.RateCounter)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.hold_at">hold_at (атрибут app.eta.Overrides)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.horizon_max_s">horizon_max_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.horizon_min_s">horizon_min_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.SimulateRequest.horizon_stops">horizon_stops (атрибут app.api_ext.SimulateRequest)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.eta.StopEta.idx">idx (атрибут app.eta.StopEta)</a>
+
+        <ul>
+          <li><a href="backend.html#app.tracker.Arrival.idx">(атрибут app.tracker.Arrival)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.routes_registry.import_gtfs">import_gtfs() (в модуле app.routes_registry)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.import_osm">import_osm() (в модуле app.routes_registry)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.ImportError_">ImportError_</a>
+</li>
+        <li><a href="feeder.html#feeder.incident_breakdown">incident_breakdown() (в модуле feeder)</a>
+</li>
+        <li><a href="feeder.html#feeder.incident_clear">incident_clear() (в модуле feeder)</a>
+</li>
+        <li><a href="feeder.html#feeder.incident_slowdown">incident_slowdown() (в модуле feeder)</a>
+</li>
+        <li><a href="backend.html#app.main.incidents">incidents() (в модуле app.main)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.SimulateRequest.include_all">include_all (атрибут app.api_ext.SimulateRequest)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ml.html#ml_service_app.adapter.ModelRuntime.info">info() (метод ml_service_app.adapter.ModelRuntime)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.ingest">ingest() (метод app.tracker.VehicleState)</a>
+</li>
+        <li><a href="ml.html#data_functions.init_stop_coordinates">init_stop_coordinates() (в модуле data_functions)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.initialized">initialized (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.ApplyRequest.inject_into_stream">inject_into_stream (атрибут app.api_ext.ApplyRequest)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.is_handshake">is_handshake (свойство ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.TelemetryRow.is_hist_data">is_hist_data (атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.is_history">is_history (свойство ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.is_telemetry">is_telemetry (свойство ndtp.codec.Frame)</a>
+</li>
+        <li><a href="backend.html#app.reference.PlannedStop.item_id">item_id (атрибут app.reference.PlannedStop)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="J" class="genindex-section">
+  <h2>J</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.api_ext.TrafficUpdate.jam">jam (атрибут app.api_ext.TrafficUpdate)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="L" class="genindex-section">
+  <h2>L</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.risk.laplace_sf">laplace_sf() (в модуле app.risk)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.last_arrival">last_arrival (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo.last_frame_at">last_frame_at (атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+        <li><a href="backend.html#app.reference.VehicleSchedule.last_planned_before">last_planned_before() (метод app.reference.VehicleSchedule)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.last_rx_wall">last_rx_wall (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.last_ts">last_ts (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.reference.PlannedStop.lat">lat (атрибут app.reference.PlannedStop)</a>
+
+        <ul>
+          <li><a href="backend.html#app.tracker.VehicleState.lat">(атрибут app.tracker.VehicleState)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.TelemetryRow.lat">(атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+          <li><a href="ndtp.html#ndtp.codec.NavRecord.lat">(атрибут ndtp.codec.NavRecord)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.config.Settings.late_threshold_s">late_threshold_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.metrics.LatencyWindow">LatencyWindow (класс в app.metrics)</a>
+</li>
+        <li><a href="backend.html#app.geometry.Polyline.length">length (атрибут app.geometry.Polyline)</a>
+</li>
+        <li><a href="backend.html#app.main.lifespan">lifespan() (в модуле app.main)</a>
+
+        <ul>
+          <li><a href="feeder.html#feeder.lifespan">(в модуле feeder)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.lifespan">(в модуле ml_service_app.main)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.config.Settings.link_timeout_s">link_timeout_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="feeder.html#feeder.Replay.load">load() (метод feeder.Replay)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.adapter.ModelRuntime.load">(метод ml_service_app.adapter.ModelRuntime)</a>
+</li>
+        </ul></li>
+        <li><a href="ml.html#data_functions.load_and_preprocess_labels">load_and_preprocess_labels() (в модуле data_functions)</a>
+</li>
+        <li><a href="ml.html#data_functions.load_and_preprocess_schedule">load_and_preprocess_schedule() (в модуле data_functions)</a>
+</li>
+        <li><a href="ml.html#data_functions.load_and_preprocess_traffic">load_and_preprocess_traffic() (в модуле data_functions)</a>
+</li>
+        <li><a href="backend.html#app.reference.load_reference">load_reference() (в модуле app.reference)</a>
+</li>
+        <li><a href="backend.html#app.regions.load_region">load_region() (в модуле app.regions)</a>
+</li>
+        <li><a href="backend.html#app.reference.load_shapes">load_shapes() (в модуле app.reference)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaEngine.locate">locate() (метод app.eta.EtaEngine)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.location_valid">location_valid (атрибут app.tracker.VehicleState)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.TelemetryRow.location_valid">(атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+          <li><a href="ndtp.html#ndtp.codec.NavRecord.location_valid">(атрибут ndtp.codec.NavRecord)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.reference.PlannedStop.lon">lon (атрибут app.reference.PlannedStop)</a>
+
+        <ul>
+          <li><a href="backend.html#app.tracker.VehicleState.lon">(атрибут app.tracker.VehicleState)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.TelemetryRow.lon">(атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+          <li><a href="ndtp.html#ndtp.codec.NavRecord.lon">(атрибут ndtp.codec.NavRecord)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ml.html#ml_service_app.evaluate.main">main() (в модуле ml_service_app.evaluate)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.finetune.main">(в модуле ml_service_app.finetune)</a>
+</li>
+        </ul></li>
+        <li><a href="ml.html#data_functions.make_submission">make_submission() (в модуле data_functions)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.ManualRoute">ManualRoute (класс в app.api_ext)</a>
+</li>
+        <li><a href="backend.html#app.routing.match">match() (в модуле app.routing)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.max_early_s">max_early_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.max_late_s">max_late_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.whatif.merge">merge() (в модуле app.whatif)</a>
+</li>
+        <li><a href="backend.html#app.main.metrics">metrics() (в модуле app.main)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.metrics">(в модуле ml_service_app.main)</a>
+</li>
+          <li><a href="backend.html#app.engine.Engine.metrics">(метод app.engine.Engine)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.config.Settings.ml_breaker_cooldown_s">ml_breaker_cooldown_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.ml_breaker_failures">ml_breaker_failures (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.ml_history">ml_history() (метод app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.ml_history_rows">ml_history_rows (атрибут app.config.Settings)</a>
+</li>
+        <li>
+    ml_service_app.adapter
+
+        <ul>
+          <li><a href="ml.html#module-ml_service_app.adapter">module</a>
+</li>
+        </ul></li>
+        <li>
+    ml_service_app.evaluate
+
+        <ul>
+          <li><a href="ml.html#module-ml_service_app.evaluate">module</a>
+</li>
+        </ul></li>
+        <li>
+    ml_service_app.explain
+
+        <ul>
+          <li><a href="ml.html#module-ml_service_app.explain">module</a>
+</li>
+        </ul></li>
+        <li>
+    ml_service_app.finetune
+
+        <ul>
+          <li><a href="ml.html#module-ml_service_app.finetune">module</a>
+</li>
+        </ul></li>
+        <li>
+    ml_service_app.main
+
+        <ul>
+          <li><a href="ml.html#module-ml_service_app.main">module</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.config.Settings.ml_timeout_s">ml_timeout_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.ml_url">ml_url (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.ml_client.MLClient">MLClient (класс в app.ml_client)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.ManualRoute.mode">mode (атрибут app.api_ext.ManualRoute)</a>
+
+        <ul>
+          <li><a href="backend.html#app.eta.EtaResult.mode">(атрибут app.eta.EtaResult)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.main.model">model() (в модуле app.main)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.ApplyRequest.model_config">model_config (атрибут app.api_ext.ApplyRequest)</a>
+
+        <ul>
+          <li><a href="backend.html#app.api_ext.ManualRoute.model_config">(атрибут app.api_ext.ManualRoute)</a>
+</li>
+          <li><a href="backend.html#app.api_ext.OsmImport.model_config">(атрибут app.api_ext.OsmImport)</a>
+</li>
+          <li><a href="backend.html#app.api_ext.Scenario.model_config">(атрибут app.api_ext.Scenario)</a>
+</li>
+          <li><a href="backend.html#app.api_ext.SimulateRequest.model_config">(атрибут app.api_ext.SimulateRequest)</a>
+</li>
+          <li><a href="backend.html#app.api_ext.TrafficUpdate.model_config">(атрибут app.api_ext.TrafficUpdate)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.Prediction.model_config">(атрибут ml_service_app.main.Prediction)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.PredictionPoint.model_config">(атрибут ml_service_app.main.PredictionPoint)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.PredictRequest.model_config">(атрибут ml_service_app.main.PredictRequest)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.PredictResponse.model_config">(атрибут ml_service_app.main.PredictResponse)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.TelemetryRow.model_config">(атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ml.html#ml_service_app.main.model_info">model_info() (в модуле ml_service_app.main)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictResponse.model_validation_mae_s">model_validation_mae_s (атрибут ml_service_app.main.PredictResponse)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.adapter.ModelRuntime">ModelRuntime (класс в ml_service_app.adapter)</a>
+</li>
+        <li>
+    module
+
+        <ul>
+          <li><a href="backend.html#module-app.api_ext">app.api_ext</a>
+</li>
+          <li><a href="backend.html#module-app.clock">app.clock</a>
+</li>
+          <li><a href="backend.html#module-app.config">app.config</a>
+</li>
+          <li><a href="backend.html#module-app.engine">app.engine</a>
+</li>
+          <li><a href="backend.html#module-app.eta">app.eta</a>
+</li>
+          <li><a href="backend.html#module-app.export">app.export</a>
+</li>
+          <li><a href="backend.html#module-app.geo">app.geo</a>
+</li>
+          <li><a href="backend.html#module-app.geometry">app.geometry</a>
+</li>
+          <li><a href="backend.html#module-app.main">app.main</a>
+</li>
+          <li><a href="backend.html#module-app.metrics">app.metrics</a>
+</li>
+          <li><a href="backend.html#module-app.ml_client">app.ml_client</a>
+</li>
+          <li><a href="backend.html#module-app.ndtp_server">app.ndtp_server</a>
+</li>
+          <li><a href="backend.html#module-app.reference">app.reference</a>
+</li>
+          <li><a href="backend.html#module-app.regions">app.regions</a>
+</li>
+          <li><a href="backend.html#module-app.risk">app.risk</a>
+</li>
+          <li><a href="backend.html#module-app.routes_registry">app.routes_registry</a>
+</li>
+          <li><a href="backend.html#module-app.routing">app.routing</a>
+</li>
+          <li><a href="backend.html#module-app.tracker">app.tracker</a>
+</li>
+          <li><a href="backend.html#module-app.whatif">app.whatif</a>
+</li>
+          <li><a href="ml.html#module-data_functions">data_functions</a>
+</li>
+          <li><a href="feeder.html#module-feeder">feeder</a>
+</li>
+          <li><a href="ml.html#module-ml_service_app.adapter">ml_service_app.adapter</a>
+</li>
+          <li><a href="ml.html#module-ml_service_app.evaluate">ml_service_app.evaluate</a>
+</li>
+          <li><a href="ml.html#module-ml_service_app.explain">ml_service_app.explain</a>
+</li>
+          <li><a href="ml.html#module-ml_service_app.finetune">ml_service_app.finetune</a>
+</li>
+          <li><a href="ml.html#module-ml_service_app.main">ml_service_app.main</a>
+</li>
+          <li><a href="ndtp.html#module-ndtp.codec">ndtp.codec</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="N" class="genindex-section">
+  <h2>N</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.api_ext.ManualRoute.name">name (атрибут app.api_ext.ManualRoute)</a>
+
+        <ul>
+          <li><a href="ndtp.html#ndtp.codec.CellSpec.name">(атрибут ndtp.codec.CellSpec)</a>
+</li>
+        </ul></li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.nav">nav() (метод ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord">NavRecord (класс в ndtp.codec)</a>
+</li>
+        <li>
+    ndtp.codec
+
+        <ul>
+          <li><a href="ndtp.html#module-ndtp.codec">module</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.config.Settings.ndtp_host">ndtp_host (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.ndtp_idle_timeout_s">ndtp_idle_timeout_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.ndtp_port">ndtp_port (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.ndtp_verify_crc">ndtp_verify_crc (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.NDTPError">NDTPError</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.ndtp_server.NDTPServer">NDTPServer (класс в app.ndtp_server)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.needs_reply">needs_reply (свойство ndtp.codec.Frame)</a>
+</li>
+        <li><a href="backend.html#app.main.network">network() (в модуле app.main)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaResult.next_idx">next_idx (атрибут app.eta.EtaResult)</a>
+
+        <ul>
+          <li><a href="backend.html#app.tracker.VehicleState.next_idx">(атрибут app.tracker.VehicleState)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.whatif.Plan.notes">notes (атрибут app.whatif.Plan)</a>
+</li>
+        <li><a href="backend.html#app.clock.DataClock.now">now() (метод app.clock.DataClock)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.nph_flags">nph_flags (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.nph_request_id">nph_request_id (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.nph_type">nph_type (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.npl_request_id">npl_request_id (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.nsat">nsat (атрибут ndtp.codec.NavRecord)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="O" class="genindex-section">
+  <h2>O</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.clock.DataClock.observe">observe() (метод app.clock.DataClock)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.on_frame">on_frame() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.OsmImport">OsmImport (класс в app.api_ext)</a>
+</li>
+        <li><a href="feeder.html#feeder.outage">outage() (в модуле feeder)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="feeder.html#feeder.outage_start">outage_start() (в модуле feeder)</a>
+</li>
+        <li><a href="feeder.html#feeder.outage_stop">outage_stop() (в модуле feeder)</a>
+</li>
+        <li><a href="backend.html#app.whatif.Plan.ov">ov (атрибут app.whatif.Plan)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.overpass">overpass() (в модуле app.routes_registry)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides">Overrides (класс в app.eta)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.eta.EtaResult.pace">pace (атрибут app.eta.EtaResult)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaEngine.pace">pace() (метод app.eta.EtaEngine)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.pace_samples">pace_samples (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.packets">packets (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.Scenario.params">params (атрибут app.api_ext.Scenario)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.parse_cells">parse_cells() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.parse_frame">parse_frame() (в модуле ndtp.codec)</a>
+</li>
+        <li><a href="backend.html#app.main.parse_ndtp">parse_ndtp() (в модуле app.main)</a>
+</li>
+        <li><a href="feeder.html#feeder.pause">pause() (в модуле feeder)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.pdop">pdop (атрибут ndtp.codec.NavRecord)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo.peer">peer (атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.peer_address">peer_address (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.pending_eval">pending_eval (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.perf_brief">perf_brief() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.whatif.Plan">Plan (класс в app.whatif)</a>
+</li>
+        <li><a href="backend.html#app.eta.StopEta.plan_ts">plan_ts (атрибут app.eta.StopEta)</a>
+
+        <ul>
+          <li><a href="backend.html#app.reference.PlannedStop.plan_ts">(атрибут app.reference.PlannedStop)</a>
+</li>
+          <li><a href="backend.html#app.reference.VehicleSchedule.plan_ts">(атрибут app.reference.VehicleSchedule)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.reference.PlannedStop">PlannedStop (класс в app.reference)</a>
+</li>
+        <li><a href="backend.html#app.geometry.Polyline.point_at">point_at() (метод app.geometry.Polyline)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictRequest.points">points (атрибут ml_service_app.main.PredictRequest)</a>
+</li>
+        <li><a href="backend.html#app.geometry.Polyline">Polyline (класс в app.geometry)</a>
+</li>
+        <li><a href="backend.html#app.reference.Reference.polyline">polyline() (метод app.reference.Reference)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.tracker.VehicleState.pop_segment_observations">pop_segment_observations() (метод app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.pos_ts">pos_ts (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaEngine.position_at">position_at() (метод app.eta.EtaEngine)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.pred_trail">pred_trail (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="ml.html#data_functions.predict">predict() (в модуле data_functions)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.predict">(в модуле ml_service_app.main)</a>
+</li>
+          <li><a href="backend.html#app.eta.EtaEngine.predict">(метод app.eta.EtaEngine)</a>
+</li>
+          <li><a href="backend.html#app.ml_client.MLClient.predict">(метод app.ml_client.MLClient)</a>
+</li>
+        </ul></li>
+        <li><a href="ml.html#ml_service_app.adapter.ModelRuntime.predict_batch">predict_batch() (метод ml_service_app.adapter.ModelRuntime)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.predict_cycle">predict_cycle() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.predict_interval_s">predict_interval_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.predict_min_interval_s">predict_min_interval_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.Prediction.predicted_delay_s">predicted_delay_s (атрибут ml_service_app.main.Prediction)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.Prediction.predicted_delta_s">predicted_delta_s (атрибут ml_service_app.main.Prediction)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.prediction">prediction (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.Prediction">Prediction (класс в ml_service_app.main)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictionPoint">PredictionPoint (класс в ml_service_app.main)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictResponse.predictions">predictions (атрибут ml_service_app.main.PredictResponse)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictRequest">PredictRequest (класс в ml_service_app.main)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictResponse">PredictResponse (класс в ml_service_app.main)</a>
+</li>
+        <li><a href="backend.html#app.geometry.Polyline.project">project() (метод app.geometry.Polyline)</a>
+</li>
+        <li><a href="backend.html#app.main.prometheus">prometheus() (в модуле app.main)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.ConnInfo.proto_version">proto_version (атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.metrics.RateCounter.rate">rate() (метод app.metrics.RateCounter)</a>
+</li>
+        <li><a href="backend.html#app.metrics.RateCounter">RateCounter (класс в app.metrics)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.adapter.ModelRuntime.ready">ready (свойство ml_service_app.adapter.ModelRuntime)</a>
+</li>
+        <li><a href="backend.html#app.risk.Cause.recommendation">recommendation (атрибут app.risk.Cause)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.red_probability">red_probability (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.red_threshold_s">red_threshold_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.ManualRoute.ref">ref (атрибут app.api_ext.ManualRoute)</a>
+
+        <ul>
+          <li><a href="backend.html#app.api_ext.OsmImport.ref">(атрибут app.api_ext.OsmImport)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.reference.Reference">Reference (класс в app.reference)</a>
+</li>
+        <li><a href="backend.html#app.ml_client.MLClient.refresh_info">refresh_info() (метод app.ml_client.MLClient)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.region">region (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.regions_path">regions_path (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.register">register() (в модуле app.api_ext)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.OsmImport.relation_id">relation_id (атрибут app.api_ext.OsmImport)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.geometry.remove_spurs">remove_spurs() (в модуле app.geometry)</a>
+</li>
+        <li><a href="feeder.html#feeder.Replay">Replay (класс в feeder)</a>
+</li>
+        <li><a href="backend.html#app.whatif.Plan.reserve">reserve (атрибут app.whatif.Plan)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.reset_schedule_state">reset_schedule_state() (метод app.tracker.VehicleState)</a>
+</li>
+        <li><a href="feeder.html#feeder.resume">resume() (в модуле feeder)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.adapter.ModelRuntime.retrain">retrain() (метод ml_service_app.adapter.ModelRuntime)</a>
+</li>
+        <li><a href="backend.html#app.risk.risk_level">risk_level() (в модуле app.risk)</a>
+</li>
+        <li><a href="backend.html#app.routing.route">route() (в модуле app.routing)</a>
+</li>
+        <li><a href="backend.html#app.reference.VehicleSchedule.route_id">route_id (атрибут app.reference.VehicleSchedule)</a>
+</li>
+        <li><a href="backend.html#app.export.route_ref">route_ref() (в модуле app.export)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.RouteRegistry">RouteRegistry (класс в app.routes_registry)</a>
+</li>
+        <li><a href="backend.html#app.reference.Reference.routes">routes (атрибут app.reference.Reference)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.routes_dir">routes_dir (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.routing.RoutingError">RoutingError</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.run">run() (метод app.engine.Engine)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="ml.html#ml_service_app.main.Prediction.sample_id">sample_id (атрибут ml_service_app.main.Prediction)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.PredictionPoint.sample_id">(атрибут ml_service_app.main.PredictionPoint)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.routes_registry.RouteRegistry.save">save() (метод app.routes_registry.RouteRegistry)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.Scenario">Scenario (класс в app.api_ext)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.SimulateRequest.scenarios">scenarios (атрибут app.api_ext.SimulateRequest)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.schedule">schedule (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.schedule_path">schedule_path (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="feeder.html#feeder.Replay.scheduler">scheduler() (метод feeder.Replay)</a>
+</li>
+        <li><a href="backend.html#app.reference.Reference.schedules">schedules (атрибут app.reference.Reference)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.score_vehicle_route">score_vehicle_route() (в модуле app.routes_registry)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.RouteRegistry.search">search() (метод app.routes_registry.RouteRegistry)</a>
+</li>
+        <li><a href="feeder.html#feeder.seek">seek() (в модуле feeder)</a>
+
+        <ul>
+          <li><a href="feeder.html#feeder.Replay.seek">(метод feeder.Replay)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.tracker.VehicleState.seg_dist_m">seg_dist_m (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.reference.seg_id">seg_id() (в модуле app.reference)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.seg_observations">seg_observations (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.seg_start_ts">seg_start_ts (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.segment_factor">segment_factor (атрибут app.eta.Overrides)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.TrafficUpdate.segment_ids">segment_ids (атрибут app.api_ext.TrafficUpdate)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.segment_info">segment_info() (метод app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.reference.Reference.segments">segments (атрибут app.reference.Reference)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.service_id">service_id (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="feeder.html#feeder.Replay.set_speed">set_speed() (метод feeder.Replay)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings">Settings (класс в app.config)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.explain.shap_values">shap_values() (в модуле ml_service_app.explain)</a>
+</li>
+        <li><a href="backend.html#app.reference.Reference.shapes">shapes (атрибут app.reference.Reference)</a>
+
+        <ul>
+          <li><a href="backend.html#app.whatif.Plan.shapes">(атрибут app.whatif.Plan)</a>
+</li>
+        </ul></li>
+        <li><a href="ndtp.html#ndtp.codec.StreamDecoder.SIG">SIG (атрибут ndtp.codec.StreamDecoder)</a>
+</li>
+        <li><a href="backend.html#app.eta.StopEta.sigma_s">sigma_s (атрибут app.eta.StopEta)</a>
+</li>
+        <li><a href="backend.html#app.geometry.simplify">simplify() (в модуле app.geometry)</a>
+</li>
+        <li><a href="backend.html#app.whatif.WhatIf.simulate">simulate() (метод app.whatif.WhatIf)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.SimulateRequest">SimulateRequest (класс в app.api_ext)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.CellSpec.size">size (свойство ndtp.codec.CellSpec)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.skip_stops">skip_stops (атрибут app.eta.Overrides)</a>
+</li>
+        <li><a href="backend.html#app.eta.StopEta.skipped">skipped (атрибут app.eta.StopEta)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.geometry.Polyline.slice">slice() (метод app.geometry.Polyline)</a>
+</li>
+        <li><a href="backend.html#app.main.snapshot">snapshot() (в модуле app.main)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.sos">sos (атрибут ndtp.codec.NavRecord)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.speed">speed (атрибут app.tracker.VehicleState)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.TelemetryRow.speed">(атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+          <li><a href="ndtp.html#ndtp.codec.NavRecord.speed">(атрибут ndtp.codec.NavRecord)</a>
+</li>
+        </ul></li>
+        <li><a href="feeder.html#feeder.speed">speed() (в модуле feeder)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.speed_max">speed_max (атрибут ndtp.codec.NavRecord)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState.standing_since">standing_since (атрибут app.tracker.VehicleState)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.standing_speed_kmh">standing_speed_kmh (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.NDTPServer.start">start() (метод app.ndtp_server.NDTPServer)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.stats">stats() (в модуле ml_service_app.main)</a>
+</li>
+        <li><a href="backend.html#app.main.status">status() (в модуле app.main)</a>
+
+        <ul>
+          <li><a href="feeder.html#feeder.status">(в модуле feeder)</a>
+</li>
+          <li><a href="backend.html#app.engine.Engine.status">(метод app.engine.Engine)</a>
+</li>
+          <li><a href="feeder.html#feeder.Replay.status">(метод feeder.Replay)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.routes_registry.stitch">stitch() (в модуле app.routes_registry)</a>
+</li>
+        <li><a href="backend.html#app.ndtp_server.NDTPServer.stop">stop() (метод app.ndtp_server.NDTPServer)</a>
+</li>
+        <li><a href="backend.html#app.eta.Overrides.stop_factor">stop_factor (атрибут app.eta.Overrides)</a>
+</li>
+        <li><a href="backend.html#app.eta.StopEta.stop_id">stop_id (атрибут app.eta.StopEta)</a>
+</li>
+        <li><a href="backend.html#app.export.stop_id">stop_id() (в модуле app.export)</a>
+</li>
+        <li><a href="backend.html#app.eta.StopEta.stop_key">stop_key (атрибут app.eta.StopEta)</a>
+
+        <ul>
+          <li><a href="backend.html#app.reference.PlannedStop.stop_key">(атрибут app.reference.PlannedStop)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.config.Settings.stop_lookahead">stop_lookahead (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.stop_radius_m">stop_radius_m (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.eta.StopEta">StopEta (класс в app.eta)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.ManualRoute.stops">stops (атрибут app.api_ext.ManualRoute)</a>
+
+        <ul>
+          <li><a href="backend.html#app.eta.EtaResult.stops">(атрибут app.eta.EtaResult)</a>
+</li>
+          <li><a href="backend.html#app.reference.Reference.stops">(атрибут app.reference.Reference)</a>
+</li>
+          <li><a href="backend.html#app.reference.VehicleSchedule.stops">(атрибут app.reference.VehicleSchedule)</a>
+</li>
+        </ul></li>
+        <li><a href="ndtp.html#ndtp.codec.StreamDecoder">StreamDecoder (класс в ndtp.codec)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.subscribe">subscribe() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.metrics.LatencyWindow.summary">summary() (метод app.metrics.LatencyWindow)</a>
+
+        <ul>
+          <li><a href="backend.html#app.routes_registry.RouteRegistry.summary">(метод app.routes_registry.RouteRegistry)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.clock.DataClock.synced">synced (свойство app.clock.DataClock)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="T" class="genindex-section">
+  <h2>T</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.eta.EtaResult.T">T (атрибут app.eta.EtaResult)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.PredictionPoint.T">(атрибут ml_service_app.main.PredictionPoint)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.tracker.VehicleState.target">target() (метод app.tracker.VehicleState)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictionPoint.target_stop_id">target_stop_id (атрибут ml_service_app.main.PredictionPoint)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictionPoint.target_time_begin">target_time_begin (атрибут ml_service_app.main.PredictionPoint)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictRequest.telemetry">telemetry (атрибут ml_service_app.main.PredictRequest)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.TelemetryRow">TelemetryRow (класс в ml_service_app.main)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.timeline_frames">timeline_frames (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.timeline_step_s">timeline_step_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.timestamp">timestamp (атрибут ndtp.codec.NavRecord)</a>
+</li>
+        <li><a href="ml.html#ml_service_app.main.PredictResponse.timings_ms">timings_ms (атрибут ml_service_app.main.PredictResponse)</a>
+</li>
+        <li><a href="backend.html#app.risk.Cause.title">title (атрибут app.risk.Cause)</a>
+</li>
+        <li><a href="backend.html#app.export.to_protobuf">to_protobuf() (в модуле app.export)</a>
+</li>
+        <li><a href="backend.html#app.reference.Reference.tr_for_unit">tr_for_unit() (метод app.reference.Reference)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.reference.VehicleSchedule.tr_id">tr_id (атрибут app.reference.VehicleSchedule)</a>
+
+        <ul>
+          <li><a href="backend.html#app.tracker.VehicleState.tr_id">(атрибут app.tracker.VehicleState)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.Prediction.tr_id">(атрибут ml_service_app.main.Prediction)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.PredictionPoint.tr_id">(атрибут ml_service_app.main.PredictionPoint)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.TelemetryRow.tr_id">(атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+        </ul></li>
+        <li><a href="ndtp.html#ndtp.codec.NavRecord.track_m">track_m (атрибут ndtp.codec.NavRecord)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaEngine.traffic_factor">traffic_factor() (метод app.eta.EtaEngine)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.TrafficUpdate">TrafficUpdate (класс в app.api_ext)</a>
+</li>
+        <li><a href="ml.html#data_functions.train">train() (в модуле data_functions)</a>
+
+        <ul>
+          <li><a href="ml.html#ml_service_app.main.train">(в модуле ml_service_app.main)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.export.trip_id">trip_id() (в модуле app.export)</a>
+</li>
+        <li><a href="backend.html#app.export.trips_of">trips_of() (в модуле app.export)</a>
+</li>
+        <li><a href="backend.html#app.api_ext.Scenario.type">type (атрибут app.api_ext.Scenario)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.CellSpec.type_id">type_id (атрибут ndtp.codec.CellSpec)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.eta.EtaResult.unit_id">unit_id (атрибут app.eta.EtaResult)</a>
+
+        <ul>
+          <li><a href="backend.html#app.ndtp_server.ConnInfo.unit_id">(атрибут app.ndtp_server.ConnInfo)</a>
+</li>
+          <li><a href="backend.html#app.tracker.VehicleState.unit_id">(атрибут app.tracker.VehicleState)</a>
+</li>
+          <li><a href="ml.html#ml_service_app.main.TelemetryRow.unit_id">(атрибут ml_service_app.main.TelemetryRow)</a>
+</li>
+        </ul></li>
+        <li><a href="feeder.html#feeder.Replay.unit_shift">unit_shift() (метод feeder.Replay)</a>
+</li>
+        <li><a href="backend.html#app.reference.Reference.unit_to_tr">unit_to_tr (атрибут app.reference.Reference)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="feeder.html#feeder.Replay.unit_worker">unit_worker() (метод feeder.Replay)</a>
+</li>
+        <li><a href="backend.html#app.whatif.Plan.units">units (атрибут app.whatif.Plan)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.units_path">units_path (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.unknown_unit_ttl_s">unknown_unit_ttl_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="ndtp.html#ndtp.codec.Frame.unparsed_cells">unparsed_cells (атрибут ndtp.codec.Frame)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.unsubscribe">unsubscribe() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.eta.EtaEngine.update_traffic">update_traffic() (метод app.eta.EtaEngine)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="V" class="genindex-section">
+  <h2>V</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.main.vehicle">vehicle() (в модуле app.main)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.vehicle_detail">vehicle_detail() (метод app.engine.Engine)</a>
+</li>
+        <li><a href="backend.html#app.routes_registry.RouteRegistry.vehicle_links">vehicle_links() (метод app.routes_registry.RouteRegistry)</a>
+</li>
+        <li><a href="backend.html#app.config.Settings.vehicle_stale_s">vehicle_stale_s (атрибут app.config.Settings)</a>
+</li>
+        <li><a href="backend.html#app.engine.Engine.vehicle_view">vehicle_view() (метод app.engine.Engine)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.api_ext.ManualRoute.vehicles">vehicles (атрибут app.api_ext.ManualRoute)</a>
+
+        <ul>
+          <li><a href="backend.html#app.api_ext.OsmImport.vehicles">(атрибут app.api_ext.OsmImport)</a>
+</li>
+        </ul></li>
+        <li><a href="backend.html#app.main.vehicles">vehicles() (в модуле app.main)</a>
+</li>
+        <li><a href="backend.html#app.reference.VehicleSchedule">VehicleSchedule (класс в app.reference)</a>
+</li>
+        <li><a href="backend.html#app.tracker.VehicleState">VehicleState (класс в app.tracker)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.risk.Cause.weight">weight (атрибут app.risk.Cause)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="backend.html#app.whatif.WhatIf">WhatIf (класс в app.whatif)</a>
+</li>
+        <li><a href="backend.html#app.main.ws">ws() (в модуле app.main)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=9ca2116e"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/translations.js?v=cd1d70c9"></script>
+    </body>
+</html>

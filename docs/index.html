@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mos-transport · документация</title>
+<style>
+  :root { --bg: #ffffff; --fg: #1d2330; --muted: #5b6474; --card: #f4f6f9; --border: #dde2ea; --link: #1f5fbf; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #14171d; --fg: #e6e9ef; --muted: #9aa3b2; --card: #1c2029; --border: #2b3140; --link: #7fb0ff; }
+  }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  p.lead { color: var(--muted); margin: 0 0 28px; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 28px 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  a.card { display: block; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--fg); text-decoration: none; }
+  a.card:hover { border-color: var(--link); }
+  a.card b { display: block; color: var(--link); margin-bottom: 4px; }
+  a.card span { color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Предиктор изменений в графике движения городского транспорта</h1>
+  <p class="lead">Документация проекта: код (Sphinx), API (OpenAPI), инструкции для жюри.</p>
+
+  <h2>Документация по коду и API</h2>
+  <div class="grid">
+    <a class="card" href="code/index.html"><b>Sphinx: документация по коду</b><span>Backend, NDTP, фидер, ML-сервис, ML-ядро — из docstrings</span></a>
+    <a class="card" href="api/backend.html"><b>OpenAPI: Backend</b><span>REST API диспетчерской, what-if, экспорт</span></a>
+    <a class="card" href="api/ml-service.html"><b>OpenAPI: ML-сервис</b><span>Прогноз, SHAP, метаданные модели</span></a>
+    <a class="card" href="api/feeder.html"><b>OpenAPI: фидер потока</b><span>Реплей NDTP, сценарии отказов</span></a>
+  </div>
+
+  <h2>Документы в репозитории</h2>
+  <div class="grid">
+    <a class="card" href="https://github.com/VitalyKalinsky/mos-transport/blob/main/README.md"><b>README</b><span>Запуск, производительность, вся функциональность</span></a>
+    <a class="card" href="https://github.com/VitalyKalinsky/mos-transport/blob/main/docs/JURY_GUIDE.md"><b>Инструкция для жюри</b><span>Поток, прогнозы и алерты, дашборд, метрики</span></a>
+    <a class="card" href="https://github.com/VitalyKalinsky/mos-transport/blob/main/docs/API.md"><b>Архитектура и API</b><span>Backend, дашборд, фидер, эндпоинты</span></a>
+    <a class="card" href="https://github.com/VitalyKalinsky/mos-transport/blob/main/docs/ML.md"><b>ML-модуль</b><span>Модель, признаки, SHAP, метрики</span></a>
+  </div>
+</main>
+</body>
+</html>

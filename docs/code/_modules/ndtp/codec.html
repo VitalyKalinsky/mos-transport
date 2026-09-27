@@ -1,0 +1,897 @@
+<!doctype html>
+<html class="no-js" lang="ru" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Алфавитный указатель" href="../../genindex.html" /><link rel="search" title="Поиск" href="../../search.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>ndtp.codec - mos-transport · документация по коду</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">mos-transport · документация по коду</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">mos-transport · документация по коду</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Поиск" name="q" aria-label="Поиск">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Модули</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../backend.html">Backend (services/backend)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndtp.html">NDTP-кодек (libs/ndtp)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feeder.html">Replay-фидер (services/feeder)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ml.html">ML-модуль</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Исходный код ndtp.codec</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""NDTP (Navigation Data Transfer Protocol) codec.</span>
+
+<span class="sd">Реализация по dataset/docs/Emulator-and-Telematic-Packets-Specification.md:</span>
+
+<span class="sd">    кадр = [ NPL 15 байт ][ NPH 10 байт ][ тело ]</span>
+
+<span class="sd">* все поля little-endian, структуры packed;</span>
+<span class="sd">* CRC-16/Modbus (poly 0xA001, init 0xFFFF) по NPH + телу, в NPL кладётся со свапнутыми байтами;</span>
+<span class="sd">* тело NPH_SND_REALTIME — последовательность ячеек [type u8][number u8][payload].</span>
+
+<span class="sd">Модуль без внешних зависимостей: им пользуются и Backend-сервис (приём и разбор потока),</span>
+<span class="sd">и replay-фидер (кодирование CSV-телеметрии в NDTP). Один кодек на обеих сторонах гарантирует,</span>
+<span class="sd">что формат совпадает; совместимость с протоколом проверена захватами живого эмулятора</span>
+<span class="sd">(``libs/ndtp/tests/fixtures``).</span>
+<span class="sd">"""</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterator</span>
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Константы протокола</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="n">NPL_SIGNATURE</span> <span class="o">=</span> <span class="mh">0x7E7E</span>  <span class="c1"># по ней декодер пересинхронизируется после мусора</span>
+<span class="n">NPL_HEADER_SIZE</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">NPH_HEADER_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">NPL_TYPE_NPH</span> <span class="o">=</span> <span class="mh">0x02</span>
+<span class="n">MAX_DATA_SIZE</span> <span class="o">=</span> <span class="mi">65535</span>  <span class="c1"># dataSize — u16</span>
+
+<span class="c1"># NPH service / type</span>
+<span class="n">NPH_SRV_GENERIC_CONTROLS</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">NPH_SRV_NAVDATA</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">NPH_RESULT</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">NPH_SGC_CONN_REQUEST</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">NPH_SND_REALTIME</span> <span class="o">=</span> <span class="mi">101</span>
+<span class="n">NPH_SND_HISTORY</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># в сервисе NAVDATA тип 100 — исторические данные (обрабатываем так же)</span>
+
+<span class="n">NPH_FLAG_REQUEST</span> <span class="o">=</span> <span class="mh">0x0001</span>  <span class="c1"># отправитель ждёт NPH_RESULT, иначе повторит пакет</span>
+
+<span class="n">_NPL</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">"&lt;HHHHBIH"</span><span class="p">)</span>          <span class="c1"># 15 байт</span>
+<span class="n">_NPH</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">"&lt;HHHI"</span><span class="p">)</span>             <span class="c1"># 10 байт</span>
+<span class="n">_HANDSHAKE</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">"&lt;HHHIII"</span><span class="p">)</span>     <span class="c1"># 18 байт</span>
+<span class="n">_RESULT</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">"&lt;I"</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="crc16_modbus">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.crc16_modbus">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">crc16_modbus</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""CRC-16/Modbus, эталонная побитовая версия (для тестов).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: NPH + тело кадра.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: CRC (poly 0xA001 = reflected 0x8005, init 0xFFFF).</span>
+<span class="sd">    """</span>
+    <span class="n">crc</span> <span class="o">=</span> <span class="mh">0xFFFF</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">crc</span> <span class="o">^=</span> <span class="n">b</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">crc</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">crc</span> <span class="o">=</span> <span class="p">(</span><span class="n">crc</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="mh">0xA001</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">crc</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">crc</span></div>
+
+
+
+<span class="c1"># Табличная версия — байт за итерацию вместо бита; используется на горячем пути приёма.</span>
+<span class="n">_CRC_TABLE</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
+    <span class="n">_c</span> <span class="o">=</span> <span class="n">_i</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">_c</span> <span class="o">=</span> <span class="p">(</span><span class="n">_c</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="mh">0xA001</span> <span class="k">if</span> <span class="n">_c</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">_c</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+    <span class="n">_CRC_TABLE</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_c</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="crc16_modbus_fast">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.crc16_modbus_fast">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">crc16_modbus_fast</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""CRC-16/Modbus табличным методом; результат совпадает с :func:`crc16_modbus`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: NPH + тело кадра.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: CRC.</span>
+<span class="sd">    """</span>
+    <span class="n">crc</span> <span class="o">=</span> <span class="mh">0xFFFF</span>
+    <span class="n">tbl</span> <span class="o">=</span> <span class="n">_CRC_TABLE</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">crc</span> <span class="o">=</span> <span class="p">(</span><span class="n">crc</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">^</span> <span class="n">tbl</span><span class="p">[(</span><span class="n">crc</span> <span class="o">^</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">crc</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_swap16</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Перестановка байт u16: по спецификации CRC в NPL лежит big-endian внутри little-endian заголовка."""</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">v</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Ячейки телематики: (type) -&gt; (имя, struct, поля)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="CellSpec">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.CellSpec">[документация]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CellSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Бинарный формат ячейки телематики: тип, имя, struct (little-endian, packed), имена полей."""</span>
+
+    <span class="n">type_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">fmt</span><span class="p">:</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span>
+    <span class="n">fields</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""int: Размер payload ячейки, байт (без 2 байт type/number)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="o">.</span><span class="n">size</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_spec</span><span class="p">(</span><span class="n">type_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">CellSpec</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">CellSpec</span><span class="p">(</span><span class="n">type_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">"&lt;"</span> <span class="o">+</span> <span class="n">fmt</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">))</span>
+
+
+<span class="n">CELL_SPECS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">CellSpec</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">type_id</span><span class="p">:</span> <span class="n">s</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="c1"># 6.1 навигация, 26 байт</span>
+        <span class="n">_spec</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"G6CellNav00"</span><span class="p">,</span> <span class="s2">"IIIBBHHHHHBB"</span><span class="p">,</span> <span class="p">[</span>
+            <span class="s2">"timestamp"</span><span class="p">,</span> <span class="s2">"longitude"</span><span class="p">,</span> <span class="s2">"latitude"</span><span class="p">,</span> <span class="s2">"extraDop"</span><span class="p">,</span> <span class="s2">"batVoltage"</span><span class="p">,</span>
+            <span class="s2">"speedAvg"</span><span class="p">,</span> <span class="s2">"speedMax"</span><span class="p">,</span> <span class="s2">"course"</span><span class="p">,</span> <span class="s2">"track"</span><span class="p">,</span> <span class="s2">"altitude"</span><span class="p">,</span> <span class="s2">"nsat"</span><span class="p">,</span> <span class="s2">"pdop"</span><span class="p">,</span>
+        <span class="p">]),</span>
+        <span class="c1"># 6.2 внутренние датчики, 26 байт</span>
+        <span class="n">_spec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"G6CellIntSensor02"</span><span class="p">,</span> <span class="s2">"HHHHBBHHHHIBBBb"</span><span class="p">,</span> <span class="p">[</span>
+            <span class="s2">"an_in0"</span><span class="p">,</span> <span class="s2">"an_in1"</span><span class="p">,</span> <span class="s2">"an_in2"</span><span class="p">,</span> <span class="s2">"an_in3"</span><span class="p">,</span> <span class="s2">"di_in"</span><span class="p">,</span> <span class="s2">"di_out"</span><span class="p">,</span>
+            <span class="s2">"di0_counter"</span><span class="p">,</span> <span class="s2">"di1_counter"</span><span class="p">,</span> <span class="s2">"di2_counter"</span><span class="p">,</span> <span class="s2">"di3_counter"</span><span class="p">,</span>
+            <span class="s2">"odometer"</span><span class="p">,</span> <span class="s2">"csq"</span><span class="p">,</span> <span class="s2">"gprs_state"</span><span class="p">,</span> <span class="s2">"accel_energy"</span><span class="p">,</span> <span class="s2">"ext_volt"</span><span class="p">,</span>
+        <span class="p">]),</span>
+        <span class="c1"># 6.3 ДУТ УЗИ-M, 6 байт</span>
+        <span class="n">_spec</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">"G6CellUsi08"</span><span class="p">,</span> <span class="s2">"BHHB"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"det_status"</span><span class="p">,</span> <span class="s2">"level_mm"</span><span class="p">,</span> <span class="s2">"level_l"</span><span class="p">,</span> <span class="s2">"temperature"</span><span class="p">]),</span>
+        <span class="c1"># 6.4 CAN, 37 байт</span>
+        <span class="n">_spec</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">"G6CellCan10"</span><span class="p">,</span> <span class="s2">"IIIIHHhB5HI"</span><span class="p">,</span> <span class="p">[</span>
+            <span class="s2">"secFlagStatus"</span><span class="p">,</span> <span class="s2">"allTimeEngine"</span><span class="p">,</span> <span class="s2">"allTrack"</span><span class="p">,</span> <span class="s2">"allFuelConsum"</span><span class="p">,</span> <span class="s2">"fuelLevel"</span><span class="p">,</span>
+            <span class="s2">"speedTurnEngine"</span><span class="p">,</span> <span class="s2">"tEngine"</span><span class="p">,</span> <span class="s2">"speed"</span><span class="p">,</span>
+            <span class="s2">"pressureAxis1"</span><span class="p">,</span> <span class="s2">"pressureAxis2"</span><span class="p">,</span> <span class="s2">"pressureAxis3"</span><span class="p">,</span> <span class="s2">"pressureAxis4"</span><span class="p">,</span> <span class="s2">"pressureAxis5"</span><span class="p">,</span>
+            <span class="s2">"flagAlarm"</span><span class="p">,</span>
+        <span class="p">]),</span>
+        <span class="c1"># 6.6 LLS, 50 байт</span>
+        <span class="n">_spec</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="s2">"G6CellLls15"</span><span class="p">,</span> <span class="s2">"H12I"</span><span class="p">,</span> <span class="p">[</span>
+            <span class="s2">"status"</span><span class="p">,</span> <span class="s2">"main_float_level"</span><span class="p">,</span> <span class="s2">"temperature_average"</span><span class="p">,</span> <span class="s2">"percent_of_volume"</span><span class="p">,</span>
+            <span class="s2">"total_Volume"</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">,</span> <span class="s2">"density"</span><span class="p">,</span> <span class="s2">"net_Standard_Volume"</span><span class="p">,</span> <span class="s2">"level_of_water"</span><span class="p">,</span>
+            <span class="s2">"pressure"</span><span class="p">,</span> <span class="s2">"vapor_temperature_average"</span><span class="p">,</span> <span class="s2">"vapor_Weight"</span><span class="p">,</span> <span class="s2">"liquid_phase_Weight"</span><span class="p">,</span>
+        <span class="p">]),</span>
+        <span class="c1"># 6.5 температура, 8 байт</span>
+        <span class="n">_spec</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s2">"G6CellTermo16"</span><span class="p">,</span> <span class="s2">"Ii"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"status"</span><span class="p">,</span> <span class="s2">"temp"</span><span class="p">]),</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Структуры результата разбора</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="NavRecord">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.NavRecord">[документация]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NavRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Раскодированная G6CellNav00 в терминах traffic.csv."""</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span>                <span class="c1"># Unix-секунды (UTC)</span>
+    <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">location_valid</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span>                  <span class="c1"># speedAvg, км/ч</span>
+    <span class="n">speed_max</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">heading</span><span class="p">:</span> <span class="nb">float</span>                <span class="c1"># course, градусы</span>
+    <span class="n">alt</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">nsat</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">pdop</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">bat_voltage_v</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">track_m</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">alarm</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">sos</span><span class="p">:</span> <span class="nb">bool</span>
+
+<div class="viewcode-block" id="NavRecord.from_cell">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.NavRecord.from_cell">[документация]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_cell</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">"NavRecord"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Nav00 → поля traffic.csv по таблице §8 README датасета.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            c: Разобранная ячейка G6CellNav00.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            NavRecord: Координаты в градусах со знаком; ``lon/lat = None`` при нулевых координатах.</span>
+<span class="sd">        """</span>
+        <span class="n">bits</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">"extraDop"</span><span class="p">]</span>
+        <span class="c1"># координаты передаются модулем, знак — битами 5 (N) и 6 (E); бит 7 — достоверность</span>
+        <span class="n">lat_north</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">bits</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">))</span>
+        <span class="n">lon_east</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">bits</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">bits</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">"longitude"</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e7</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">lon_east</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">"latitude"</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e7</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">lat_north</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="s2">"longitude"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">c</span><span class="p">[</span><span class="s2">"latitude"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># терминал без фикса шлёт нули — это не точка (0, 0)</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="n">lat</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">timestamp</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">"timestamp"</span><span class="p">],</span>
+            <span class="n">lon</span><span class="o">=</span><span class="n">lon</span><span class="p">,</span>
+            <span class="n">lat</span><span class="o">=</span><span class="n">lat</span><span class="p">,</span>
+            <span class="n">location_valid</span><span class="o">=</span><span class="n">valid</span><span class="p">,</span>
+            <span class="n">speed</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">"speedAvg"</span><span class="p">]),</span>
+            <span class="n">speed_max</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">"speedMax"</span><span class="p">]),</span>
+            <span class="n">heading</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">"course"</span><span class="p">]),</span>
+            <span class="n">alt</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">"altitude"</span><span class="p">]),</span>
+            <span class="n">nsat</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">"nsat"</span><span class="p">],</span>
+            <span class="n">pdop</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">"pdop"</span><span class="p">],</span>
+            <span class="n">bat_voltage_v</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">"batVoltage"</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.02</span><span class="p">,</span>  <span class="c1"># единица — 20 мВ</span>
+            <span class="n">track_m</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">"track"</span><span class="p">],</span>
+            <span class="n">alarm</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">bits</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="n">sos</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">bits</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)),</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Frame">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.Frame">[документация]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Frame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Разобранный NDTP-кадр: заголовки NPL/NPH и содержимое (ячейки или handshake)."""</span>
+
+    <span class="n">peer_address</span><span class="p">:</span> <span class="nb">int</span>             <span class="c1"># unitId из NPL — по нему терминал связывается с ТС</span>
+    <span class="n">npl_request_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">service_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">nph_type</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">nph_flags</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">nph_request_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">bytes</span>
+    <span class="n">cells</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">handshake</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">unparsed_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>       <span class="c1"># ячейки неизвестного типа (разбор хвоста остановлен)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_handshake</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""bool: Запрос соединения ``NPH_SGC_CONN_REQUEST`` (первый кадр сессии)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_id</span> <span class="o">==</span> <span class="n">NPH_SRV_GENERIC_CONTROLS</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nph_type</span> <span class="o">==</span> <span class="n">NPH_SGC_CONN_REQUEST</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_telemetry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""bool: Навигационные данные (realtime или история)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_id</span> <span class="o">==</span> <span class="n">NPH_SRV_NAVDATA</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nph_type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NPH_SND_REALTIME</span><span class="p">,</span> <span class="n">NPH_SND_HISTORY</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_history</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""bool: Данные из «чёрного ящика», досланные после восстановления связи."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_id</span> <span class="o">==</span> <span class="n">NPH_SRV_NAVDATA</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nph_type</span> <span class="o">==</span> <span class="n">NPH_SND_HISTORY</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">needs_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""bool: Отправитель ждёт ``NPH_RESULT``."""</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nph_flags</span> <span class="o">&amp;</span> <span class="n">NPH_FLAG_REQUEST</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Frame.nav">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.Frame.nav">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NavRecord</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Первая навигационная ячейка кадра.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            NavRecord | None: ``None`` — в кадре нет Nav00.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">NavRecord</span><span class="o">.</span><span class="n">from_cell</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="NDTPError">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.NDTPError">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NDTPError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Кадр не соответствует протоколу (короткий, чужая сигнатура, тип NPL, обрезан, CRC)."""</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Разбор</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="parse_cells">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.parse_cells">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_cells</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Разбирает тело realtime-пакета.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        body: Тело кадра после NPH.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple[list[dict], int]: Ячейки и признак обрыва разбора (1 — встречен тип неизвестного размера</span>
+<span class="sd">        или обрезанная ячейка; ячейки до него сохраняются).</span>
+<span class="sd">    """</span>
+    <span class="n">cells</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">ctype</span><span class="p">,</span> <span class="n">number</span> <span class="o">=</span> <span class="n">body</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span> <span class="n">body</span><span class="p">[</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">CELL_SPECS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ctype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ctype</span> <span class="ow">in</span> <span class="n">OPAQUE_CELL_SIZES</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">OPAQUE_CELL_SIZES</span><span class="p">[</span><span class="n">ctype</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">cells</span><span class="p">,</span> <span class="mi">1</span>
+            <span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"type"</span><span class="p">:</span> <span class="n">ctype</span><span class="p">,</span> <span class="s2">"number"</span><span class="p">:</span> <span class="n">number</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                          <span class="s2">"raw"</span><span class="p">:</span> <span class="n">body</span><span class="p">[</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">2</span><span class="p">:</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">hex</span><span class="p">()})</span>
+            <span class="n">pos</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">size</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">spec</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="c1"># Размер неизвестного типа нам не известен → дальше разбирать нельзя.</span>
+            <span class="k">return</span> <span class="n">cells</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">fmt</span><span class="o">.</span><span class="n">unpack_from</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">fields</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
+        <span class="n">cell</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctype</span>
+        <span class="n">cell</span><span class="p">[</span><span class="s2">"number"</span><span class="p">]</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="n">cell</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">spec</span><span class="o">.</span><span class="n">size</span>
+    <span class="k">return</span> <span class="n">cells</span><span class="p">,</span> <span class="mi">0</span></div>
+
+
+
+<span class="c1"># Ячейки из §6.7: бинарный layout полей в спецификации не описан, но размер</span>
+<span class="c1"># измерен на живом эмуляторе (ndtp-telemetry-emulator:1.0). Такие ячейки</span>
+<span class="c1"># пропускаем целиком (payload отдаём как hex), не теряя последующие ячейки пакета.</span>
+<span class="n">OPAQUE_CELL_SIZES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellCrown03"</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="mi">4</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellIrma04"</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="mi">5</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellKdm05"</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="mi">6</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellIdn06"</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="mi">7</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellIdn07"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">9</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellReg09"</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span>
+    <span class="mi">12</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellRfid12"</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">13</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellPlo13"</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="mi">14</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellBms14"</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+    <span class="mi">17</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellAlcohol1st17"</span><span class="p">,</span> <span class="mi">46</span><span class="p">),</span> <span class="mi">18</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellCAN18"</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="mi">19</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellGSMstations19"</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span>
+    <span class="mi">20</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellM333CAN20"</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="mi">21</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellAlcohol2nd21"</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span> <span class="mi">22</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellServerStatistics22"</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span>
+    <span class="mi">23</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellTrackerStatistics23"</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="mi">100</span><span class="p">:</span> <span class="p">(</span><span class="s2">"G6CellZipSensorData100"</span><span class="p">,</span> <span class="mi">44</span><span class="p">),</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="parse_frame">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.parse_frame">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_frame</span><span class="p">(</span><span class="n">buf</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="nb">memoryview</span><span class="p">,</span> <span class="n">verify_crc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Frame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Разбирает ровно один полный кадр.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        buf: Байты кадра, начиная с сигнатуры.</span>
+<span class="sd">        verify_crc: Проверять CRC.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Frame: Кадр с разобранными ячейками или handshake.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        NDTPError: Кадр короче заголовков, неверная сигнатура или тип NPL, тело обрезано, CRC не совпал.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">NPL_HEADER_SIZE</span> <span class="o">+</span> <span class="n">NPH_HEADER_SIZE</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NDTPError</span><span class="p">(</span><span class="s2">"frame too short"</span><span class="p">)</span>
+    <span class="n">sig</span><span class="p">,</span> <span class="n">data_size</span><span class="p">,</span> <span class="n">_flags</span><span class="p">,</span> <span class="n">crc</span><span class="p">,</span> <span class="n">npl_type</span><span class="p">,</span> <span class="n">peer</span><span class="p">,</span> <span class="n">npl_req</span> <span class="o">=</span> <span class="n">_NPL</span><span class="o">.</span><span class="n">unpack_from</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sig</span> <span class="o">!=</span> <span class="n">NPL_SIGNATURE</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NDTPError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"bad signature 0x</span><span class="si">{</span><span class="n">sig</span><span class="si">:</span><span class="s2">04X</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">npl_type</span> <span class="o">!=</span> <span class="n">NPL_TYPE_NPH</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NDTPError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unsupported NPL type </span><span class="si">{</span><span class="n">npl_type</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="n">NPL_HEADER_SIZE</span><span class="p">:</span><span class="n">NPL_HEADER_SIZE</span> <span class="o">+</span> <span class="n">data_size</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span> <span class="o">!=</span> <span class="n">data_size</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NDTPError</span><span class="p">(</span><span class="s2">"truncated frame"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verify_crc</span><span class="p">:</span>
+        <span class="n">calc</span> <span class="o">=</span> <span class="n">crc16_modbus_fast</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+        <span class="c1"># По спецификации CRC лежит со свапнутыми байтами; принимаем и «прямой» порядок</span>
+        <span class="c1"># для совместимости с иными реализациями терминалов.</span>
+        <span class="k">if</span> <span class="n">crc</span> <span class="o">!=</span> <span class="n">_swap16</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span> <span class="ow">and</span> <span class="n">crc</span> <span class="o">!=</span> <span class="n">calc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NDTPError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"crc mismatch: got 0x</span><span class="si">{</span><span class="n">crc</span><span class="si">:</span><span class="s2">04X</span><span class="si">}</span><span class="s2">, calc 0x</span><span class="si">{</span><span class="n">calc</span><span class="si">:</span><span class="s2">04X</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">srv</span><span class="p">,</span> <span class="n">nph_type</span><span class="p">,</span> <span class="n">nph_flags</span><span class="p">,</span> <span class="n">nph_req</span> <span class="o">=</span> <span class="n">_NPH</span><span class="o">.</span><span class="n">unpack_from</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="n">NPH_HEADER_SIZE</span><span class="p">:]</span>
+    <span class="n">fr</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="n">peer</span><span class="p">,</span> <span class="n">npl_req</span><span class="p">,</span> <span class="n">srv</span><span class="p">,</span> <span class="n">nph_type</span><span class="p">,</span> <span class="n">nph_flags</span><span class="p">,</span> <span class="n">nph_req</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fr</span><span class="o">.</span><span class="n">is_handshake</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">body</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">_HANDSHAKE</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+        <span class="n">hi</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hflags</span><span class="p">,</span> <span class="n">hpeer</span><span class="p">,</span> <span class="n">max_size</span><span class="p">,</span> <span class="n">_res</span> <span class="o">=</span> <span class="n">_HANDSHAKE</span><span class="o">.</span><span class="n">unpack_from</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">fr</span><span class="o">.</span><span class="n">handshake</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"proto_version"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">hi</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">lo</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"flags"</span><span class="p">:</span> <span class="n">hflags</span><span class="p">,</span>
+            <span class="s2">"peer_address"</span><span class="p">:</span> <span class="n">hpeer</span><span class="p">,</span> <span class="s2">"max_packet_size"</span><span class="p">:</span> <span class="n">max_size</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="k">elif</span> <span class="n">fr</span><span class="o">.</span><span class="n">is_telemetry</span><span class="p">:</span>
+        <span class="n">fr</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="n">fr</span><span class="o">.</span><span class="n">unparsed_cells</span> <span class="o">=</span> <span class="n">parse_cells</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fr</span></div>
+
+
+
+<div class="viewcode-block" id="StreamDecoder">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.StreamDecoder">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StreamDecoder</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Инкрементальный декодер TCP-потока: накапливает байты, отдаёт целые кадры.</span>
+
+<span class="sd">    Устойчив к мусору и битым кадрам: при ошибке сигнатуры/CRC пересинхронизируется</span>
+<span class="sd">    по следующей сигнатуре 0x7E7E, не теряя соединение.</span>
+<span class="sd">    """</span>
+
+    <span class="n">SIG</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">"</span><span class="se">\x7e\x7e</span><span class="s2">"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verify_crc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">max_buffer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Args:</span>
+<span class="sd">            verify_crc: Проверять CRC кадров.</span>
+<span class="sd">            max_buffer: Предел буфера, байт; защита от памяти при бесконечном мусоре.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify_crc</span> <span class="o">=</span> <span class="n">verify_crc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_buffer</span> <span class="o">=</span> <span class="n">max_buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skipped_bytes</span> <span class="o">=</span> <span class="mi">0</span>          <span class="c1"># мусор между кадрами, отброшенный при пересинхронизации</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_error</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="StreamDecoder.feed">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.StreamDecoder.feed">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">feed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Frame</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Добавляет очередной фрагмент TCP-потока и выдаёт все собранные целые кадры.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: Произвольный фрагмент (TCP не сохраняет границы кадров).</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Frame: Корректные кадры. Ошибки не пробрасываются, а считаются в ``errors`` и ``last_error``.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="o">+=</span> <span class="n">data</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_buffer</span><span class="p">:</span>  <span class="c1"># защита от раздувания буфера</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[</span><span class="o">-</span><span class="n">NPL_HEADER_SIZE</span><span class="p">:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_error</span> <span class="o">=</span> <span class="s2">"buffer overflow"</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SIG</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># оставляем последний байт — он может быть началом сигнатуры</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">skipped_bytes</span> <span class="o">+=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">skipped_bytes</span> <span class="o">+=</span> <span class="n">start</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[:</span><span class="n">start</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">NPL_HEADER_SIZE</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="n">data_size</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="s2">"little"</span><span class="p">)</span>
+            <span class="c1"># валидируем заголовок ДО ожидания тела: ложная сигнатура 0x7E7E в мусоре</span>
+            <span class="c1"># с большим dataSize иначе «подвесила» бы поток до 64 КБ</span>
+            <span class="k">if</span> <span class="n">data_size</span> <span class="o">&lt;</span> <span class="n">NPH_HEADER_SIZE</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">!=</span> <span class="n">NPL_TYPE_NPH</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_skip</span><span class="p">(</span><span class="s2">"bad NPL header"</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="n">NPL_HEADER_SIZE</span> <span class="o">+</span> <span class="n">data_size</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">total</span><span class="p">:</span>
+                <span class="k">return</span>  <span class="c1"># кадр ещё не пришёл целиком — ждём следующий фрагмент</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">frame</span> <span class="o">=</span> <span class="n">parse_frame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[:</span><span class="n">total</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify_crc</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">NDTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_skip</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="k">continue</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[:</span><span class="n">total</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="n">frame</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_skip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_error</span> <span class="o">=</span> <span class="n">reason</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buf</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># сдвигаемся за сигнатуру и ищем следующую</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Кодирование (для эмуляции терминала и ответов сервера)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<div class="viewcode-block" id="build_frame">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.build_frame">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_frame</span><span class="p">(</span><span class="n">peer_address</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">service_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nph_type</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">request_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">body</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">nph_flags</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">NPH_FLAG_REQUEST</span><span class="p">,</span> <span class="n">npl_request_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Собирает кадр NPL + NPH + тело с CRC.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        peer_address: unitId терминала.</span>
+<span class="sd">        service_id: Сервис NPH.</span>
+<span class="sd">        nph_type: Тип пакета NPH.</span>
+<span class="sd">        request_id: ID запроса NPH (обрезается до u32).</span>
+<span class="sd">        body: Тело.</span>
+<span class="sd">        nph_flags: Флаги NPH (по умолчанию — ждать подтверждения).</span>
+<span class="sd">        npl_request_id: ID запроса NPL.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: Готовый кадр.</span>
+<span class="sd">    """</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">_NPH</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">service_id</span><span class="p">,</span> <span class="n">nph_type</span><span class="p">,</span> <span class="n">nph_flags</span><span class="p">,</span> <span class="n">request_id</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span><span class="p">)</span> <span class="o">+</span> <span class="n">body</span>
+    <span class="n">crc</span> <span class="o">=</span> <span class="n">_swap16</span><span class="p">(</span><span class="n">crc16_modbus_fast</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+    <span class="n">npl</span> <span class="o">=</span> <span class="n">_NPL</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">NPL_SIGNATURE</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">crc</span><span class="p">,</span> <span class="n">NPL_TYPE_NPH</span><span class="p">,</span>
+                    <span class="n">peer_address</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span><span class="p">,</span> <span class="n">npl_request_id</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">npl</span> <span class="o">+</span> <span class="n">payload</span></div>
+
+
+
+<div class="viewcode-block" id="build_handshake">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.build_handshake">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_handshake</span><span class="p">(</span><span class="n">unit_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">request_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Запрос соединения терминала (``NPH_SGC_CONN_REQUEST``).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        unit_id: unitId терминала.</span>
+<span class="sd">        request_id: ID запроса.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: Кадр handshake.</span>
+<span class="sd">    """</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">_HANDSHAKE</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">unit_id</span><span class="p">,</span> <span class="mi">65535</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># версия протокола 6.2</span>
+    <span class="k">return</span> <span class="n">build_frame</span><span class="p">(</span><span class="n">unit_id</span><span class="p">,</span> <span class="n">NPH_SRV_GENERIC_CONTROLS</span><span class="p">,</span> <span class="n">NPH_SGC_CONN_REQUEST</span><span class="p">,</span> <span class="n">request_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="build_result">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.build_result">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_result</span><span class="p">(</span><span class="n">to_frame</span><span class="p">:</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Ответ сервера ``NPH_RESULT`` на кадр с флагом request.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        to_frame: Подтверждаемый кадр (берутся его peer, сервис и request_id).</span>
+<span class="sd">        error: Код результата, 0 — успех.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: Кадр ответа (без флага request: на ответ не отвечают).</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">build_frame</span><span class="p">(</span><span class="n">to_frame</span><span class="o">.</span><span class="n">peer_address</span><span class="p">,</span> <span class="n">to_frame</span><span class="o">.</span><span class="n">service_id</span><span class="p">,</span> <span class="n">NPH_RESULT</span><span class="p">,</span>
+                       <span class="n">to_frame</span><span class="o">.</span><span class="n">nph_request_id</span><span class="p">,</span> <span class="n">_RESULT</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="n">nph_flags</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="encode_cell">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.encode_cell">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">encode_cell</span><span class="p">(</span><span class="n">type_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Кодирует ячейку телематики.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        type_id: Тип ячейки из :data:`CELL_SPECS`.</span>
+<span class="sd">        number: Номер ячейки.</span>
+<span class="sd">        values: Значения полей; отсутствующие — 0.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: ``[type][number][payload]``.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeyError: Тип без описания формата.</span>
+<span class="sd">        struct.error: Значение не помещается в поле.</span>
+<span class="sd">    """</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">CELL_SPECS</span><span class="p">[</span><span class="n">type_id</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">((</span><span class="n">type_id</span><span class="p">,</span> <span class="n">number</span><span class="p">))</span> <span class="o">+</span> <span class="n">spec</span><span class="o">.</span><span class="n">fmt</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">fields</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="encode_nav">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.encode_nav">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">encode_nav</span><span class="p">(</span><span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">valid</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+               <span class="n">speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">heading</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+               <span class="n">nsat</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span> <span class="n">pdop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">bat_voltage_v</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.1</span><span class="p">,</span>
+               <span class="n">track_m</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""G6CellNav00 из полей traffic.csv (обратное преобразование к таблице §8 README датасета).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        timestamp: Время, unix-с.</span>
+<span class="sd">        lon: Долгота или ``None`` (нет фикса → нули и сброшенный бит валидности).</span>
+<span class="sd">        lat: Широта или ``None``.</span>
+<span class="sd">        valid: Координаты достоверны.</span>
+<span class="sd">        speed: Скорость, км/ч.</span>
+<span class="sd">        heading: Курс, градусы.</span>
+<span class="sd">        alt: Высота, м.</span>
+<span class="sd">        nsat: Число спутников.</span>
+<span class="sd">        pdop: PDOP.</span>
+<span class="sd">        bat_voltage_v: Напряжение батареи, В.</span>
+<span class="sd">        track_m: Пробег, м.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: Ячейка Nav00.</span>
+<span class="sd">    """</span>
+    <span class="n">has_pos</span> <span class="o">=</span> <span class="n">lon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">lat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_pos</span> <span class="ow">or</span> <span class="n">lat</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">bits</span> <span class="o">|=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_pos</span> <span class="ow">or</span> <span class="n">lon</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">bits</span> <span class="o">|=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span>
+    <span class="k">if</span> <span class="n">valid</span> <span class="ow">and</span> <span class="n">has_pos</span><span class="p">:</span>
+        <span class="n">bits</span> <span class="o">|=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
+    <span class="n">spd</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">65535</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">speed</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">))))</span>
+    <span class="k">return</span> <span class="n">encode_cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s2">"timestamp"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">timestamp</span><span class="p">),</span>
+        <span class="s2">"longitude"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e7</span><span class="p">))</span> <span class="k">if</span> <span class="n">has_pos</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"latitude"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e7</span><span class="p">))</span> <span class="k">if</span> <span class="n">has_pos</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"extraDop"</span><span class="p">:</span> <span class="n">bits</span><span class="p">,</span>
+        <span class="s2">"batVoltage"</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">bat_voltage_v</span> <span class="o">/</span> <span class="mf">0.02</span><span class="p">))),</span>
+        <span class="s2">"speedAvg"</span><span class="p">:</span> <span class="n">spd</span><span class="p">,</span>
+        <span class="s2">"speedMax"</span><span class="p">:</span> <span class="n">spd</span><span class="p">,</span>
+        <span class="s2">"course"</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">65535</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">heading</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">))))</span> <span class="o">%</span> <span class="mi">361</span><span class="p">,</span>  <span class="c1"># курс 0..360 включительно</span>
+        <span class="s2">"track"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">track_m</span><span class="p">)</span> <span class="o">%</span> <span class="mi">65535</span><span class="p">,</span>
+        <span class="s2">"altitude"</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">65535</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">alt</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)))),</span>
+        <span class="s2">"nsat"</span><span class="p">:</span> <span class="n">nsat</span><span class="p">,</span>
+        <span class="s2">"pdop"</span><span class="p">:</span> <span class="n">pdop</span><span class="p">,</span>
+    <span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="build_realtime">
+<a class="viewcode-back" href="../../ndtp.html#ndtp.codec.build_realtime">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_realtime</span><span class="p">(</span><span class="n">unit_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">request_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cells</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">history</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Кадр с навигационными данными.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        unit_id: unitId терминала.</span>
+<span class="sd">        request_id: ID запроса.</span>
+<span class="sd">        cells: Закодированные ячейки.</span>
+<span class="sd">        history: Исторические данные (досылка после обрыва).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bytes: Кадр ``NPH_SND_REALTIME`` или ``NPH_SND_HISTORY``.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">build_frame</span><span class="p">(</span><span class="n">unit_id</span><span class="p">,</span> <span class="n">NPH_SRV_NAVDATA</span><span class="p">,</span>
+                       <span class="n">NPH_SND_HISTORY</span> <span class="k">if</span> <span class="n">history</span> <span class="k">else</span> <span class="n">NPH_SND_REALTIME</span><span class="p">,</span> <span class="n">request_id</span><span class="p">,</span> <span class="n">cells</span><span class="p">)</span></div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=9ca2116e"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/translations.js?v=cd1d70c9"></script>
+    </body>
+</html>

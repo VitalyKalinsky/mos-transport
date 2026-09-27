@@ -1,0 +1,7 @@
+units=1000 rate/unit=1.0/s duration=40.0s  conn_errors=0
+sent=39273  received_by_backend=39761  loss=-1.24%
+throughput ≈ 994 packets/s
+ingest processing per packet (µs): {'n': 2000, 'p50': 11.295, 'p95': 60.952, 'p99': 118.564, 'max': 229.822}
+prediction cycle (ms): {'n': 317, 'p50': 23.056, 'p95': 33.488, 'p99': 42.922, 'max': 79.979}  overruns=0
+API /health latency under load: p50=3.0 ms  max=25.6 ms
+parse_errors=0 handler_errors=0

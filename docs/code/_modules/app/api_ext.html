@@ -1,0 +1,706 @@
+<!doctype html>
+<html class="no-js" lang="ru" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Алфавитный указатель" href="../../genindex.html" /><link rel="search" title="Поиск" href="../../search.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>app.api_ext - mos-transport · документация по коду</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">mos-transport · документация по коду</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">mos-transport · документация по коду</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Поиск" name="q" aria-label="Поиск">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Модули</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../backend.html">Backend (services/backend)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndtp.html">NDTP-кодек (libs/ndtp)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feeder.html">Replay-фидер (services/feeder)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ml.html">ML-модуль</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Исходный код app.api_ext</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Расширенное API: регион/карта, поиск и отслеживание ТС, ETA, what-if, таймлайн, реестр маршрутов,</span>
+<span class="sd">пробки/автобусные полосы, экспорт для картографических сервисов, управление потоком.</span>
+
+<span class="sd">Эндпоинты регистрируются функцией :func:`register` на общем приложении из :mod:`app.main`.</span>
+<span class="sd">"""</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Body</span><span class="p">,</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">File</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">UploadFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span><span class="p">,</span> <span class="n">Response</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.routes_registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImportError_</span><span class="p">,</span> <span class="n">geometry_by_router</span><span class="p">,</span> <span class="n">import_gtfs</span><span class="p">,</span> <span class="n">import_osm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.whatif</span><span class="w"> </span><span class="kn">import</span> <span class="n">SCENARIO_TYPES</span><span class="p">,</span> <span class="n">merge</span>
+
+<span class="n">ScenarioType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"reserve_bus"</span><span class="p">,</span> <span class="s2">"detour"</span><span class="p">,</span> <span class="s2">"signal_priority"</span><span class="p">,</span> <span class="s2">"domino"</span><span class="p">,</span> <span class="s2">"skip_stops"</span><span class="p">,</span>
+                       <span class="s2">"breakdown"</span><span class="p">,</span> <span class="s2">"accident"</span><span class="p">,</span> <span class="s2">"blockage"</span><span class="p">,</span> <span class="s2">"traffic"</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Scenario">
+<a class="viewcode-back" href="../../backend.html#app.api_ext.Scenario">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Scenario</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Один сценарий what-if: тип + параметры (см. ``GET /api/whatif/types``)."""</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">ScenarioType</span>
+    <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">,</span> <span class="n">examples</span><span class="o">=</span><span class="p">[{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="mi">985940</span><span class="p">,</span> <span class="s2">"minutes"</span><span class="p">:</span> <span class="mi">10</span><span class="p">}])</span></div>
+
+
+
+<div class="viewcode-block" id="SimulateRequest">
+<a class="viewcode-back" href="../../backend.html#app.api_ext.SimulateRequest">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SimulateRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Запрос моделирования: сценарии применяются вместе (комбинация)."""</span>
+    <span class="n">scenarios</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Scenario</span><span class="p">]</span>
+    <span class="n">horizon_stops</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+    <span class="n">include_all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># показать и незатронутые ТС (для сравнения по сети)</span></div>
+
+
+
+<div class="viewcode-block" id="ApplyRequest">
+<a class="viewcode-back" href="../../backend.html#app.api_ext.ApplyRequest">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ApplyRequest</span><span class="p">(</span><span class="n">SimulateRequest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Запрос применения сценария к живому прогнозу."""</span>
+    <span class="n">duration_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Сколько минут (время данных) воздействие действует в живом прогнозе"</span><span class="p">)</span>
+    <span class="n">inject_into_stream</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Поломку/ДТП/засор также имитировать в потоке телеметрии (фидер)"</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ManualRoute">
+<a class="viewcode-back" href="../../backend.html#app.api_ext.ManualRoute">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ManualRoute</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Маршрут, заданный вручную списком остановок."""</span>
+    <span class="n">ref</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="s2">"м6"</span><span class="p">])</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"bus"</span><span class="p">,</span> <span class="s2">"trolleybus"</span><span class="p">,</span> <span class="s2">"tram"</span><span class="p">,</span> <span class="s2">"share_taxi"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"bus"</span>
+    <span class="n">stops</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"[{name, lat, lon}] в порядке следования"</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">vehicles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="OsmImport">
+<a class="viewcode-back" href="../../backend.html#app.api_ext.OsmImport">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OsmImport</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Импорт из OSM по номеру или ID relation."""</span>
+    <span class="n">ref</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Номер маршрута как в OSM (например «м6», «т25», «297»)"</span><span class="p">)</span>
+    <span class="n">relation_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">vehicles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Привязать ТС (tr_id) к импортированному маршруту"</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TrafficUpdate">
+<a class="viewcode-back" href="../../backend.html#app.api_ext.TrafficUpdate">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TrafficUpdate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Внешний индекс пробок и автобусные полосы для набора перегонов."""</span>
+    <span class="n">segment_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">jam</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Балл пробок 0–10 (как в картографических сервисах)"</span><span class="p">)</span>
+    <span class="n">bus_lane</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Доля участка с выделенной полосой ОТ"</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="register">
+<a class="viewcode-back" href="../../backend.html#app.api_ext.register">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">app</span><span class="p">:</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Регистрирует расширенные эндпоинты.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        app: Приложение FastAPI.</span>
+<span class="sd">        state: Общее состояние процесса из :mod:`app.main` (заполняется в lifespan).</span>
+<span class="sd">    """</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eng</span><span class="p">():</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"engine"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">503</span><span class="p">,</span> <span class="s2">"starting"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">e</span>
+
+    <span class="c1"># ------------------------------------------------------------- region / map</span>
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/region"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"map"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Регион обслуживания: границы карты, центр, провайдеры тайлов"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">region</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">"""Регион карты: границы, центр, масштабы, часовой пояс, провайдеры тайлов (2ГИС, Яндекс, OSM)."""</span>
+        <span class="k">return</span> <span class="n">state</span><span class="p">[</span><span class="s2">"region"</span><span class="p">]</span>
+
+    <span class="c1"># ------------------------------------------------------------- search / tracking</span>
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/search"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"dispatcher"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Поиск ТС по номеру ТС / бортовому терминалу / номеру маршрута"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="n">q</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="s2">"м6"</span><span class="p">])):</span>
+<span class="w">        </span><span class="sd">"""Поиск ТС и маршрутов.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            q: tr_id, unit_id или номер маршрута. Короткие запросы (&lt; 3 символов) — только точное</span>
+<span class="sd">                совпадение, чтобы «1» не находило всё подряд.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: ``vehicles`` (до 30) и ``routes`` (до 10).</span>
+<span class="sd">        """</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">eng</span><span class="p">()</span>
+        <span class="n">ql</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">snapshot</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"vehicles"</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">"tr_id"</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">"unit_id"</span><span class="p">]),</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"route_ref"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                    <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"route_id"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="n">ql</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ql</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">ql</span> <span class="ow">in</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">):</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"vehicle"</span><span class="p">,</span> <span class="s2">"unit_id"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s2">"unit_id"</span><span class="p">],</span> <span class="s2">"tr_id"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s2">"tr_id"</span><span class="p">],</span>
+                            <span class="s2">"route_ref"</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"route_ref"</span><span class="p">),</span> <span class="s2">"route_id"</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"route_id"</span><span class="p">),</span> <span class="s2">"level"</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]})</span>
+        <span class="n">routes</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">"registry"</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"vehicles"</span><span class="p">:</span> <span class="n">res</span><span class="p">[:</span><span class="mi">30</span><span class="p">],</span> <span class="s2">"routes"</span><span class="p">:</span> <span class="n">routes</span><span class="p">[:</span><span class="mi">10</span><span class="p">]}</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/vehicles/</span><span class="si">{vehicle_id}</span><span class="s2">/eta"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"dispatcher"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"ETA на ближайшие остановки"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vehicle_eta</span><span class="p">(</span><span class="n">vehicle_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stops</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">40</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">"""ETA на ближайшие остановки (с учётом применённых what-if).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vehicle_id: unit_id или tr_id.</span>
+<span class="sd">            stops: Число остановок.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 404 — ТС не найдено или без расписания.</span>
+<span class="sd">        """</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">eng</span><span class="p">()</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">vehicle_id</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">next</span><span class="p">((</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">vehicles</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">tr_id</span> <span class="o">==</span> <span class="n">vehicle_id</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">st</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">st</span><span class="o">.</span><span class="n">schedule</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">"vehicle not found or has no schedule"</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">stops</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">live_overrides</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">eta_view</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------- what-if</span>
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/whatif/types"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"what-if"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Типы сценариев и их параметры"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">whatif_types</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">"""Справочник сценариев what-if: название и параметры (в скобках — значения по умолчанию)."""</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"reserve_bus"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"reserve_bus"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС"</span><span class="p">,</span> <span class="s2">"dispatch_min"</span><span class="p">:</span> <span class="s2">"минут до выхода резерва (8)"</span><span class="p">}},</span>
+            <span class="s2">"detour"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"detour"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС"</span><span class="p">,</span> <span class="s2">"offset"</span><span class="p">:</span> <span class="s2">"через сколько остановок начинается закрытие (0)"</span><span class="p">,</span> <span class="s2">"closed_stops"</span><span class="p">:</span> <span class="s2">"число закрытых остановок (1)"</span><span class="p">,</span> <span class="s2">"side_m"</span><span class="p">:</span> <span class="s2">"смещение объезда, м (450)"</span><span class="p">}},</span>
+            <span class="s2">"signal_priority"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"signal_priority"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС (участки впереди)"</span><span class="p">,</span> <span class="s2">"gain"</span><span class="p">:</span> <span class="s2">"сокращение времени перегона (0.15)"</span><span class="p">,</span> <span class="s2">"segments"</span><span class="p">:</span> <span class="s2">"число перегонов (10)"</span><span class="p">}},</span>
+            <span class="s2">"domino"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"domino"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС"</span><span class="p">,</span> <span class="s2">"action"</span><span class="p">:</span> <span class="s2">"short_turn | skip | reserve | hold"</span><span class="p">}},</span>
+            <span class="s2">"skip_stops"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"skip_stops"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС"</span><span class="p">,</span> <span class="s2">"count"</span><span class="p">:</span> <span class="s2">"число остановок (2)"</span><span class="p">}},</span>
+            <span class="s2">"breakdown"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"breakdown"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС"</span><span class="p">,</span> <span class="s2">"minutes"</span><span class="p">:</span> <span class="s2">"длительность простоя (10)"</span><span class="p">}},</span>
+            <span class="s2">"accident"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"accident"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС (ДТП на его пути)"</span><span class="p">,</span> <span class="s2">"minutes"</span><span class="p">:</span> <span class="s2">"длительность (20)"</span><span class="p">,</span> <span class="s2">"capacity"</span><span class="p">:</span> <span class="s2">"пропускная способность (0.35)"</span><span class="p">}},</span>
+            <span class="s2">"blockage"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"blockage"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС"</span><span class="p">,</span> <span class="s2">"minutes"</span><span class="p">:</span> <span class="s2">"длительность (20)"</span><span class="p">,</span> <span class="s2">"capacity"</span><span class="p">:</span> <span class="s2">"пропускная способность (0.6)"</span><span class="p">}},</span>
+            <span class="s2">"traffic"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="s2">"traffic"</span><span class="p">],</span> <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="s2">"ТС (участки впереди)"</span><span class="p">,</span> <span class="s2">"jam"</span><span class="p">:</span> <span class="s2">"балл пробок 0–10"</span><span class="p">,</span> <span class="s2">"bus_lane"</span><span class="p">:</span> <span class="s2">"есть выделенная полоса (bool)"</span><span class="p">}},</span>
+        <span class="p">}</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/whatif/simulate"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"what-if"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Смоделировать сценарий(и): сравнение до/после"</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">whatif_simulate</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">SimulateRequest</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Моделирует сценарии поверх текущего состояния сети без изменения живого прогноза.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: По каждому затронутому ТС — ETA «до/после» по остановкам, суммарное опоздание,</span>
+<span class="sd">            остановки с опозданием &gt; 2 мин, опаздывающие следующие рейсы; общий эффект и рекомендация.</span>
+<span class="sd">        """</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">state</span><span class="p">[</span><span class="s2">"whatif"</span><span class="p">]</span><span class="o">.</span><span class="n">simulate</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">scenarios</span><span class="p">],</span> <span class="n">req</span><span class="o">.</span><span class="n">horizon_stops</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">include_all</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"_overrides"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># внутренний объект, не сериализуется</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/whatif/apply"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"what-if"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Применить сценарий к живому прогнозу (и потоку)"</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">whatif_apply</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">ApplyRequest</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Применяет сценарий к живому прогнозу на ``duration_min`` минут времени данных.</span>
+
+<span class="sd">        Поломка, ДТП и засор дополнительно передаются в фидер: ТС реально останавливается или</span>
+<span class="sd">        замедляется в потоке NDTP, и весь контур (детектор, ML, инциденты) реагирует на настоящее опоздание.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: ``until``, результат инъекции в поток, эффект и рекомендация.</span>
+<span class="sd">        """</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">eng</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">state</span><span class="p">[</span><span class="s2">"whatif"</span><span class="p">]</span><span class="o">.</span><span class="n">simulate</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">scenarios</span><span class="p">],</span> <span class="n">req</span><span class="o">.</span><span class="n">horizon_stops</span><span class="p">)</span>
+        <span class="n">ov</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"_overrides"</span><span class="p">)</span>
+        <span class="n">until</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">req</span><span class="o">.</span><span class="n">duration_min</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># срок во времени данных: при ускорении реплея истекает быстрее</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">live_ovs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ov</span><span class="p">,</span> <span class="n">until</span><span class="p">))</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">live_overrides</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">live_overrides</span><span class="p">,</span> <span class="n">ov</span><span class="p">)</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">live_scenarios</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"scenarios"</span><span class="p">:</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">scenarios</span><span class="p">],</span> <span class="s2">"until_T"</span><span class="p">:</span> <span class="n">until</span><span class="p">,</span>
+                                 <span class="s2">"until"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">until</span><span class="p">),</span> <span class="s2">"title"</span><span class="p">:</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SCENARIO_TYPES</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">type</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">scenarios</span><span class="p">)})</span>
+        <span class="n">injected</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">inject_into_stream</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">scenarios</span><span class="p">:</span>
+                <span class="n">unit</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"unit_id"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"breakdown"</span><span class="p">,</span> <span class="s2">"accident"</span><span class="p">,</span> <span class="s2">"blockage"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">unit</span><span class="p">:</span>
+                    <span class="n">kind</span> <span class="o">=</span> <span class="s2">"breakdown"</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">"breakdown"</span> <span class="k">else</span> <span class="s2">"slowdown"</span>
+                    <span class="n">q</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"minutes=</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'minutes'</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">kind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'breakdown'</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"slowdown"</span><span class="p">:</span>
+                        <span class="c1"># пропускная способность 0.35 → ТС едет в 1/0.35 ≈ 2.9 раза медленнее</span>
+                        <span class="n">q</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"&amp;factor=</span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'capacity'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.35</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">s</span><span class="o">.</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'accident'</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mf">0.6</span><span class="p">)))</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="n">ok</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">_feeder_post</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"/incident/</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">?</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                    <span class="n">injected</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"unit_id"</span><span class="p">:</span> <span class="n">unit</span><span class="p">,</span> <span class="s2">"kind"</span><span class="p">:</span> <span class="n">kind</span><span class="p">,</span> <span class="s2">"ok"</span><span class="p">:</span> <span class="n">ok</span><span class="p">})</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"warn"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Применён сценарий: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">live_scenarios</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">'title'</span><span class="p">]</span><span class="si">}</span><span class="s2"> (до </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">live_scenarios</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">'until'</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"applied"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"until"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">until</span><span class="p">),</span> <span class="s2">"stream_injection"</span><span class="p">:</span> <span class="n">injected</span><span class="p">,</span> <span class="s2">"effect"</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s2">"effect"</span><span class="p">],</span>
+                <span class="s2">"recommendation"</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s2">"recommendation"</span><span class="p">]}</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">"/api/whatif/live"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"what-if"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Снять все применённые сценарии"</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">whatif_clear</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">"""Снимает все применённые сценарии и внештатные ситуации в потоке фидера."""</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">eng</span><span class="p">()</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">live_overrides</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">live_ovs</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">live_scenarios</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">_feeder_post</span><span class="p">,</span> <span class="s2">"/incident/clear"</span><span class="p">)</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s2">"info"</span><span class="p">,</span> <span class="s2">"Применённые сценарии сняты"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"ok"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="c1"># ------------------------------------------------------------- timeline</span>
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/timeline"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"timeline"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"История состояний (кадры) и прогноз положения ТС"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">timeline</span><span class="p">(</span><span class="n">past_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">720</span><span class="p">),</span> <span class="n">future_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">120</span><span class="p">),</span>
+                 <span class="n">step_s</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">600</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">"""Кадры истории и прогноз положения ТС для интерактивного таймлайна.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            past_min: Глубина истории, мин (хранится до 6 ч).</span>
+<span class="sd">            future_min: Горизонт прогноза положения, мин.</span>
+<span class="sd">            step_s: Шаг между кадрами, с (прореживание для размера ответа).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: ``now``, ``past`` (кадры), ``future`` (прогнозные кадры по ETA).</span>
+<span class="sd">        """</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">eng</span><span class="p">()</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">frames</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="p">[],</span> <span class="o">-</span><span class="mf">1e18</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">timeline</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s2">"T"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">past_min</span> <span class="o">*</span> <span class="mi">60</span> <span class="ow">and</span> <span class="n">f</span><span class="p">[</span><span class="s2">"T"</span><span class="p">]</span> <span class="o">-</span> <span class="n">last</span> <span class="o">&gt;=</span> <span class="n">step_s</span><span class="p">:</span>
+                <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s2">"T"</span><span class="p">]</span>
+        <span class="n">fut</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">future_frames</span><span class="p">(</span><span class="n">future_min</span><span class="p">,</span> <span class="n">step_s</span><span class="p">)</span> <span class="k">if</span> <span class="n">future_min</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"now_T"</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="s2">"now"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">_local</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="s2">"past"</span><span class="p">:</span> <span class="n">frames</span><span class="p">,</span> <span class="s2">"future"</span><span class="p">:</span> <span class="n">fut</span><span class="p">}</span>
+
+    <span class="c1"># ------------------------------------------------------------- traffic / bus lanes</span>
+    <span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"/api/traffic"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"map"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Внешний индекс пробок / автобусные полосы для участков"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">traffic</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">TrafficUpdate</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Задаёт внешний индекс пробок и/или долю автобусной полосы для перегонов (влияет на ETA и what-if)."""</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">eng</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">sid</span> <span class="ow">in</span> <span class="n">u</span><span class="o">.</span><span class="n">segment_ids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">u</span><span class="o">.</span><span class="n">jam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">manual_traffic</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.12</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">jam</span>  <span class="c1"># 10 баллов ≈ перегон в 2.2 раза дольше</span>
+            <span class="k">if</span> <span class="n">u</span><span class="o">.</span><span class="n">bus_lane</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">bus_lanes</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">bus_lane</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"segments"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">segment_ids</span><span class="p">),</span> <span class="s2">"manual_traffic"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">manual_traffic</span><span class="p">),</span>
+                <span class="s2">"bus_lanes"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">bus_lanes</span><span class="p">)}</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/traffic"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"map"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Текущая загруженность перегонов (живая + внешняя)"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">traffic_get</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">"""Загруженность перегонов: ``live`` (по проездам наших ТС), ``manual`` (внешний индекс), ``bus_lanes``."""</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">eng</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"live"</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">traffic</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+                <span class="s2">"manual"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">manual_traffic</span><span class="p">,</span> <span class="s2">"bus_lanes"</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">eta</span><span class="o">.</span><span class="n">bus_lanes</span><span class="p">}</span>
+
+    <span class="c1"># ------------------------------------------------------------- routes registry</span>
+    <span class="n">reg</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s2">"registry"</span><span class="p">]</span>  <span class="c1"># noqa: E731 — реестр появляется только после lifespan</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_relink</span><span class="p">():</span>
+        <span class="n">eng</span><span class="p">()</span><span class="o">.</span><span class="n">route_names</span> <span class="o">=</span> <span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">vehicle_links</span><span class="p">()</span>  <span class="c1"># номера маршрутов на карте меняются сразу</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/routes"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"routes"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Реестр реальных маршрутов"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">routes_list</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">"""Все маршруты реестра (без геометрии)."""</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/routes/</span><span class="si">{route_id}</span><span class="s2">"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"routes"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Маршрут: остановки и геометрия"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">route_get</span><span class="p">(</span><span class="n">route_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Полная запись маршрута.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 404 — маршрут не найден.</span>
+<span class="sd">        """</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">route_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">"route not found"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/routes/import/osm"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"routes"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Импорт маршрута из OpenStreetMap по номеру/relation"</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">route_import_osm</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">OsmImport</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Импортирует все направления маршрута из OSM и сохраняет в реестр.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 502 — Overpass недоступен или маршрут не найден.</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">variants</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">import_osm</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">ref</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">relation_id</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="s2">"region"</span><span class="p">][</span><span class="s2">"bounds"</span><span class="p">],</span>
+                                               <span class="n">state</span><span class="p">[</span><span class="s2">"region"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"osm_area"</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">ImportError_</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">502</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variants</span><span class="p">:</span>
+            <span class="n">v</span><span class="p">[</span><span class="s2">"vehicles"</span><span class="p">]</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">vehicles</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span>
+        <span class="n">_relink</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/routes/import/gtfs"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"routes"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Импорт маршрутов из GTFS (zip)"</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">route_import_gtfs</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">UploadFile</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="o">...</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">"""Импортирует маршруты из GTFS-архива перевозчика.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 400 — архив некорректен или без рейсов.</span>
+<span class="sd">        """</span>
+        <span class="n">blob</span> <span class="o">=</span> <span class="k">await</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">routes</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">import_gtfs</span><span class="p">,</span> <span class="n">blob</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImportError_</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">routes</span><span class="p">]</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/routes"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"routes"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Создать маршрут по списку остановок (геометрия по дорогам)"</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">route_create</span><span class="p">(</span><span class="n">r</span><span class="p">:</span> <span class="n">ManualRoute</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Создаёт маршрут вручную; геометрия строится роутером (если он недоступен — прямыми)."""</span>
+        <span class="n">geom</span><span class="p">,</span> <span class="n">src</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">geometry_by_router</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">stops</span><span class="p">)</span>
+        <span class="n">rid</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"manual-</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">ref</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="n">rid</span><span class="p">,</span> <span class="s2">"ref"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">ref</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">"Маршрут </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">ref</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+                 <span class="s2">"from"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span> <span class="s2">"to"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">stops</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span> <span class="s2">"source"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"manual/</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                 <span class="s2">"stops"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">stops</span><span class="p">,</span> <span class="s2">"geometry"</span><span class="p">:</span> <span class="n">geom</span><span class="p">,</span> <span class="s2">"vehicles"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">vehicles</span><span class="p">}</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">route</span><span class="p">))</span>
+        <span class="n">_relink</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"/api/routes/</span><span class="si">{route_id}</span><span class="s2">/vehicles"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"routes"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Привязать ТС (tr_id) к маршруту"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">route_vehicles</span><span class="p">(</span><span class="n">route_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vehicles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">examples</span><span class="o">=</span><span class="p">[[</span><span class="mi">131672</span><span class="p">]])):</span>
+<span class="w">        </span><span class="sd">"""Заменяет список привязанных ТС.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 404 — маршрут не найден.</span>
+<span class="sd">        """</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">route_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">"route not found"</span><span class="p">)</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">"vehicles"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">vehicles</span><span class="p">))</span>
+        <span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="n">_relink</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">"/api/routes/</span><span class="si">{route_id}</span><span class="s2">"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"routes"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Удалить маршрут"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">route_delete</span><span class="p">(</span><span class="n">route_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Удаляет маршрут из реестра и с диска.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 404 — маршрут не найден.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">reg</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">route_id</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">"route not found"</span><span class="p">)</span>
+        <span class="n">_relink</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"ok"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="c1"># ------------------------------------------------------------- export (integrations)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_rt</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">export</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">eng</span><span class="p">(),</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">"json"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">export</span><span class="o">.</span><span class="n">to_protobuf</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">"application/x-protobuf"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">501</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>  <span class="c1"># нет protobuf-биндингов — JSON остаётся доступен</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/export/gtfs-rt/vehicle-positions"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"export"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"GTFS-Realtime: положения ТС"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gtfs_rt_vp</span><span class="p">(</span><span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"pb"</span><span class="p">,</span> <span class="s2">"json"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"pb"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""GTFS-RT VehiclePositions (protobuf или JSON).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 501 — protobuf недоступен (используйте ``format=json``).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">_rt</span><span class="p">(</span><span class="s2">"vehicle_positions"</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/export/gtfs-rt/trip-updates"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"export"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"GTFS-Realtime: прогноз прибытия (ETA + ML)"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gtfs_rt_tu</span><span class="p">(</span><span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"pb"</span><span class="p">,</span> <span class="s2">"json"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"pb"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""GTFS-RT TripUpdates: ETA-движок, на целевой остановке — ML-прогноз.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 501 — protobuf недоступен (используйте ``format=json``).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">_rt</span><span class="p">(</span><span class="s2">"trip_updates"</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/export/gtfs-rt/alerts"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"export"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"GTFS-Realtime: инциденты"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gtfs_rt_alerts</span><span class="p">(</span><span class="nb">format</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"pb"</span><span class="p">,</span> <span class="s2">"json"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"pb"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""GTFS-RT Alerts по открытым инцидентам.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            HTTPException: 501 — protobuf недоступен (используйте ``format=json``).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">_rt</span><span class="p">(</span><span class="s2">"alerts"</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/export/gtfs-static.zip"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"export"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"Статический GTFS (идентификаторы совпадают с RT)"</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">gtfs_static</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">"""Статический GTFS (zip) по эталонному расписанию; ID совпадают с realtime-фидами."""</span>
+        <span class="n">blob</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">export</span><span class="o">.</span><span class="n">gtfs_static</span><span class="p">,</span> <span class="n">eng</span><span class="p">())</span>  <span class="c1"># сборка zip ~0.1 с — не в event loop</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">blob</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">"application/zip"</span><span class="p">,</span>
+                        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Content-Disposition"</span><span class="p">:</span> <span class="s2">"attachment; filename=mos-transport-gtfs.zip"</span><span class="p">})</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/export/vehicles.geojson"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"export"</span><span class="p">],</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"GeoJSON ТС для JS API карт"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vehicles_geojson</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">"""GeoJSON FeatureCollection ТС с уровнем риска и прогнозом."""</span>
+        <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span><span class="n">export</span><span class="o">.</span><span class="n">geojson</span><span class="p">(</span><span class="n">eng</span><span class="p">()),</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">"application/geo+json"</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_feeder_post</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""POST в фидер (инъекция внештатных ситуаций в поток).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: Путь с query-строкой.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: ``True`` — фидер принял команду; ``False`` при любой ошибке (исключения не пробрасываются).</span>
+<span class="sd">    """</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">feeder_url</span> <span class="o">+</span> <span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s2">""</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"POST"</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>  <span class="c1"># короткий таймаут: фидер локальный</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="ow">or</span> <span class="sa">b</span><span class="s2">"</span><span class="si">{}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 — фидера может не быть (реальные терминалы)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=9ca2116e"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/translations.js?v=cd1d70c9"></script>
+    </body>
+</html>
